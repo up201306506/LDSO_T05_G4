@@ -1,0 +1,7 @@
+Ainda ando a estudar como isto funciona, por enquanto ainda só consegui introduzir dados na BD mas não consigo verificar se ficam
+realmente guardados na BD.. Também não consigo recuperar nada a partir da BD
+
+Mas o que vos consigo ensinar por agora é que é necessário ter o localhost a correr (a partir do intellij) e depois é preciso abrir o mongod com um path para uma BD
+Da seguinte maneira
+
+mongod.exe --dbpath <dir path onde irá ser guardada as coisas da bd>
