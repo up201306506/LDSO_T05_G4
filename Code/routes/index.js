@@ -32,19 +32,18 @@ router.post('/login', function (req, res, next) {
 
     var usernameReceived = req.body.name;
 
-    var resultArray = [];
     mongo.connect(url, function (err, db) {
         assert.equal(null, err);
-        var cursor = db.collection('users').find();
-        cursor.forEach(function (doc, err) {
+
+        db.collection('users').findOne({"username": usernameReceived}, function (err, itemFromDB) {
             assert.equal(null, err);
-            resultArray.push(doc);
-        }, function () {
+
+            console.log("User Received: " + usernameReceived);
+            console.log("DB: " + itemFromDB.username + ", " + itemFromDB.password);
+
             db.close();
         });
     });
-
-    console.log(resultArray);
 
     res.redirect('/');
 });
