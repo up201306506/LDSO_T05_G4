@@ -3,11 +3,11 @@ var router = express.Router();
 var assert = require('assert');
 var auth = require("../config/ensureAuthentication.js");
 
-
-/* GET home page. */
-router.get('/', auth.ensureAuthenticated, function (req, res) {
+/* GET community creation page. */
+router.get('/', /*auth.ensureAuthenticated,*/ function (req, res) {
     req.flash('error_msg', 'É necessário estar autenticado');
-    res.render('index', {title: 'Local Exchange'});
+    res.render('create_community', {title: 'New Community'});
 });
+
 
 module.exports = router;
