@@ -10,3 +10,7 @@ a {
     height: 100px;
     background-color: #0080ff;
 }
+
+form {
+    padding: 25px 5px 0px 5px;
+}
