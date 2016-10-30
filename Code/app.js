@@ -69,10 +69,12 @@ app.use(function (req, res, next) {
 // web pages js's
 var index = require('./routes/index');
 var login = require('./routes/login');
+var test = require('./routes/test');
 
 // declaration of the web pages
 app.use('/', index);
 app.use('/login', login);
+app.use('/test', test);
 
 // catch 404
 app.use(function (req, res, next) {
