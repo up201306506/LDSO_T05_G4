@@ -19,13 +19,17 @@
         <label for="sede">Sede:</label>
         <input type="text" class="form-control" id="sede">
     </div>
-    <label for="categoria">Categoria:</label>
-    <select>
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="opel">Opel</option>
-        <option value="audi">Audi</option>
-    </select>
+    <div class="dropdown">
+        <label for="categoria">Categoria:</label>
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="#">Tipo 1</a></li>
+            <li><a href="#">Tipo 2</a></li>
+            <li><a href="#">Tipo 3</a></li>
+        </ul>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
 </form>
 
 

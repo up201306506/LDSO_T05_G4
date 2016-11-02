@@ -67,7 +67,6 @@ app.use(function (req, res, next) {
 });
 
 // web pages js's
-<<<<<<< HEAD
 var webpage_index = require('./routes/index');
 var webpage_login = require('./routes/login');
 var webpage_newcommunity = require('./routes/create_community');
@@ -80,16 +79,6 @@ app.use('/login', webpage_login);
 app.use('/newcommunity', webpage_newcommunity);
 
 app.use('/newoffer', webpage_newoffer);
-=======
-var index = require('./routes/index');
-var login = require('./routes/login');
-var test = require('./routes/test');
-
-// declaration of the web pages
-app.use('/', index);
-app.use('/login', login);
-app.use('/test', test);
->>>>>>> refs/remotes/origin/master
 
 // catch 404
 app.use(function (req, res, next) {
