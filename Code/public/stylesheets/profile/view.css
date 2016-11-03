@@ -1,0 +1,12 @@
+.datadiv{
+    margin: 10%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.editbadge{
+    font-size: 12px;
+    padding-right: .6em;
+    padding-left: .6em;
+    border-radius: 10rem;
+}

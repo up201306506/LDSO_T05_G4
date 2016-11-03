@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+
+    <!-- BootSrap -->
+    <% include ./../templates/header.ejs %>
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/profile/view.css">
+</head>
+<body>
+
+<div class="col-md-0 center-align datadiv">
+    <h3 class="dark-grey">Perfil <a href="profile/edit" class="label label-primary label-as-badge editbadge">Editar</a></h3>
+
+    <div class="form-group col-lg-12">
+        <label>Nome</label>
+        <h5>nome</h5>
+    </div>
+
+    <div class="form-group col-lg-12">
+        <label>Contacto</label>
+        <h5>contacto</h5>
+    </div>
+
+    <div class="form-group col-lg-12">
+        <label>Data de nascimento</label>
+        <h5>data</h5>
+    </div>
+
+    <div class="form-group col-lg-12">
+        <label>Sexo:</label>
+        <h5>sexo</h5>
+    </div>
+
+    <div class="form-group col-lg-12">
+        <label>Email Address</label>
+        <h5>email</h5>
+    </div>
+
+    <div class="form-group col-lg-12">
+        <label>Password</label>
+        <a href="profile/edit" class="btn btn-link">Editar</a>
+    </div>
+
+</div>
+
+
+</body>
+</html>

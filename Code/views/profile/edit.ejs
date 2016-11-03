@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+
+    <!-- BootSrap -->
+    <% include ./../templates/header.ejs %>
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/profile/edit.css">
+</head>
+<body>
+
+<div class="col-md-0 center-align register">
+    <h3 class="dark-grey">Editar Perfil</h3>
+
+    <form role="form" action="/login/register" method="post">
+
+        <div class="form-group col-lg-12">
+            <label>Nome</label>
+            <input type="text" name="name" class="form-control" value="" required>
+        </div>
+
+        <div class="form-group col-lg-12">
+            <label>Contacto</label>
+            <input type="text" name="contact" class="form-control" value="" required>
+        </div>
+
+        <div class="form-group col-lg-12">
+            <label>Data de nascimento</label>
+            <input type="datetime" name="birth_date" class="form-control" value="" required>
+        </div>
+
+        <div class="form-group col-lg-12">
+            <label for="sel_sex">Sexo:</label>
+            <select class="form-control" id="sel_sex">
+                <option>Outro</option>
+                <option>Masculino</option>
+                <option>Feminino</option>
+            </select>
+        </div>
+
+        <div class="form-group col-lg-6">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" value="" required>
+        </div>
+
+        <div class="form-group col-lg-6">
+            <label>Repeat Password</label>
+            <input type="password" name="password2" class="form-control" value="" required>
+        </div>
+
+        <div class="form-group col-lg-6">
+            <label>Email Address</label>
+            <input type="" name="email" class="form-control" value="" required>
+        </div>
+
+        <div class="form-group col-lg-6">
+            <label>Repeat Email Address</label>
+            <input type="" name="email2" class="form-control" value="" required>
+        </div>
+
+        <button type="submit" name="register-submit" id="register-submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+
+</body>
+</html>
