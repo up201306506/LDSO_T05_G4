@@ -70,6 +70,7 @@ app.use(function (req, res, next) {
 var webpage_index = require('./routes/index');
 var webpage_login = require('./routes/login');
 var webpage_newcommunity = require('./routes/create_community');
+var webpage_searchresults = require('./routes/search_results');
 
 var webpage_newoffer = require('./routes/new_offer');
 
@@ -77,6 +78,7 @@ var webpage_newoffer = require('./routes/new_offer');
 app.use('/', webpage_index);
 app.use('/login', webpage_login);
 app.use('/newcommunity', webpage_newcommunity);
+app.use('/search_results', webpage_searchresults);
 
 app.use('/newoffer', webpage_newoffer);
 

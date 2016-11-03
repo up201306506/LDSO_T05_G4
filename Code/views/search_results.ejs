@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+
+    <!-- BootSrap -->
+    <% include templates/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/search_results.css">
+</head>
+<body>
+    <% include templates/navbar.ejs %>
+    <div class="container">
+        <h2>Search Results</h2>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Rating</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><a href="#">Community1</a></td>
+                <td>We love apples!</td>
+                <td>Gardenning</td>
+                <td>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><a href="#">Community2</a></td>
+                <td>Apples are great!</td>
+                <td>Gardenning</td>
+                <td>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+
+                </td>
+            </tr>
+            <tr>
+                <td><a href="#">Community3</a></td>
+                <td>We dont like apples that much</td>
+                <td>Politics</td>
+                <td>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><a href="#">Community4</a></td>
+                <td>We like pears and games</td>
+                <td>Gaming</td>
+                <td>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><a href="#">Community5</a></td>
+                <td>PC is love, PC is life</td>
+                <td>Informatics</td>
+                <td>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
