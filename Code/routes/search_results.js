@@ -1,6 +1,3 @@
-/**
- * Created by João on 03/11/2016.
- */
 var express = require('express'),
     router = express.Router();/*,
     mongo = require('mongodb').MongoClient,
