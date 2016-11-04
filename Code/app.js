@@ -73,6 +73,7 @@ var webpage_newcommunity = require('./routes/create_community');
 var webpage_searchresults = require('./routes/search_results');
 var webpage_mainpage = require('./routes/main_page');
 var webpage_newoffer = require('./routes/new_offer');
+var webpage_viewoffer = require('./routes/viewoffer');
 
 // declaration of the web pages
 app.use('/', webpage_index);
@@ -81,6 +82,7 @@ app.use('/newcommunity', webpage_newcommunity);
 app.use('/search_results', webpage_searchresults);
 app.use('/main_page', webpage_mainpage);
 app.use('/newoffer', webpage_newoffer);
+app.use('/viewoffer', webpage_viewoffer);
 
 // catch 404
 app.use(function (req, res, next) {
