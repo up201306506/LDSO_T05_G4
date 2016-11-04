@@ -2,3 +2,7 @@ body {
     margin-top: 45px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+
+#users tr td:nth-child(1){
+    width:50%;
+}

@@ -71,7 +71,7 @@ var webpage_index = require('./routes/index');
 var webpage_login = require('./routes/login');
 var webpage_newcommunity = require('./routes/create_community');
 var webpage_searchresults = require('./routes/search_results');
-
+var webpage_mainpage = require('./routes/main_page');
 var webpage_newoffer = require('./routes/new_offer');
 
 // declaration of the web pages
@@ -79,7 +79,7 @@ app.use('/', webpage_index);
 app.use('/login', webpage_login);
 app.use('/newcommunity', webpage_newcommunity);
 app.use('/search_results', webpage_searchresults);
-
+app.use('/main_page', webpage_mainpage);
 app.use('/newoffer', webpage_newoffer);
 
 // catch 404
