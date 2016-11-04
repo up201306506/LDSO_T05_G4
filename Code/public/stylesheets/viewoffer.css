@@ -1,0 +1,27 @@
+img {
+    width: 100%;
+    border: none;
+}
+
+.container {
+    border: 1px solid black;
+
+    margin-top: 100px;
+}
+
+.container > [class*='col-'] {
+    padding-right:0;
+    padding-left:0;
+}
+
+p {
+    font-size: x-large;
+    position: static;
+}
+
+.container button{
+    height: 50px;
+    width: 250px;
+    font-size: x-large;
+    margin-bottom:15px;
+}

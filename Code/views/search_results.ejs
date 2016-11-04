@@ -4,87 +4,135 @@
     <title><%= title %></title>
 
     <!-- BootSrap -->
-    <% include templates/header.ejs %>
+    <!-- Não percebo porque é que a mim não me dá o header xCCC -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="/stylesheets/search_results.css">
 </head>
 <body>
     <% include templates/navbar.ejs %>
+
+
     <div class="container">
         <h2>Search Results</h2>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Type</th>
-                <th>Rating</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><a href="#">Community1</a></td>
-                <td>We love apples!</td>
-                <td>Gardenning</td>
-                <td>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                </td>
-            </tr>
-            <tr>
-                <td><a href="#">Community2</a></td>
-                <td>Apples are great!</td>
-                <td>Gardenning</td>
-                <td>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <span class="glyphicon glyphicon-star-empty"></span>
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#community">Community</a></li>
+            <li><a data-toggle="tab" href="#users">Users</a></li>
+        </ul>
 
-                </td>
-            </tr>
-            <tr>
-                <td><a href="#">Community3</a></td>
-                <td>We dont like apples that much</td>
-                <td>Politics</td>
-                <td>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star"></span>
-                </td>
-            </tr>
-            <tr>
-                <td><a href="#">Community4</a></td>
-                <td>We like pears and games</td>
-                <td>Gaming</td>
-                <td>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                </td>
-            </tr>
-            <tr>
-                <td><a href="#">Community5</a></td>
-                <td>PC is love, PC is life</td>
-                <td>Informatics</td>
-                <td>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star"></span>
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="community">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                        <th>Rating</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><a href="#">Community1</a></td>
+                        <td>We love apples!</td>
+                        <td>Gardenning</td>
+                        <td>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">Community2</a></td>
+                        <td>Apples are great!</td>
+                        <td>Gardenning</td>
+                        <td>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">Community3</a></td>
+                        <td>We dont like apples that much</td>
+                        <td>Politics</td>
+                        <td>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">Community4</a></td>
+                        <td>We like pears and games</td>
+                        <td>Gaming</td>
+                        <td>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">Community5</a></td>
+                        <td>PC is love, PC is life</td>
+                        <td>Informatics</td>
+                        <td>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="users">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><a href="#">User1</a></td>
+                        <td>example1@gmail.com</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">User2</a></td>
+                        <td>example2@gmail.com</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">User3</a></td>
+                        <td>example3@gmail.com</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">User4</a></td>
+                        <td>example4@gmail.com</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">User5</a></td>
+                        <td>example5@gmail.com</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
 
 </body>
 </html>
