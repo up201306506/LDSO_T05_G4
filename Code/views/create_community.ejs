@@ -2,14 +2,12 @@
 <html>
 <head>
     <title><%= title %></title>
-    <!-- BootSrap -->
+
     <% include templates/header.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/create_community.css">
 </head>
 <body>
-
-
-<div id="placeholder"><!-- Acrescentem um menu de navegação aqui! --></div>
+<% include templates/navbar.ejs %>
 
 <form>
     <div class="form-group">
@@ -31,7 +29,6 @@
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
 </form>
-
 
 </body>
 </html>
