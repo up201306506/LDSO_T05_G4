@@ -7,40 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/login.css">
 </head>
 <body>
-
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Local Exchange</a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
-            <form id="signIn" class="navbar-form navbar-right" role="form" action="/login" method="post">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    <input type="text" class="form-control" name="username" value="" placeholder="Username" required>
-                </div>
-
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                    <input type="password" class="form-control" name="password" value="" placeholder="Password" required>
-                </div>
-
-                <button type="submit" name="login-submit" id="login-submit" class="btn btn-primary">Login</button>
-            </form>
-
-        </div>
-    </div>
-</nav>
-
-
-<% if (typeof errors != "undefined") { %>
-<% errors.forEach(function(error) { %>
-<div class="alert alert-danger"><%= error.msg %></div>
-<% }); %>
-<% } %>
+<% include templates/login_navbar.ejs %>
 
 <div class="container-fluid">
     <section class="container">

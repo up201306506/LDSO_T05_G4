@@ -1,0 +1,20 @@
+#questions {
+    border-right-style: dashed;
+    border-width: 1px;
+}
+
+#aside-nav {
+    width: 100%;
+}
+
+#aside-nav * {
+    width: 15rem;
+}
+
+#back-button {
+    margin-bottom: 1rem;
+}
+
+#aside-nav ul {
+    margin-left: 20%;
+}

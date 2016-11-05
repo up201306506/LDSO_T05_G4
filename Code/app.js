@@ -66,23 +66,33 @@ app.use(function (req, res, next) {
     next();
 });
 
+//---------------------------------------------------------------------
+
 // web pages js's
-var webpage_index = require('./routes/index');
+// initial pages
 var webpage_login = require('./routes/login');
+var webpage_faq = require('./routes/faq');
+// profile pages
 var webpage_profile = require('./routes/profile');
+// community pages
 var webpage_newcommunity = require('./routes/create_community');
+var webpage_newoffer = require('./routes/new_offer');
+// search page
 var webpage_searchresults = require('./routes/search_results');
 
-var webpage_newoffer = require('./routes/new_offer');
-
 // declaration of the web pages
-app.use('/', webpage_index);
-app.use('/login', webpage_login);
+// initial pages
+app.use('/', webpage_login);
+app.use('/faq', webpage_faq);
+// profile pages
 app.use('/profile', webpage_profile);
+// community pages
 app.use('/newcommunity', webpage_newcommunity);
+app.use('/newoffer', webpage_newoffer);
+// search page
 app.use('/search_results', webpage_searchresults);
 
-app.use('/newoffer', webpage_newoffer);
+//---------------------------------------------------------------------
 
 // catch 404
 app.use(function (req, res, next) {
