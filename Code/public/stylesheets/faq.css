@@ -3,18 +3,18 @@
     border-width: 1px;
 }
 
-#aside-nav {
+#aside-nav * {
+    width: 15rem;
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+    align-items: center;
+}
+
+#aside-nav a {
     width: 100%;
 }
 
-#aside-nav * {
-    width: 15rem;
-}
-
 #back-button {
-    margin-bottom: 1rem;
-}
-
-#aside-nav ul {
-    margin-left: 20%;
+    margin-bottom: 1.5rem;
 }
