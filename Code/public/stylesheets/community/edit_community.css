@@ -1,0 +1,19 @@
+body {
+    padding-top: 50px;
+}
+
+#descricao {
+    resize: none;
+}
+
+#buttons-panel {
+    margin-top: 3rem;
+}
+
+#buttons-panel button {
+    width: 8rem;
+}
+
+#save-button {
+    margin-right: 2rem;
+}

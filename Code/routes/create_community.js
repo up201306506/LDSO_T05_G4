@@ -4,7 +4,7 @@ var assert = require('assert');
 
 /* GET community creation page. */
 router.get('/', function (req, res) {
-    res.render('create_community', {title: 'New Community'});
+    res.render('community/create_community', {title: 'New Community'});
 });
 
 

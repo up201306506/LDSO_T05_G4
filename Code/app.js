@@ -76,7 +76,8 @@ var webpage_faq = require('./routes/faq');
 var webpage_mainpage = require('./routes/main_page');
 var webpage_profile = require('./routes/profile');
 // community pages
-var webpage_newcommunity = require('./routes/create_community');
+var webpage_createCommunity = require('./routes/create_community');
+var webpage_editCommunity = require('./routes/edit_community');
 var webpage_communityUserList = require('./routes/community_user_list');
 var webpage_newoffer = require('./routes/new_offer');
 var webpage_viewoffer = require('./routes/viewoffer');
@@ -91,7 +92,8 @@ app.use('/faq', webpage_faq);
 app.use('/main_page', webpage_mainpage);
 app.use('/profile', webpage_profile);
 // community pages
-app.use('/newcommunity', webpage_newcommunity);
+app.use('/create_community', webpage_createCommunity);
+app.use('/edit_community', webpage_editCommunity);
 app.use('/community_users', webpage_communityUserList);
 app.use('/newoffer', webpage_newoffer);
 app.use('/viewoffer', webpage_viewoffer);
