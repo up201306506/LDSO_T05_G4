@@ -3,13 +3,13 @@ img {
     border: none;
 }
 
-.container {
+#container-panel {
     border: 1px solid black;
 
     margin-top: 100px;
 }
 
-.container > [class*='col-'] {
+#container-panel > [class*='col-'] {
     padding-right:0;
     padding-left:0;
 }
@@ -19,7 +19,7 @@ p {
     position: static;
 }
 
-.container button{
+#container-panel button{
     height: 50px;
     width: 250px;
     font-size: x-large;
