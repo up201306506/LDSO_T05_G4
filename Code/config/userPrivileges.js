@@ -6,7 +6,12 @@ function ensureAuthenticated(req, res, next) {
     }
 }
 
-module.exports = {
-    "ensureAuthenticated": ensureAuthenticated
-};
+// TO DO vvv
+function isModerator() {
+    return true;
+}
 
+module.exports = {
+    "ensureAuthenticated": ensureAuthenticated,
+    "isModerator": isModerator
+};

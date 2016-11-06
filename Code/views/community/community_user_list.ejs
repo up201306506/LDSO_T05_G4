@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+
+    <% include ./../templates/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/community/community_user_list.css">
+</head>
+<body>
+<% include ./../templates/navbar.ejs %>
+
+<div class="container-fluid">
+	<div class="col-sm-2"></div>
+
+	<div class="col-sm-8">
+		<h1><%= communityName %></h1>
+		<br>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Nome</th>
+					<th>Email</th>
+					
+					<% if(isModerator){ %>
+					<th>Administrar</th>
+					<% } %>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<% for(var index = 0; index < users.length; index++) { %>
+				<tr>
+					<td class="col-sm-4"><%= users[index].name %></td>
+					<td class="col-sm-4"><%= users[index].email %></td>
+					<% if(isModerator){ %>
+					<td class="col-sm-4">
+						<div class="row">
+							<div class="col-sm-8">
+								<span><input id="admin-checkbox" type="checkbox" value="">Moderador</span>
+							</div>
+							
+							<div class="col-sm-4">
+								<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+							</div>
+						</div>
+					</td>
+					<% } %>
+				</tr>
+				<% } %>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="col-sm-2"></div>
+</div>
+
+</body>
+</html>

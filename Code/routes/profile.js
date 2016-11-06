@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var assert = require('assert');
 
-
+// Checks if user is authenticated
 function ensureAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return next();
