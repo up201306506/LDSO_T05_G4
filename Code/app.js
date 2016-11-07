@@ -83,6 +83,9 @@ var webpage_newoffer = require('./routes/new_offer');
 var webpage_viewoffer = require('./routes/viewoffer');
 // search page
 var webpage_searchresults = require('./routes/search_results');
+// messaging pages
+var webpage_messageinbox = require('./routes/messaging/inbox');
+
 
 // declaration of the web pages
 // initial pages
@@ -99,6 +102,8 @@ app.use('/newoffer', webpage_newoffer);
 app.use('/viewoffer', webpage_viewoffer);
 // search page
 app.use('/search_results', webpage_searchresults);
+// messaging pages
+app.use('/message/inbox', webpage_messageinbox);
 
 //---------------------------------------------------------------------
 

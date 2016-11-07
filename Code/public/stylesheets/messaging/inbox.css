@@ -1,0 +1,16 @@
+body {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+#top_divisor{ margin-top: 75px; margin-bottom: 10px; }
+
+#main_body {
+    border: dotted 2px crimson;
+}
+
+.col-md-2 {
+    border: 1px solid blue;
+}
+.col-md-10 {
+    border: 1px solid blue;
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+
+    <% include ../templates/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/messaging/inbox.css">
+</head>
+<body>
+<% include ../templates/navbar.ejs %>
+
+<hr id="top_divisor">
+
+<div class="container"id="main_body">
+    <div class=row">
+        <!-- 3/9 2/10  Buttons on the Left, Inbox on the Right-->
+        <div class="col-xs-3 col-md-2">
+            <a href="#" class="btn btn-danger btn-sm btn-block" role="button">New Message</a>
+            <hr>
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a href="#"><span class="badge pull-right">New</span> Inbox </a></li>
+                <li><a href="#">Offers</a></li>
+                <li><a href="#">Important</a></li>
+                <li><a href="#">Sent Mail</a></li>
+                <li><a href="#"></a></li>
+            </ul>
+        </div>
+        <div class="col-xs-9 col-md-10">
+            <p>Content side IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM</p>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
