@@ -20,24 +20,32 @@ hr  {  margin-top: 10px;    margin-bottom: 20px;}
 }
 .message_sender_username{
     min-width: 80px;
-    max-width: 200px;
+    max-width: 180px;
     margin-right: 25px;
     display: inline-block;
-
-    font-weight: bold;
+    vertical-align: top;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+.message_sender_username_text{
+    font-weight: bold;
 }
 .message_subject{
 }
 .message_preview{
     min-width: 80px;
-    max-width: 600px;
-
+    max-width: 400px;
+    margin-right: 25px;
+    display: inline-block;
+    vertical-align: top;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+.message_preview_text{
+    font-size: smaller;
+    color: #999999;
 }
 
 .tooltip{
