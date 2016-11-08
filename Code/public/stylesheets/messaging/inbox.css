@@ -6,21 +6,22 @@ hr  {  margin-top: 10px;    margin-bottom: 20px;}
 
 
 #main_body {
-    /* border: dotted 2px crimson; */
     background-color: white;
 }
 #btn_New_Message{
     margin-top: 5px;
 }
 #Inbox_Header {
-    display: inline;
+
 }
 #Inbox_Contents{
     margin-top: 25px;
 }
+.message_item{
+    overflow:hidden
+}
 .message_sender_username{
-    min-width: 80px;
-    max-width: 180px;
+    width: 180px;
     margin-right: 25px;
     display: inline-block;
     vertical-align: top;
@@ -62,4 +63,6 @@ hr  {  margin-top: 10px;    margin-bottom: 20px;}
 .col-md-10 {
     border: 1px solid blue;
 }
+#main_body{
+    border: dotted 2px crimson;
 */
