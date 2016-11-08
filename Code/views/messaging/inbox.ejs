@@ -9,28 +9,82 @@
 <body>
 <% include ../templates/navbar.ejs %>
 
-<hr id="top_divisor">
-
 <div class="container"id="main_body">
     <div class=row">
         <!-- 3/9 2/10  Buttons on the Left, Inbox on the Right-->
-        <div class="col-xs-3 col-md-2">
-            <a href="#" class="btn btn-danger btn-sm btn-block" role="button">New Message</a>
+        <!-- Buttons -->
+        <div class="col-sm-3 col-md-2">
+            <!-- New Message Button -->
+            <a href="#" class="btn btn-danger btn-sm btn-block" role="button" id="btn_New_Message">New Message</a>
             <hr>
+            <!-- Bottom Buttons -->
             <ul class="nav nav-pills nav-stacked">
                 <li class="active"><a href="#"><span class="badge pull-right">New</span> Inbox </a></li>
                 <li><a href="#">Offers</a></li>
                 <li><a href="#">Important</a></li>
                 <li><a href="#">Sent Mail</a></li>
-                <li><a href="#"></a></li>
+                <li><a href="#">Deleted</a></li>
             </ul>
         </div>
-        <div class="col-xs-9 col-md-10">
-            <p>Content side IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM</p>
+
+        <!-- Inbox -->
+        <div class="col-sm-9 col-md-10" >
+            <!-- Header -->
+            <div id=Inbox_Header">
+                <!-- Mark Read Button -->
+                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Mark all as Read">Mark all as Read</button>
+                <!-- Refresh Button -->
+                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Refresh">
+                    &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;&nbsp;</button>
+                <!-- Title -->
+                <h2>???'s Inbox</h2>
+                <hr>
+            </div>
+
+
+            <!-- Contents -->
+            <ul class="list-group" id="Inbox_Contents">
+
+                <!-- Example Message -->
+                <li class="list-group-item">
+                    <!-- Star -->
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    <!-- Other User's Name -->
+                    <span class="message_sender_username">A User</span>
+                    <!-- Message Subject -->
+                    <span class="message_subject">Subject - </span>
+                    <!-- Message Preview -->
+                    <small class="message_preview hidden-sm-down">A small preview of the message contents that should cut off at the border of the screen</small>
+
+
+                    <div class="pull-right">
+                        <!-- Type -->
+                        <span class="glyphicon glyphicon glyphicon-leaf"
+                              data-toggle="tooltip" data-placement="top" title="Offer Related"></span>
+                        <!-- Receive Date -->
+                        <span class="badge">12:10 AM</span>
+                        <!-- Trash Can -->
+                        <a href="#"><span class="glyphicon glyphicon glyphicon glyphicon glyphicon-trash"
+                              data-toggle="tooltip" data-placement="top" title="Delete"></span></a>
+                    </div>
+                </li>
+
+
+                <li class="list-group-item ">Second item</li>
+                <li class="list-group-item disabled">Third item</li>
+            </ul>
         </div>
     </div>
 </div>
 
+<script>
+    $(document).ready(function(){
+
+        //Tooltip function initializer
+        $('[data-toggle="tooltip"]').tooltip();
+
+    });
+</script>
 
 
 </body>

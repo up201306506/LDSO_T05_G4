@@ -1,16 +1,57 @@
-body {
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+body { margin-top: 75px;font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;  background-color: lightsteelblue;}
 
-#top_divisor{ margin-top: 75px; margin-bottom: 10px; }
+
+hr  {  margin-top: 10px;    margin-bottom: 20px;}
+
+
 
 #main_body {
-    border: dotted 2px crimson;
+    /* border: dotted 2px crimson; */
+    background-color: white;
+}
+#btn_New_Message{
+    margin-top: 5px;
+}
+#Inbox_Header {
+    display: inline;
+}
+#Inbox_Contents{
+    margin-top: 25px;
+}
+.message_sender_username{
+    min-width: 80px;
+    max-width: 200px;
+    margin-right: 25px;
+    display: inline-block;
+
+    font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.message_subject{
+}
+.message_preview{
+    min-width: 80px;
+    max-width: 600px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
+.tooltip{
+    background-color: transparent;
+    color:green;
+}
+
+
+/* If you want to see the page's grid*/
+/*
 .col-md-2 {
     border: 1px solid blue;
 }
 .col-md-10 {
     border: 1px solid blue;
 }
+*/
