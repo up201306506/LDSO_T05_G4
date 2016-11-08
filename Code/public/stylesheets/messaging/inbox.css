@@ -1,0 +1,68 @@
+body { margin-top: 75px;font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;  background-color: lightsteelblue;}
+
+
+hr  {  margin-top: 10px;    margin-bottom: 20px;}
+
+
+
+#main_body {
+    background-color: white;
+}
+#btn_New_Message{
+    margin-top: 5px;
+}
+#Inbox_Header {
+
+}
+#Inbox_Contents{
+    margin-top: 25px;
+}
+.message_item{
+    overflow:hidden
+}
+.message_sender_username{
+    width: 180px;
+    margin-right: 25px;
+    display: inline-block;
+    vertical-align: top;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.message_sender_username_text{
+    font-weight: bold;
+}
+.message_subject{
+}
+.message_preview{
+    min-width: 80px;
+    max-width: 400px;
+    margin-right: 25px;
+    display: inline-block;
+    vertical-align: top;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.message_preview_text{
+    font-size: smaller;
+    color: #999999;
+}
+
+.tooltip{
+    background-color: transparent;
+    color:green;
+}
+
+
+/* If you want to see the page's grid*/
+/*
+.col-md-2 {
+    border: 1px solid blue;
+}
+.col-md-10 {
+    border: 1px solid blue;
+}
+#main_body{
+    border: dotted 2px crimson;
+*/
