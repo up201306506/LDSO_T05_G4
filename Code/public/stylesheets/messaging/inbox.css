@@ -47,6 +47,16 @@ hr  {  margin-top: 10px;    margin-bottom: 20px;}
     color:green;
 }
 
+.modal-header, h4, .close {
+    background-color: #0080ff;
+    color:white;
+    text-align: center;
+    font-size: 30px;
+}
+.modal-footer {
+    background-color: #0080ff;
+}
+
 
 /* If you want to see the page's grid*/
 /*
