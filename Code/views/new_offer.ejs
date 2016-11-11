@@ -1,101 +1,68 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title> <%= title %> </title>
-    <!-- Bootstrap & jQuery -->
-    <% include templates/header.ejs %>
-</head>
-<body>
-    <div class="container">
-        <h1> New Offer </h1>
-        <br>
-    </div>
-    <div class="container">
-        <form action="/login" method="post">
-            <!-- Offer Name-->
-            <div class="form-group row">
-                <label for="offer_name" class="col-sm-2 col-form-label"> Name : </label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="offer_name" placeholder="Offer Name ...">
-                </div>
-            </div>
-            <!-- Community Name -->
-            <div class="form-group row">
-                <label for="community_name" class="col-sm-2 col-form-label"> Community : </label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="community_name" placeholder="Community Name ..." disabled>
-                </div>
-            </div>
-            <!-- Offer Description -->
-            <div class="form-group row">
-                <label for="offer_description" class="col-sm-2 col-form-label"> Description : </label>
-                <div class="col-sm-10">
-                    <textarea rows="3" cols="20" class="form-control" id="offer_description" placeholder="Offer Description ..."></textarea>
-                </div>
-            </div>
-            <!-- Type Selector -->
-            <fieldset class="form-group row">
-                <label for="offer_type" class="col-sm-2 col-form-label"> Type : </label>
-                <div class="col-sm-10">
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="radio" name="offer_type" id="offer_material" checked>
-                            I want to offer a material.
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="radio" name="offer_type" id="offer_service">
-                            I want to offer a service.
-                        </label>
+    <head>
+        <title> <%= title %> </title>
+        <!-- Bootstrap & jQuery -->
+        <% include templates/header.ejs %>
+    </head>
+    <body>
+    <% include templates/login_navbar.ejs %>
+        <div class="container">
+            <h1> New Offer </h1><br>
+        </div>
+        <div class="container">
+            <form action="/login" method="post">
+
+                <!-- Offer Name-->
+                <div class="form-group row">
+                    <label for="offer_name" class="col-sm-2 col-form-label"> Name : </label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="offer_name" placeholder="Offer Name ..." required>
                     </div>
                 </div>
-            </fieldset>
-            <!-- Offer Price -->
-            <% if (false){ /* insert condition to check if community has or not currency */ %>
-            <div class="form-group row">
-                <label for="offer_price" class="col-sm-2 col-form-label"> Price : </label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="offer_price" placeholder="Offer Price ...">
-                </div>
-            </div>
-            <% } %>
-            <!-- 'I Agree' Checkbox -->
-            <div class="form-group row">
-                <div class="col-sm-10">
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox"> I agree with the terms and conditions.
-                        </label>
+
+                <!-- Offer Description -->
+                <div class="form-group row">
+                    <label for="offer_description" class="col-sm-2 col-form-label"> Description : </label>
+                    <div class="col-sm-10">
+                        <textarea rows="3" cols="20" class="form-control" id="offer_description" placeholder="Offer Description ..." required></textarea>
                     </div>
                 </div>
-            </div>
-            <!-- Submit Button -->
-            <div class="form-group row">
-                <div class="offset-sm-2 col-sm-10">
-                    <button type="submit" id="submit_offer" class="btn btn-primary"> Submit Offer </button>
+
+                <!-- Offer Price -->
+                <div class="form-group row">
+                    <label for="offer_name" class="col-sm-2 col-form-label"> Price : </label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="offer-price" placeholder="Offer Price ..." required>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
-    <script>
-        // code to post form data
-        // TODO: add support to price and community_name
-        $(document).ready(function(){
-            var offer_name, offer_type, offer_description;
-            $("#submit_offer").click(function(){
-                offer_name=$("#offer_name").val();
-                offer_description=$("#offer_description").val();
-                if($("#offer_material").is(':checked'))
-                    offer_type="material";
-                else
-                    offer_type="service";
-                $.post("http://localhost:3000/newoffer",
-                        {offer_name:offer_name,
-                            offer_description:offer_description,
-                            offer_type:offer_type}, function(){});
-            });
-        });
-    </script>
-</body>
+
+                <!-- Offer Type -->
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label"> Type : </label>
+                    <div class="col-sm-10">
+                       <form>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio"> Material
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio"> Service
+                            </label>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Offer Image -->
+                <div class="form-group row">
+                    <label for="offer-image" class="col-sm-2 col-form-label"> Image : </label>
+                    <div class="col-sm-10">
+                        <input type="file" class="form-control" id="offer-image" required>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="button" class="btn btn-primary"> Submit Offer </button>
+            </form>
+        </div>
+    </body>
 </html>
