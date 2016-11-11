@@ -47,6 +47,22 @@ hr  {  margin-top: 10px;    margin-bottom: 20px;}
     color:green;
 }
 
+.modal-header, h4, .close {
+    background-color: #00B7FF;
+    color:white;
+    text-align: center;
+    font-size: 30px;
+}
+.modal-footer {
+    background-color: #00B7FF;
+}
+#editor {overflow: auto; max-height:700px; height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+#editor-buttons{
+
+}
 
 /* If you want to see the page's grid*/
 /*
