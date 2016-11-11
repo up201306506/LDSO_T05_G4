@@ -6,7 +6,7 @@ function ensureAuthenticated(req, res, next) {
     }
 }
 
-// TO DO vvv
+// TODO vvv
 function isModerator() {
     return true;
 }

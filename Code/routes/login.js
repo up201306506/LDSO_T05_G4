@@ -5,7 +5,8 @@ var express = require('express'),
     configDB = require('./../config/database.js'),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    user = require('../models/user');
+    user = require('../models/user'),
+    userController = require('../controllers/UserController');
 
 /* GET page. */
 router.get('/', function (req, res) {
@@ -30,30 +31,11 @@ router.post('/register', function (req, res) {
             errors: errors
         });
     } else {
-        var itemToRegister = {
-            username: req.body.username,
-            password: req.body.password,
-            email: req.body.email
-        };
-
         mongo.connect(configDB.url, function (err, db, next) {
-            assert.equal(null, err);
-            db.collection('users').insertOne(itemToRegister, function (err, result) {
-                assert.equal(null, err);
+            userController.insertUser(db, "", req.body.username, req.body.email, req.body.password, "", "", "", function () {
                 db.close();
-            })
+            });
         });
-
-        /*var newUser = new User({
-         username: req.body.username,
-         password: req.body.password,
-         email: req.body.email
-         });
-
-         User.createUser(newUser, function (err, user) {
-         if(err) throw err;
-         console.log(user);
-         });*/
 
         req.flash('success_msg', 'Registado com sucesso');
         res.redirect('/');
@@ -73,8 +55,7 @@ passport.deserializeUser(function (user, done) {
 passport.use(new LocalStrategy(
     function (username, password, done) {
         mongo.connect(configDB.url, function (err, db) {
-            assert.equal(null, err);
-            db.collection('users').findOne({username: username, password: password}, function (err, user) {
+            userController.logIn(db, username, password, function (err, user) {
                 if (err) {
                     console.log(err);
                 }
@@ -103,26 +84,6 @@ router.post('/', function (req, res, next) {
             });
         } else {
             next();
-            /*mongo.connect(configDB.url, function (err, db) {
-                assert.equal(null, err);
-                db.collection('users').findOne({
-                    username: req.body.username,
-                    password: req.body.password
-                }, function (err, user) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    else if (user) {
-                        res.redirect('/');
-                    }
-                    else {
-                        console.log('Invalid');
-                        res.redirect('');
-                        //TODO mostrar erro
-                    }
-                    db.close();
-                });
-            });*/
         }
     }, passport.authenticate(
         'local',

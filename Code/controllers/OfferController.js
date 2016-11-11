@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
-
-var url = 'mongodb://localhost:27017/LocalExchangeDB';
+var configDB = require('./../config/database.js');
+var url = configDB.url;
 
 var insertOffer = function (db, id, type, user, description, is_expired, date, price, title, callback) {
     var offer = db.collection('offer');
