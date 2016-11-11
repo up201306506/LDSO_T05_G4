@@ -56,7 +56,13 @@ hr  {  margin-top: 10px;    margin-bottom: 20px;}
 .modal-footer {
     background-color: #00B7FF;
 }
+#editor {overflow: auto; max-height:700px; height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+#editor-buttons{
 
+}
 
 /* If you want to see the page's grid*/
 /*
