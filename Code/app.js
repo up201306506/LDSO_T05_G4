@@ -90,10 +90,10 @@ var webpage_message = require('./routes/messaging/message');
 
 // declaration of the web pages
 // initial pages
-app.use('/', webpage_login);
+app.use('/login', webpage_login);
 app.use('/faq', webpage_faq);
 // profile pages
-app.use('/main_page', webpage_mainpage);
+app.use('/', webpage_mainpage);
 app.use('/profile', webpage_profile);
 // community pages
 app.use('/create_community', webpage_createCommunity);
