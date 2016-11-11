@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
 
-var url = 'mongodb://localhost:27017/Tutorial';
+var url = 'mongodb://localhost:27017/LocalExchangeDB';
 
 var insertCommunity = function (db, name, headOffice, category, founder, description, privacy, coin, creationDate,members,callback){
     var community = db.collection('community');

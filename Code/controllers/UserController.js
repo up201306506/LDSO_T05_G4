@@ -1,19 +1,19 @@
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
 
-var url = 'mongodb://localhost:27017/Tutorial';
+var url = 'mongodb://localhost:27017/LocalExchangeDB';
 
 var insertUser = function(db, name, mail, pass, gender, phone, birthdate, callback){
     var users = db.collection('users');
     //Procura um utilizador na base de dados, dado o e-mail
     users.find({email:mail}).toArray(function (err,docs) {
         assert.equal(err,null);
-        //Verifica se já existe um user com o e-mail dado
+        //Verifica se jï¿½ existe um user com o e-mail dado
         //Se existir, avisa o utilizador e fecha a base de dados
         if(docs.length>=1){
             console.log('Already exists a user with the given e-mail');
             db.close();
         }
-        //Senão existir, adiciona-o à base de dados
+        //Senï¿½o existir, adiciona-o ï¿½ base de dados
         else{
             users.insertOne({name: name, email: mail, password: pass, gender: gender, phone: phone, birthdate: birthdate},
             function (err,result) {
