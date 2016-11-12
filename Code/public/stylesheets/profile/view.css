@@ -10,3 +10,8 @@
     padding-left: .6em;
     border-radius: 10rem;
 }
+
+.notDefined{
+    font-style: italic;
+    color: #cdcdcd;
+}

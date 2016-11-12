@@ -3,6 +3,14 @@ var configDB = require('./../config/database.js');
 var url = configDB.url;
 
 module.exports = {
+    getUser : function (db, username, callback) {
+        var users = db.collection('users');
+        users.findOne({username: username}, function (err, docs) {
+            assert.equal(err, null);
+            callback(err, docs);
+        });
+    },
+
     insertUser: function (db, name, username, mail, pass, gender, phone, birthdate, callback) {
         var users = db.collection('users');
         //Procura um utilizador na base de dados, dado o e-mail

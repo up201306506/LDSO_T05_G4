@@ -15,28 +15,49 @@
     <h3 class="dark-grey">Perfil <a href="profile/edit" class="label label-primary label-as-badge editbadge">Editar</a></h3>
 
     <div class="form-group col-lg-12">
+        <label>Username</label>
+        <h5><%= userdata.username %></h5>
+    </div>
+
+    <div class="form-group col-lg-12">
         <label>Nome</label>
-        <h5>nome</h5>
+        <% if(userdata.name == ""){ %>
+        <h5 class="notDefined">Não definido</h5>
+        <% } else{ %>
+        <h5><%= userdata.name %></h5>
+        <% } %>
     </div>
 
     <div class="form-group col-lg-12">
         <label>Contacto</label>
-        <h5>contacto</h5>
+        <% if(userdata.phone == ""){ %>
+        <h5 class="notDefined">Não definido</h5>
+        <% } else{ %>
+        <h5><%= userdata.phone %></h5>
+        <% } %>
     </div>
 
     <div class="form-group col-lg-12">
         <label>Data de nascimento</label>
-        <h5>data</h5>
+        <% if(userdata.birthdate == ""){ %>
+        <h5 class="notDefined">Não definido</h5>
+        <% } else{ %>
+        <h5><%= userdata.birthdate %></h5>
+        <% } %>
     </div>
 
     <div class="form-group col-lg-12">
         <label>Sexo:</label>
-        <h5>sexo</h5>
+        <% if(userdata.gender == ""){ %>
+        <h5 class="notDefined">Não definido</h5>
+        <% } else{ %>
+        <h5><%= userdata.gender %></h5>
+        <% } %>
     </div>
 
     <div class="form-group col-lg-12">
-        <label>Email Address</label>
-        <h5>email</h5>
+        <label>Endereço de Email</label>
+        <h5><%= userdata.email %></h5>
     </div>
 
     <div class="form-group col-lg-12">

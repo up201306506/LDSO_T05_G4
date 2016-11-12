@@ -1,26 +1,31 @@
-var express = require('express');
-var router = express.Router();
-var assert = require('assert');
+var express = require('express'),
+    router = express.Router(),
+    assert = require('assert'),
+    userPrivileges = require('./../config/userPrivileges')
+    mongo = require('mongodb').MongoClient,
+    configDB = require('./../config/database.js'),
+    userController = require('../controllers/UserController');
 
-// Checks if user is authenticated
-function ensureAuthenticated(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }else{
-        res.redirect('/');
-    }
-}
+
 
 /* View profile */
-router.get('/', ensureAuthenticated, function (req, res) {
-    req.flash('error_msg', 'É necessário estar autenticado');
-    res.render('profile/view', {title: 'Local Exchange'});
+router.get('/', userPrivileges.ensureAuthenticated, function (req, res) {
+    mongo.connect(configDB.url, function (err, db, next) {
+        userController.getUser(db, req.user, function (err, userdata) {
+            db.close();
+            res.render('profile/view', {title: 'Local Exchange', userdata: userdata});
+        });
+    });
 });
 
 /* Get Edit Profile page */
-router.get('/edit', ensureAuthenticated, function (req, res) {
-    req.flash('error_msg', 'É necessário estar autenticado');
-    res.render('profile/edit', {title: 'Local Exchange'});
+router.get('/edit', userPrivileges.ensureAuthenticated, function (req, res) {
+    mongo.connect(configDB.url, function (err, db, next) {
+        userController.getUser(db, req.user, function (err, userdata) {
+            db.close();
+            res.render('profile/edit', {title: 'Local Exchange', userdata: userdata});
+        });
+    });
 });
 
 module.exports = router;

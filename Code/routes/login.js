@@ -5,7 +5,7 @@ var express = require('express'),
     configDB = require('./../config/database.js'),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    user = require('../models/user'),
+    //user = require('../models/user'),
     userController = require('../controllers/UserController');
 
 /* GET page. */
