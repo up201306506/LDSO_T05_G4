@@ -40,7 +40,6 @@ router.post('/register', function (req, res) {
         req.flash('success_msg', 'Registado com sucesso');
         res.redirect('/');
     }
-
 });
 
 

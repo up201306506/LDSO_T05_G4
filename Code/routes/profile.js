@@ -1,7 +1,7 @@
 var express = require('express'),
     router = express.Router(),
     assert = require('assert'),
-    userPrivileges = require('./../config/userPrivileges')
+    userPrivileges = require('./../config/userPrivileges'),
     mongo = require('mongodb').MongoClient,
     configDB = require('./../config/database.js'),
     userController = require('../controllers/UserController');
