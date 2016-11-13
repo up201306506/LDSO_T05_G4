@@ -16,27 +16,27 @@
 		<h1>Criar Comunidade</h1>
 		<br>
 	
-		<form>
+		<form role="form" action="/create_community/create" method="post">
 			<div class="form-horizontal">
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="nome">Nome:</label>
-					<div class="col-sm-10"><input type="text" class="form-control" id="nome"></div>
+					<div class="col-sm-10"><input type="text" name="nome" class="form-control" id="nome"></div>
 				</div>
 				
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="sede">Sede:</label>
-					<div class="col-sm-10"><input type="text" class="form-control" id="sede"></div>
+					<div class="col-sm-10"><input type="text" name="sede" class="form-control" id="sede"></div>
 				</div>
 				
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="descricao">Descrição:</label>
-					<div class="col-sm-10"><textarea class="form-control" id="descricao" rows="3"></textarea></div>
+					<div class="col-sm-10"><textarea class="form-control" name="descricao" id="descricao" rows="3"></textarea></div>
 				</div>
 				
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="categoria">Categoria:</label>
 					<div class="col-sm-4">
-						<select class="form-control" id="sel-categoria">
+						<select class="form-control" name="categoria" id="sel-categoria">
 							<option>Geral</option>
 							<option>Jardinagem</option>
 							<option>Mecânica</option>
@@ -46,7 +46,7 @@
 					
 					<label class="control-label col-sm-2" for="visualizacao">Visualização:</label>
 					<div class="col-sm-2">
-						<select class="form-control" id="sel-visualizacao">
+						<select class="form-control" name="visualizacao" id="sel-visualizacao">
 							<option>Pública</option>
 							<option>Privada</option>
 							<option>Secreta</option>
