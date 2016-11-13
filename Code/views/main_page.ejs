@@ -10,151 +10,50 @@
 <% include templates/navbar.ejs %>
 
 <div class="container">
-    <div id="sidebar-wrapper">
+    <div id="side-container" class="col-md-3">
         <ul class="sidebar-nav">
-            <li class="sidebar-brand">
-                Minhas Comunidades
+            <li class="sidebar-title">
+                Comunidades
             </li>
+            <li class="sidebar-subtitle">
+                <a href="/create_community">Criar comunidade</a>
+            </li>
+            <% for(var index = 0; index < communityArr.length; index++) { %>
             <li>
-                <a href="#">Comunidade1</a>
+                <a href="#"><%= communityArr[index].name %></a>
             </li>
-            <li>
-                <a href="#">Comunidade2</a>
-            </li>
-            <li>
-                <a href="#">Comunidade3</a>
-            </li>
-            <li>
-                <a href="#">Comunidade4</a>
-            </li>
-            <li>
-                <a href="#">Comunidade5</a>
-            </li>
+            <% } %>
         </ul>
     </div>
 
-    <div id="feed">
-        <div class="feed-offer">
-            <a href="#">Comunidade1</a> - <a href="#">Oferta1</a>
-            <br>
-            <br>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="imgAbt">
-                        <img width="220" height="220" src="http://downloadicons.net/sites/default/files/offer-icons-47062.png" />
+    <div class="col-md-9">
+        <% for(var index = 0; index < offerArr.length; index++) { %>
+        <div class="row offer-area">
+            <div class="offer-title">
+                <a href="#"><%= offerArr[index].communityName %></a> : <a href="#"><%= offerArr[index].offerName %></a>
+            </div>
+
+            <div class="offer-content">
+                <div class="row">
+                    <div class="visible-lg col-sm-3">
+                        <img width="220" height="220" src="http://placehold.it/420x320" />
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <p class="lead">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non auctor
-                        magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie. Pellentesque
-                        habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    </p>
+
+                    <div class="col-sm-9">
+                        <p class="lead">
+                            <%= offerArr[index].offerDescription %>
+                        </p>
+
+                        <div class="row">
+                            <div class="col-sm-2 pull-right">
+                                <a href="#" class="btn btn-default offer-button" role="button">Abrir oferta</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <br>
-        <br>
-        <br>
-        <div class="feed-offer">
-            <div class="row">
-                <div class="col-md-8">
-                    <a href="#">Comunidade2</a> - <a href="#">Oferta1</a>
-                </div>
-                <div class="col-md-2">
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
-                            <span class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
-                            <li role="presentation"><a role="menuitem" tabindex="-100px" href="#">Editar</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-100px" href="#">Apagar</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <br>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="imgAbt">
-                        <img width="220" height="220" src="http://downloadicons.net/sites/default/files/offer-icons-47062.png" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <p class="lead">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non auctor
-                        magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie. Pellentesque
-                        habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <br>
-        <br>
-        <div class="feed-offer">
-            <a href="#">Comunidade2</a> - <a href="#">Oferta2</a>
-            <br>
-            <br>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="imgAbt">
-                        <img width="220" height="220" src="http://downloadicons.net/sites/default/files/offer-icons-47062.png" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <p class="lead">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non auctor
-                        magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie. Pellentesque
-                        habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <br>
-        <br>
-        <div class="feed-offer">
-            <a href="#">Comunidade2</a> - <a href="#">Oferta3</a>
-            <br>
-            <br>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="imgAbt">
-                        <img width="220" height="220" src="http://downloadicons.net/sites/default/files/offer-icons-47062.png" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <p class="lead">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non auctor
-                        magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie. Pellentesque
-                        habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <br>
-        <br>
-        <div class="feed-offer">
-            <a href="#">Comunidade3</a> - <a href="#">Oferta1</a>
-            <br>
-            <br>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="imgAbt">
-                        <img width="220" height="220" src="http://downloadicons.net/sites/default/files/offer-icons-47062.png" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <p class="lead">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non auctor
-                        magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie. Pellentesque
-                        habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    </p>
-                </div>
-            </div>
-        </div>
+        <% } %>
     </div>
 </div>
 </body>
