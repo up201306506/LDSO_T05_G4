@@ -2,13 +2,13 @@ var express = require('express'),
     router = express.Router(),
     mongo = require('mongodb').MongoClient,
     assert = require('assert'),
-    configDB = require('./../config/database.js'),
-    userPrivileges = require('./../config/userPrivileges'),
-    offerController = require('../controllers/OfferController');
+    configDB = require('./../../config/dbURL.js'),
+    userPrivileges = require('./../../config/userPrivileges'),
+    offerController = require('../../controllers/OfferController');
 
 /* GET users listing. */
 router.get('/', userPrivileges.ensureAuthenticated, function(req, res, next) {
-    res.render('new_offer', { title: 'New Offer' });
+    res.render('offer/new_offer', { title: 'New Offer' });
 });
 
 router.post('/', function(req, res, next) {

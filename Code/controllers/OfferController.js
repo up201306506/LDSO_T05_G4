@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
-var configDB = require('./../config/database.js');
+var configDB = require('./../config/dbURL.js');
 var url = configDB.url;
 
 module.exports = {
