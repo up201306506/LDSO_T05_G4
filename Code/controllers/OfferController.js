@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
-var configDB = require('./../config/database.js');
+var configDB = require('./../config/dbURL.js');
 var url = configDB.url;
 
 var insertOffer = function (db, id, type, user, description, is_expired, date, price, title, callback) {
