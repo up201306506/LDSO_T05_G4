@@ -1,4 +1,4 @@
-var configDB = require('./../config/database.js');
+var configDB = require('./../config/dbURL.js');
 
 module.exports = {
     

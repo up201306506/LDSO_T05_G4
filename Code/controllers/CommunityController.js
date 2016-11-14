@@ -1,19 +1,19 @@
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
-var configDB = require('./../config/database.js');
+var configDB = require('./../config/dbURL.js');
 var url = configDB.url;
 
 module.exports = {
 
-    insertCommunity : function (db, name, headOffice, category, founder, description, privacy, creationDate,members,callback){
+    insertCommunity : function (db, name, headOffice, category, founder, description, privacy, members, callback){
         var community = db.collection('community');
-        community.find({name:name, date: creationDate }).toArray(function (err,docs) {
+        community.find({name:name}).toArray(function (err,docs) {
             assert.equal(err,null);
             if(docs.length>=1){
-                console.log('Already exists a community with the given name and creation date');
+                console.log('Already exists a community with the given name: ' + name);
                 db.close();
-            }
-            else{
-                community.insertOne({name: name, office: headOffice, category: category, description: description, date: creationDate, founder: founder, privacy: privacy, members: members},
+            }else{
+                community.insertOne({name: name, office: headOffice, category: category, description: description,
+                       founder: founder, privacy: privacy, members: members},
                     function (err,result) {
                         assert.equal(err,null);
                         assert.equal(1, result.result.n);
@@ -22,6 +22,16 @@ module.exports = {
                         callback(result);
                     });
             }
+        });
+    },
+
+    getUserEnrolledCommunities : function (db, email, callback) {
+        var community = db.collection('community');
+        community.find({members: email}).toArray(function (err,docs) {
+            assert.equal(err,null);
+            console.log('Found ' + docs.length + " documents");
+            console.log(docs);
+            callback(docs);
         });
     }
 }
