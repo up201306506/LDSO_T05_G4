@@ -12,7 +12,7 @@
 <% include ./../templates/navbar.ejs %>
 
 <div class="col-md-0 center-align datadiv">
-    <h3 class="dark-grey">Perfil <a href="profile/edit" class="label label-primary label-as-badge editbadge">Editar</a></h3>
+    <h3 class="dark-grey">Perfil <% if(userdata.username == user){ %><a href="profile/edit" class="label label-primary label-as-badge editbadge">Editar</a> <% } %></h3>
 
     <div class="form-group col-lg-12">
         <label>Username</label>
@@ -55,6 +55,7 @@
         <% } %>
     </div>
 
+    <% if(userdata.username == user){ %>
     <div class="form-group col-lg-12">
         <label>Endereço de Email</label>
         <h5><%= userdata.email %></h5>
@@ -64,6 +65,7 @@
         <label>Password</label>
         <a href="profile/edit" class="btn btn-link">Editar</a>
     </div>
+    <% } %>
 
 </div>
 

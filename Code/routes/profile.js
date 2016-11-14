@@ -10,8 +10,14 @@ var express = require('express'),
 
 /* View profile */
 router.get('/', userPrivileges.ensureAuthenticated, function (req, res) {
+
+    var userProfile = req.user;
+    if(typeof req.query.username != 'undefined'){
+        userProfile = req.query.username;
+    }
+
     mongo.connect(configDB.url, function (err, db, next) {
-        userController.getUser(db, req.user, function (err, userdata) {
+        userController.getUser(db, userProfile, function (err, userdata) {
             db.close();
             res.render('profile/view', {title: 'Local Exchange', userdata: userdata});
         });
