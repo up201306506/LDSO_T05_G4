@@ -2,20 +2,24 @@ var express = require('express'),
     router = express.Router(),
     configDB = require('./../../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
-    assert = require('assert'),
-    userPrivileges = require('./../../config/userPrivileges'),
-    communityController = require('./../../controllers/CommunityController');
+    userController = require('./../../controllers/UserController'),
+    communityController = require('./../../controllers/CommunityController'),
+    userPrivileges = require('./../../config/userPrivileges');
 
-router.get('/:communityName', userPrivileges.ensureAuthenticated, function(req, res, next) {
+router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req, res, next) {
     // GET community name from url
-    var name = String(req.params.communityName);
+    var communityName = String(req.params.communityName);
 
+    // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
-        console.log(communityController.isUserEnrolledInCommunity(db, "LDSO", "pedro.pereira.95@hotmail.com"));
-        //console.log(communityController.isUserEnrolledInCommunity(db, "LDSO", "pedro.pereira@hotmail.com"));
-        //console.log(communityController.isUserEnrolledInCommunity(db, "LD", "pedro.pereira.95@hotmail.com"));
-
-        db.close();
+        // Verifies if this user is enrolled in this community
+        communityController.isUserEnrolledInCommunity(db, req.user, communityName, function (community) {
+            if (community.length == 0) {
+                res.redirect('/');
+            } else {
+                // TODO Maybe do functions for every page???
+            }
+        });
     });
 
     // TEMP

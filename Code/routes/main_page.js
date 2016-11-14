@@ -23,22 +23,19 @@ router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
     ];
 
     mongo.connect(configDB.url, function (err, db, next) {
-        // Get this user information
-        userController.getUser(db, req.user, function (userdata) {
-            // Get this user enrolled communities from the db
-            communityController.getUserEnrolledCommunities(db, userdata.username, function (communities) {
-                // TODO Get all offers visible to this user
+        // Get this user enrolled communities from the db
+        communityController.getUserEnrolledCommunities(db, req.user, function (communities) {
+            // TODO Get all offers visible to this user
 
-                // TODO Eventually this following block of code will be contained by the block above to be done
-                db.close();
+            // TODO Eventually this following block of code will be contained by the block above to be done
+            db.close();
 
-                res.render('main_page',
-                    {
-                        title: 'Local Exchange - Main page',
-                        communityArr: communities,
-                        offerArr: tempOfferArr
-                    });
-            });
+            res.render('main_page',
+                {
+                    title: 'Local Exchange - Main page',
+                    communityArr: communities,
+                    offerArr: tempOfferArr
+                });
         });
     });
 });

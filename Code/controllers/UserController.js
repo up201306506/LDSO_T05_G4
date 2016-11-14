@@ -8,7 +8,7 @@ module.exports = {
         var user = db.collection('user');
 
         // Search for the user's username in the db
-        user.find({username: username}).toArray(function (err, docs) {
+        user.findOne({username: username}).toArray(function (err, docs) {
             assert.equal(err, null);
 
             // Verifies if there is another user with the same specs on the db
@@ -65,6 +65,19 @@ module.exports = {
             callback(user);
         });
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     updateEmail: function (db, oldEmail, newEmail, callback) {
         var user = db.collection('user');

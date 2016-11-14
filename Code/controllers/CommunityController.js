@@ -22,7 +22,7 @@ module.exports = {
         var community = db.collection('community');
 
         // Search for the community's name in the db
-        community.find({name: communityName}).toArray(function (err, docs) {
+        community.findOne({name: communityName}).toArray(function (err, docs) {
             assert.equal(err, null);
 
             // Verifies if there is another community with the same specs on the db
@@ -47,12 +47,17 @@ module.exports = {
         });
     },
 
+    // Verifies if an user is enrolled in a community
     isUserEnrolledInCommunity: function (db, username, communityName) {
-        var myCursor = db.collection('community').find({
-            name: communityName,
-            members: username
-        }).toArray(function (err, arr) {
-            console.log(arr);
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Verifies if the user is member of the specified community
+        community.findOne({name: communityName, members: username}).toArray(function (err, community) {
+            assert.equal(err, null);
+
+            // Process the community
+            callback(community);
         });
     }
 }
