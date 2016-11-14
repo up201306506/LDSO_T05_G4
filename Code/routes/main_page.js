@@ -1,14 +1,12 @@
 var express = require('express'),
     router = express.Router(),
-    assert = require('assert'),
     configDB = require('./../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
-    communityController = require('../controllers/CommunityController'),
-    userController = require('../controllers/UserController'),
+    userController = require('./../controllers/UserController'),
+    communityController = require('./../controllers/CommunityController'),
     userPrivileges = require('./../config/userPrivileges');
 
-/* GET users listing. */
-router.get('/', userPrivileges.ensureAuthenticated, function(req, res, next) {
+router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
 
     // TEMP
     var tempOfferArr = [
@@ -24,21 +22,23 @@ router.get('/', userPrivileges.ensureAuthenticated, function(req, res, next) {
         }
     ];
 
-    // Get this user enrolled communities from the db
     mongo.connect(configDB.url, function (err, db, next) {
-        userController.getUser(db, req.user, function (err, userdata) {
-            communityController.getUserEnrolledCommunities(db, userdata.email, function (communityDocs) {
-                db.close();
+        // Get this user information
+        userController.getUser(db, req.user, function (userdata) {
+            // Get this user enrolled communities from the db
+            communityController.getUserEnrolledCommunities(db, userdata.username, function (communities) {
+                // TODO Get all offers visible to this user
 
-                var tempCommunityArr = communityDocs;
+                // TODO Eventually this following block of code will be contained by the block above to be done
+                db.close();
 
                 res.render('main_page',
                     {
                         title: 'Local Exchange - Main page',
-                        communityArr: tempCommunityArr,
+                        communityArr: communities,
                         offerArr: tempOfferArr
                     });
-            })
+            });
         });
     });
 });

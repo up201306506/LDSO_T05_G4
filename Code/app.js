@@ -69,41 +69,42 @@ app.use(function (req, res, next) {
 //---------------------------------------------------------------------
 
 // web pages js's
-// initial pages
+// unspecified
 var webpage_login = require('./routes/login');
 var webpage_faq = require('./routes/faq');
-// profile pages
 var webpage_mainpage = require('./routes/main_page');
+var webpage_searchresults = require('./routes/search_results');
+// profile
 var webpage_profile = require('./routes/profile/profile');
-// community pages
+// community
+var webpage_communitypage = require('./routes/community/community_page');
 var webpage_createCommunity = require('./routes/community/create_community');
 var webpage_editCommunity = require('./routes/community/edit_community');
 var webpage_communityUserList = require('./routes/community/community_user_list');
+// offer
 var webpage_newoffer = require('./routes/offer/new_offer');
 var webpage_viewoffer = require('./routes/offer/viewoffer');
-// search page
-var webpage_searchresults = require('./routes/search_results');
-// messaging pages
+// messaging
 var webpage_messageinbox = require('./routes/messaging/inbox');
 var webpage_message = require('./routes/messaging/message');
 
-
-// declaration of the web pages
-// initial pages
+// pages url's
+// unspecified
 app.use('/login', webpage_login);
 app.use('/faq', webpage_faq);
-// profile pages
 app.use('/', webpage_mainpage);
+app.use('/search_results', webpage_searchresults);
+// profile
 app.use('/profile', webpage_profile);
-// community pages
+// community
+app.use('/community', webpage_communitypage);
 app.use('/create_community', webpage_createCommunity);
 app.use('/edit_community', webpage_editCommunity);
 app.use('/community_users', webpage_communityUserList);
+// offer
 app.use('/newoffer', webpage_newoffer);
 app.use('/viewoffer', webpage_viewoffer);
-// search page
-app.use('/search_results', webpage_searchresults);
-// messaging pages
+// messaging
 app.use('/message/inbox', webpage_messageinbox);
 app.use('/message/message', webpage_message);
 
