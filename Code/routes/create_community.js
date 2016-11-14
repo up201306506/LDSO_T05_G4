@@ -4,6 +4,8 @@ var assert = require('assert');
 var configDB = require('./../config/database.js');
 var communityController = require('../controllers/CommunityController');
 var mongo = require('mongodb').MongoClient;
+var userController = require('../controllers/UserController');
+var userPrivileges = require('./../config/userPrivileges');
 
 /* GET community creation page. */
 router.get('/', function (req, res) {
@@ -34,13 +36,8 @@ var getDateTime = function () {
     return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
 }
 
-router.post('/create', function (req,res)
+router.post('/create', userPrivileges.ensureAuthenticated, function (req,res)
 {
-    var user_data;
-
-    if(req.isAuthenticated())
-        user_data = req.user;
-
     req.checkBody('nome', 'Nome da comunidade necessário').notEmpty();
     req.checkBody('sede', 'Sede da comunidade necessária').notEmpty();
     req.checkBody('descricao', 'Descricao da comunidade necessária').notEmpty();
@@ -54,8 +51,10 @@ router.post('/create', function (req,res)
         });
     } else {
         mongo.connect(configDB.url, function (err, db, next) {
-            communityController.insertCommunity(db, req.body.nome, req.body.sede, req.body.categoria, user_data, req.body.descricao, req.body.visualizacao, getDateTime(),[user_data], function () {
-                db.close();
+            userController.getUser(db, req.user, function (err, userdata) {
+                communityController.insertCommunity(db, req.body.nome, req.body.sede, req.body.categoria, userdata.email, req.body.descricao, req.body.visualizacao, getDateTime(), [userdata.email], function () {
+                    db.close();
+                });
             });
         });
 
