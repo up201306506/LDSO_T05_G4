@@ -42,7 +42,7 @@ router.get('/', function(req, res, next) {
         title: "Example Community",
         communityName: "Example Community",
         info: community_info,
-        communityImage: "images/placeholder.jpg",
+        communityLogo: "images/placeholder.jpg",
         recommendations: offers,
         pin: pinned_announcement,
         userCoins: 100
