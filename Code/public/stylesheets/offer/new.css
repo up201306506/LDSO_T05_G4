@@ -1,0 +1,8 @@
+body { padding-top: 70px; }
+
+.currencyinput {
+    border: 1px inset #ccc;
+}
+.currencyinput input {
+    border: 0;
+}

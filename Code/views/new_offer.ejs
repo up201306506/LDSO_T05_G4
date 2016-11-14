@@ -4,20 +4,21 @@
         <title> <%= title %> </title>
         <!-- Bootstrap & jQuery -->
         <% include templates/header.ejs %>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/offer/new.css">
     </head>
     <body>
-    <% include templates/login_navbar.ejs %>
+    <% include templates/navbar.ejs %>
         <div class="container">
             <h1> New Offer </h1><br>
         </div>
         <div class="container">
-            <form action="/login" method="post">
+            <form role="form" action="/newoffer" method="post">
 
                 <!-- Offer Name-->
                 <div class="form-group row">
                     <label for="offer_name" class="col-sm-2 col-form-label"> Name : </label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="offer_name" placeholder="Offer Name ..." required>
+                        <input type="text" class="form-control" id="offer_name" name="offer_name" placeholder="Offer Name ..." required>
                     </div>
                 </div>
 
@@ -25,15 +26,15 @@
                 <div class="form-group row">
                     <label for="offer_description" class="col-sm-2 col-form-label"> Description : </label>
                     <div class="col-sm-10">
-                        <textarea rows="3" cols="20" class="form-control" id="offer_description" placeholder="Offer Description ..." required></textarea>
+                        <textarea rows="3" cols="20" class="form-control" id="offer_description" name="offer_description" placeholder="Offer Description ..." required></textarea>
                     </div>
                 </div>
 
                 <!-- Offer Price -->
                 <div class="form-group row">
-                    <label for="offer_name" class="col-sm-2 col-form-label"> Price : </label>
+                    <label for="offer_price" class="col-sm-2 col-form-label"> Price : </label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="offer-price" placeholder="Offer Price ..." required>
+                        <input type="number" class="form-control currency"  id="offer_price" name="offer_price" placeholder="Offer Price ..." min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" required />
                     </div>
                 </div>
 
@@ -41,27 +42,25 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label"> Type : </label>
                     <div class="col-sm-10">
-                       <form>
                             <label class="radio-inline">
-                                <input type="radio" name="optradio"> Material
+                                <input type="radio" name="optradio" value="1"> Material
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="optradio"> Service
+                                <input type="radio" name="optradio" value="2"> Service
                             </label>
-                        </form>
                     </div>
                 </div>
 
                 <!-- Offer Image -->
                 <div class="form-group row">
-                    <label for="offer-image" class="col-sm-2 col-form-label"> Image : </label>
+                    <label for="offer_image" class="col-sm-2 col-form-label"> Image : </label>
                     <div class="col-sm-10">
-                        <input type="file" class="form-control" id="offer-image" required>
+                        <input type="file" class="form-control" id="offer_image" name="offer_image">
                     </div>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="button" class="btn btn-primary"> Submit Offer </button>
+                <button type="submit" name="offer-submit" class="btn btn-primary"> Submit Offer </button>
             </form>
         </div>
     </body>
