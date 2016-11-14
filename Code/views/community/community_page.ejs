@@ -3,26 +3,21 @@
 <head>
     <title><%= title %></title>
 
-    <% include templates/header.ejs %>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/main_page.css">
+    <% include ./../templates/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/community/community_page.css">
 </head>
 <body>
-<% include templates/navbar.ejs %>
+<% include ./../templates/navbar.ejs %>
 
 <div class="container">
     <div id="side-container" class="col-md-3">
         <ul class="sidebar-nav">
             <li class="sidebar-title">
-                Comunidades
+                <%= title %>
             </li>
             <li class="sidebar-subtitle">
-                <a href="/create_community">Criar comunidade</a>
+                <a href="#">yoyooyade</a>
             </li>
-            <% for(var index = 0; index < communityArr.length; index++) { %>
-            <li>
-                <a href="/community/<%= communityArr[index].name %>"><%= communityArr[index].name %></a>
-            </li>
-            <% } %>
         </ul>
     </div>
 
@@ -30,7 +25,7 @@
         <% for(var index = 0; index < offerArr.length; index++) { %>
         <div class="row offer-area">
             <div class="offer-title">
-                <a href="#"><%= offerArr[index].communityName %></a> : <a href="#"><%= offerArr[index].offerName %></a>
+                <a href="#"><%= offerArr[index].offerName %></a>
             </div>
 
             <div class="offer-content">

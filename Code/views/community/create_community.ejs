@@ -10,60 +10,66 @@
 <% include ./../templates/navbar.ejs %>
 
 <div class="container-fluid">
-	<div class="col-sm-2"></div>
-	
-	<div class="col-sm-8">
-		<h1>Criar Comunidade</h1>
-		<br>
-	
-		<form role="form" action="/create_community/create" method="post">
-			<div class="form-horizontal">
-				<div class="form-group">
-					<label class="control-label col-sm-2" for="nome">Nome:</label>
-					<div class="col-sm-10"><input type="text" name="nome" class="form-control" id="nome"></div>
-				</div>
-				
-				<div class="form-group">
-					<label class="control-label col-sm-2" for="sede">Sede:</label>
-					<div class="col-sm-10"><input type="text" name="sede" class="form-control" id="sede"></div>
-				</div>
-				
-				<div class="form-group">
-					<label class="control-label col-sm-2" for="descricao">Descrição:</label>
-					<div class="col-sm-10"><textarea class="form-control" name="descricao" id="descricao" rows="3"></textarea></div>
-				</div>
-				
-				<div class="form-group">
-					<label class="control-label col-sm-2" for="categoria">Categoria:</label>
-					<div class="col-sm-4">
-						<select class="form-control" name="categoria" id="sel-categoria">
-							<option>Geral</option>
-							<option>Jardinagem</option>
-							<option>Mecânica</option>
-							<option>Materiais</option>
-						</select>
-					</div>
-					
-					<label class="control-label col-sm-2" for="visualizacao">Visualização:</label>
-					<div class="col-sm-2">
-						<select class="form-control" name="visualizacao" id="sel-visualizacao">
-							<option>Pública</option>
-							<option>Privada</option>
-							<option>Secreta</option>
-						</select>
-					</div>
-				</div>
-				
-				<div class="form-group" id="buttons-panel">
-					<div class="col-sm-5"></div>
-					<div class="col-sm-1"><button type="submit" class="btn btn-default">Criar</button></div>
-					<div class="col-sm-1"><button type="button" class="btn btn-default" onclick="location.href = '#'">Voltar</button></div>
-				</div>
-			</div>
-		</form>
-	</div>
+    <div class="col-sm-2"></div>
 
-	<div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <h1>Criar Comunidade</h1>
+        <br>
+
+        <form role="form" action="/create_community/create" method="post">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="nome">Nome:</label>
+                    <div class="col-sm-10"><input type="text" name="communityName" class="form-control"
+                                                  id="communityName"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="sede">Sede:</label>
+                    <div class="col-sm-10"><input type="text" name="hq" class="form-control" id="hq"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="descricao">Descrição:</label>
+                    <div class="col-sm-10"><textarea class="form-control" name="description" id="description"
+                                                     rows="3"></textarea></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="category">Categoria:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="category" id="sel-category">
+                            <option>Geral</option>
+                            <option>Jardinagem</option>
+                            <option>Mecânica</option>
+                            <option>Materiais</option>
+                        </select>
+                    </div>
+
+                    <label class="control-label col-sm-2" for="privacy">Visualização:</label>
+                    <div class="col-sm-2">
+                        <select class="form-control" name="privacy" id="sel-privacy">
+                            <option>Pública</option>
+                            <option>Privada</option>
+                            <option>Secreta</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" id="buttons-panel">
+                    <div class="col-sm-5"></div>
+                    <div class="col-sm-1">
+                        <button type="submit" class="btn btn-default">Criar</button>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-default" onclick="location.href = '/'">Voltar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-sm-2"></div>
 </div>
 
 </body>
