@@ -1,33 +1,26 @@
-var MongoClient = require('mongodb').MongoClient, assert = require('assert');
-var configDB = require('./../config/dbURL.js');
-var url = configDB.url;
+var assert = require('assert');
 
 module.exports = {
-    getUser : function (db, username, callback) {
-        var user = db.collection('user');
-        user.findOne({username: username}, function (err, docs) {
-            assert.equal(err, null);
-            callback(err, docs);
-        });
-    },
 
-    insertUser: function (db, name, username, mail, pass, gender, phone, birthdate, callback) {
+    // Inserts a new user
+    insertUser: function (db, name, username, email, pass, gender, phone, birthdate, callback) {
+        // Get User collection
         var user = db.collection('user');
-        //Procura um utilizador na base de dados, dado o e-mail
-        user.find({email: mail}).toArray(function (err, docs) {
+
+        // Search for the user's username in the db
+        user.findOne({username: username}).toArray(function (err, docs) {
             assert.equal(err, null);
-            //Verifica se ja existe um user com o e-mail dado
-            //Se existir, avisa o utilizador e fecha a base de dados
+
+            // Verifies if there is another user with the same specs on the db
             if (docs.length >= 1) {
-                console.log('Already exists a user with the given e-mail');
+                console.log('This user already exists ' + username);
                 db.close();
-            }
-            //Senao existir, adiciona-o a base de dados
-            else {
+            } else {
+                // Inserts the new user
                 user.insertOne({
                         name: name,
                         username: username,
-                        email: mail,
+                        email: email,
                         password: pass,
                         gender: gender,
                         phone: phone,
@@ -37,20 +30,54 @@ module.exports = {
                         assert.equal(err, null);
                         assert.equal(1, result.result.n);
                         assert.equal(1, result.ops.length);
-                        console.log('Inserted 1 document into the db');
-                        callback(result);
+
+                        console.log('Inserted a new user: ' + username);
+                        db.close();
                     });
             }
         });
     },
 
-    logIn: function (db, email, pass, callback) {
+    // Verifies if an user exists
+    logIn: function (db, username, pass, callback) {
+        // Get User collection
         var user = db.collection('user');
-        user.findOne({username: email, password: pass}, function (err, docs) {
+
+        // Find the user in the db
+        user.findOne({username: username, password: pass}, function (err, user) {
             assert.equal(err, null);
-            callback(err, docs);
+
+            // Process the search
+            callback(err, user);
         });
     },
+
+    // Get user data
+    getUser: function (db, username, callback) {
+        // Get User collection
+        var user = db.collection('user');
+
+        // Find the user in the db
+        user.findOne({username: username}, function (err, user) {
+            assert.equal(err, null);
+
+            // Process the search
+            callback(user);
+        });
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     updateEmail: function (db, oldEmail, newEmail, callback) {
         var user = db.collection('user');
