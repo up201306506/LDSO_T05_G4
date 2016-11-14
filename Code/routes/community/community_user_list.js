@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var assert = require('assert');
-var userPrivileges = require('./../config/userPrivileges');
+var userPrivileges = require('./../../config/userPrivileges');
 
 /* GET community user list page. */
 router.get('/', function (req, res) {
