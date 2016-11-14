@@ -8,25 +8,25 @@ router.get('/', function(req, res, next) {
             title: "Example Offer 1",
             user: "Example User 1",
             price: 5,
-            image: ""
+            image: "images/placeholder.jpg"
         },
         {
             title: "Example Offer 2",
             user: "Example User 2",
-            price: 5,
-            image: ""
+            price: 10,
+            image: "images/placeholder.jpg"
         },
         {
             title: "Example Offer 3",
             user: "Example User 3",
-            price: 5,
-            image: ""
+            price: 0,
+            image: "images/placeholder.jpg"
         },
         {
             title: "Example Offer 4",
             user: "Example User 4",
-            price: 5,
-            image: ""
+            price: 15,
+            image: "images/placeholder.jpg"
         }
     ];
 

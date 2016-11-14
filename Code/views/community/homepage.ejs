@@ -17,7 +17,7 @@
     <hr>
     <div class="row">
         <!-- Right-Top div -->
-        <div class="col-md-9 col-md-push-3">
+        <div class="col-md-4 col-md-push-8">
             <div id="Community_Info">
                 Community Info
             </div>
@@ -26,20 +26,30 @@
             </div>
         </div>
         <!-- Left-Bot div -->
-        <div class="col-md-3 col-md-pull-9">
+        <div class="col-md-8 col-md-pull-4">
             <div id="Pinned_Content">
-                Pins
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"> <span class="glyphicon glyphicon-pushpin aria-hidden="true""></span> <%= pin.title %></h3>
+                    </div>
+                    <div class="panel-body">
+                        <p id="pin_content" class="pin_hidden_text"> <%= pin.description %></p>
+                        <small><a href="#" id="readMore_pin">Show More</a></small>
+                    </div>
+                </div>
             </div>
             <div id="Offer_List">
                 <% for(var i = 0; i < recommendations.length; i++){ %>
                 <div class="media">
                     <div class="media-left media-middle">
                         <a href="#">
-                            <img class="media-object" src="D:\Personal Data\Trabalho\LDSO\LDSO_T05_G4\Resources\placeholder_square_300x300.jpg" alt="<%= recommendations[i].title + "'s Offer Image"%>">
+                            <img class="media-object media_image" src="<%= recommendations[i].image %>" alt="<%= recommendations[i].title + "'s Offer Image"%>">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading..."> <%= recommendations[i].title %></h4>
+                        <a href="#">
+                            <h4 class="media-heading..."> <%= recommendations[i].title %></h4>
+                        </a>
                         <p><%= recommendations[i].user %></p>
                         <p>Price: <strong><%= recommendations[i].price %></strong></p>
                     </div>
@@ -49,7 +59,20 @@
         </div>
     </div>
 </div>
-<div id="navbar_float_test"></div>
+
+
+<script>
+    $(document).ready(function(){
+
+        //read more button in pin area
+        $('#readMore_pin').click(function(){
+            $('#pin_content').toggleClass('pin_hidden_text');
+            if($(this).text()=='Show Less') $(this).text('Show More');
+            else  $(this).text('Show Less');
+        });
+    });
+</script>
+
 
 </body>
 </html>

@@ -14,21 +14,37 @@ hr  {  margin-top: 5px;    margin-bottom: 10px;}
     width: 90%;
     justify-content: center;
 }
-
-.col-md-9 {
+.col-md-8 {}
+#Pinned_Content{}
+#pin_content{
+    overflow: hidden;
+    transition: all 0.3s;
+    margin-bottom: 10px;
 }
-.col-md-3 {
+.pin_hidden_text{
+    height: 40px!important;
+}
+#Offer_List{
+    overflow-y: scroll;
+    overflow-x: auto;
+}
+img{
+    max-width: 200px;
+    height: auto;
 }
 
 
+.col-md-4 {}
+#Community_Info{}
+#User_Options{}
 
 
 
 /*If you want to see the page's grid*/
-.col-md-9 {
+.col-md-4 {
     border: 1px solid blue;
 }
-.col-md-3 {
+.col-md-8 {
     border: 1px solid blue;
 }
 #main_body {
