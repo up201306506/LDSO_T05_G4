@@ -10,11 +10,46 @@
 <body>
 <% include ../templates/navbar.ejs %>
 
-    <div id="navbar_float_test"></div>
-
 <div class="container"id="main_body">
-
+    <h1>
+        <%= communityName %>
+    </h1>
+    <hr>
+    <div class="row">
+        <!-- Right-Top div -->
+        <div class="col-md-9 col-md-push-3">
+            <div id="Community_Info">
+                Community Info
+            </div>
+            <div id="User_Options">
+                User Options
+            </div>
+        </div>
+        <!-- Left-Bot div -->
+        <div class="col-md-3 col-md-pull-9">
+            <div id="Pinned_Content">
+                Pins
+            </div>
+            <div id="Offer_List">
+                <% for(var i = 0; i < recommendations.length; i++){ %>
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <a href="#">
+                            <img class="media-object" src="D:\Personal Data\Trabalho\LDSO\LDSO_T05_G4\Resources\placeholder_square_300x300.jpg" alt="<%= recommendations[i].title + "'s Offer Image"%>">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading..."> <%= recommendations[i].title %></h4>
+                        <p><%= recommendations[i].user %></p>
+                        <p>Price: <strong><%= recommendations[i].price %></strong></p>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
 </div>
+<div id="navbar_float_test"></div>
 
 </body>
 </html>

@@ -1,4 +1,5 @@
 body { margin-top: 75px;font: 14px Geneva, Helvetica, Arial, sans-serif;  background-color: lightsteelblue;}
+hr  {  margin-top: 5px;    margin-bottom: 10px;}
 
 #navbar_float_test {
     height: 3000px;
@@ -8,4 +9,28 @@ body { margin-top: 75px;font: 14px Geneva, Helvetica, Arial, sans-serif;  backgr
 }
 
 
-#main_body {    background-color: white;  }
+#main_body {
+    background-color: white;
+    width: 90%;
+    justify-content: center;
+}
+
+.col-md-9 {
+}
+.col-md-3 {
+}
+
+
+
+
+
+/*If you want to see the page's grid*/
+.col-md-9 {
+    border: 1px solid blue;
+}
+.col-md-3 {
+    border: 1px solid blue;
+}
+#main_body {
+    border: dotted 2px crimson;
+}
