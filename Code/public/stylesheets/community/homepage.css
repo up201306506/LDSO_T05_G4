@@ -1,0 +1,68 @@
+body { margin-top: 75px;font: 14px Geneva, Helvetica, Arial, sans-serif;  background-color: lightsteelblue;}
+hr  {  margin-top: 5px;    margin-bottom: 10px;}
+
+#navbar_float_test {
+    height: 3000px;
+    width: 200px;
+    margin: auto;
+    background-color: black;
+}
+
+
+#main_body {
+    background-color: white;
+    width: 90%;
+    justify-content: center;
+}
+.col-md-8 {}
+#Pinned_Content{}
+#pin_content{
+    overflow: hidden;
+    transition: all 0.3s;
+    margin-bottom: 10px;
+}
+.pin_hidden_text{
+    height: 40px;
+}
+#Offer_List{
+    overflow-y: scroll;
+    overflow-x: auto;
+}
+#Offer_List img{
+    max-width: 200px;
+    height: auto;
+}
+
+
+.col-md-4 {}
+#Community_Info{
+    max-height: 500px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+#Community_Info img{
+    max-width: 100px;
+    border-radius: 50%;
+    height: auto;
+}
+#User_Options{
+    text-align: center;
+}
+#User_Options *{
+    margin-bottom: 10px;
+}
+
+
+
+/*If you want to see the page's grid*/
+/*
+.col-md-4 {
+    border: 1px solid blue;
+}
+.col-md-8 {
+    border: 1px solid blue;
+}
+#main_body {
+    border: dotted 2px crimson;
+}
+*/

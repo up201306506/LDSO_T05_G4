@@ -79,6 +79,7 @@ var webpage_profile = require('./routes/profile/profile');
 var webpage_createCommunity = require('./routes/community/create_community');
 var webpage_editCommunity = require('./routes/community/edit_community');
 var webpage_communityUserList = require('./routes/community/community_user_list');
+var webpage_communityHomepage = require('./routes/community/homepage');
 var webpage_newoffer = require('./routes/offer/new_offer');
 var webpage_viewoffer = require('./routes/offer/viewoffer');
 // search page
@@ -99,6 +100,7 @@ app.use('/profile', webpage_profile);
 app.use('/create_community', webpage_createCommunity);
 app.use('/edit_community', webpage_editCommunity);
 app.use('/community_users', webpage_communityUserList);
+app.use('/community', webpage_communityHomepage);
 app.use('/newoffer', webpage_newoffer);
 app.use('/viewoffer', webpage_viewoffer);
 // search page
