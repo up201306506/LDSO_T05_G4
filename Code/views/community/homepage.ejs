@@ -16,17 +16,31 @@
     </h1>
     <hr>
     <div class="row">
+
+
         <!-- Right-Top div -->
         <div class="col-md-4 col-md-push-8">
+            <!-- -->
             <div id="Community_Info">
-                Community Info
+                <div class="media">
+                    Content
+                </div>
             </div>
+            <!-- -->
             <div id="User_Options">
-                User Options
+                <span>Coins: <strong><%= userCoins %></strong></span>
+                <br>
+                <button type="button" class="btn btn-success">Create Offer</button>
+                <br>
+                <button type="button" class="btn btn-success">Lookup Users</button>
+
             </div>
         </div>
+
+
         <!-- Left-Bot div -->
         <div class="col-md-8 col-md-pull-4">
+            <!-- -->
             <div id="Pinned_Content">
                 <div class="panel panel-success">
                     <div class="panel-heading">
@@ -38,6 +52,7 @@
                     </div>
                 </div>
             </div>
+            <!-- -->
             <div id="Offer_List">
                 <% for(var i = 0; i < recommendations.length; i++){ %>
                 <div class="media">

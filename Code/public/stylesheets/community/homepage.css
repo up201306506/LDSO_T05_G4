@@ -36,11 +36,19 @@ img{
 
 .col-md-4 {}
 #Community_Info{}
-#User_Options{}
+#User_Options{
+
+    text-align: center;
+    margin: auto;
+}
+#User_Options *{
+    margin-bottom: 10px;
+}
 
 
 
 /*If you want to see the page's grid*/
+/*
 .col-md-4 {
     border: 1px solid blue;
 }
@@ -50,3 +58,4 @@ img{
 #main_body {
     border: dotted 2px crimson;
 }
+*/
