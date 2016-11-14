@@ -10,7 +10,11 @@ var express = require('express'),
 
 /* GET page. */
 router.get('/', function (req, res) {
-    res.render('login', {title: 'Local Exchange - Login'});
+    if(req.isAuthenticated()){
+        res.redirect('/');
+    }else{
+        res.render('login', {title: 'Local Exchange - Login'});
+    }
 });
 
 router.post('/register', function (req, res) {
