@@ -1,30 +1,30 @@
 var MongoClient = require('mongodb').MongoClient, assert = require('assert');
-var configDB = require('./../config/database.js');
+var configDB = require('./../config/dbURL.js');
 var url = configDB.url;
 
 module.exports = {
     getUser : function (db, username, callback) {
-        var users = db.collection('users');
-        users.findOne({username: username}, function (err, docs) {
+        var user = db.collection('user');
+        user.findOne({username: username}, function (err, docs) {
             assert.equal(err, null);
             callback(err, docs);
         });
     },
 
     insertUser: function (db, name, username, mail, pass, gender, phone, birthdate, callback) {
-        var users = db.collection('users');
+        var user = db.collection('user');
         //Procura um utilizador na base de dados, dado o e-mail
-        users.find({email: mail}).toArray(function (err, docs) {
+        user.find({email: mail}).toArray(function (err, docs) {
             assert.equal(err, null);
-            //Verifica se j� existe um user com o e-mail dado
+            //Verifica se ja existe um user com o e-mail dado
             //Se existir, avisa o utilizador e fecha a base de dados
             if (docs.length >= 1) {
                 console.log('Already exists a user with the given e-mail');
                 db.close();
             }
-            //Sen�o existir, adiciona-o � base de dados
+            //Senao existir, adiciona-o a base de dados
             else {
-                users.insertOne({
+                user.insertOne({
                         name: name,
                         username: username,
                         email: mail,
@@ -45,16 +45,16 @@ module.exports = {
     },
 
     logIn: function (db, email, pass, callback) {
-        var users = db.collection('users');
-        users.findOne({username: email, password: pass}, function (err, docs) {
+        var user = db.collection('user');
+        user.findOne({username: email, password: pass}, function (err, docs) {
             assert.equal(err, null);
             callback(err, docs);
         });
     },
 
     updateEmail: function (db, oldEmail, newEmail, callback) {
-        var users = db.collection('users');
-        users.updateOne({email: oldEmail}, {$set: {email: newEmail}}
+        var user = db.collection('user');
+        user.updateOne({email: oldEmail}, {$set: {email: newEmail}}
             , function (err, result) {
                 assert.equal(err, null);
                 console.log("E-mail updated.");
@@ -63,8 +63,8 @@ module.exports = {
     },
 
     updatePassword: function (db, email, newpass, callback) {
-        var users = db.collection('users');
-        users.updateOne({email: email}, {$set: {password: newpass}}
+        var user = db.collection('user');
+        user.updateOne({email: email}, {$set: {password: newpass}}
             , function (err, result) {
                 assert.equal(err, null);
                 console.log("Password updated.");
@@ -73,8 +73,8 @@ module.exports = {
     },
 
     updatePhone: function (db, email, newphone, callback) {
-        var users = db.collection('users');
-        users.updateOne({email: email}, {$set: {phone: newphone}}
+        var user = db.collection('user');
+        user.updateOne({email: email}, {$set: {phone: newphone}}
             , function (err, result) {
                 assert.equal(err, null);
                 console.log("Phone updated.");
@@ -83,7 +83,7 @@ module.exports = {
     },
 
     deleteUserByEmail: function (db, mail, callback) {
-        var user = db.collection('users');
+        var user = db.collection('user');
         user.deleteOne({email: mail}, function (err, results) {
             if (err) {
                 console.log("failed");
@@ -96,7 +96,7 @@ module.exports = {
     },
 
     listAllUsers: function (db, callback) {
-        var user = db.collection('users');
+        var user = db.collection('user');
         user.find().toArray(function (err, docs) {
             assert.equal(err, null);
             console.log('Found ' + docs.length + " documents");

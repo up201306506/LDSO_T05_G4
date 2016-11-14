@@ -74,14 +74,14 @@ var webpage_login = require('./routes/login');
 var webpage_faq = require('./routes/faq');
 // profile pages
 var webpage_mainpage = require('./routes/main_page');
-var webpage_profile = require('./routes/profile');
+var webpage_profile = require('./routes/profile/profile');
 // community pages
-var webpage_createCommunity = require('./routes/create_community');
-var webpage_editCommunity = require('./routes/edit_community');
-var webpage_communityUserList = require('./routes/community_user_list');
+var webpage_createCommunity = require('./routes/community/create_community');
+var webpage_editCommunity = require('./routes/community/edit_community');
+var webpage_communityUserList = require('./routes/community/community_user_list');
 var webpage_communityHomepage = require('./routes/community/homepage');
-var webpage_newoffer = require('./routes/new_offer');
-var webpage_viewoffer = require('./routes/viewoffer');
+var webpage_newoffer = require('./routes/offer/new_offer');
+var webpage_viewoffer = require('./routes/offer/viewoffer');
 // search page
 var webpage_searchresults = require('./routes/search_results');
 // messaging pages
