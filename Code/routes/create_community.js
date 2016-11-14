@@ -3,6 +3,7 @@ var router = express.Router();
 var assert = require('assert');
 var configDB = require('./../config/database.js');
 var communityController = require('../controllers/CommunityController');
+var mongo = require('mongodb').MongoClient;
 
 /* GET community creation page. */
 router.get('/', function (req, res) {
