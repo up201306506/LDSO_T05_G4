@@ -65,3 +65,21 @@ var listCommunityByCategory = function (db, category, callback) {
         callback(docs);
     });
 }
+
+var insertUserInCommunity = function (db, name, member, callback) {
+    var community = db.collection('community');
+    community.updateOne({name: name}, {$push: {members: member}}, function (err, result) {
+        assert.equal(err, null);
+        console.log("New member inserted");
+        callback(result);
+    });
+}
+
+var removeUserFromCommunity = function (db, name, member, callback) {
+    var community = db.collection('community');
+    community.updateOne({name: name}, {$pull: {members: member}}, function (err, result) {
+        assert.equal(err, null);
+        console.log("Member removed from community");
+        callback(result);
+    });
+}
