@@ -10,6 +10,10 @@ hr  {  margin-top: 10px;    margin-bottom: 20px;}
 
 #Inbox_Contents{    margin-top: 25px;}
 .message_item{    overflow:hidden}
+li > a:hover, li > a, li > .pull-right > a{
+    color: inherit;
+    text-decoration: none;
+}
 .message_sender_username{
     width: 180px;
     margin-right: 25px;
@@ -35,6 +39,8 @@ hr  {  margin-top: 10px;    margin-bottom: 20px;}
     font-size: smaller;
     color: #999999;
 }
+
+
 #Inbox_Navigation{
     vertical-align: top;
     /* Grids have a padding of 15px, doing the same for alignment reasons */
