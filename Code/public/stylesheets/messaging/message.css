@@ -28,6 +28,28 @@ a, a:hover {
     border-radius: 50%;
 }
 
+.messageContent {
+    border: solid 1px black;
+
+    display: block;
+    min-height: 35px;
+    word-wrap: break-word;
+}
+
+#messageMeta{
+    display: block;
+    width: 100%;
+    color: white;
+    background-color: #9a9595;
+
+}
+#interactive_pane{
+    display: block;
+    width: 100%;
+    color: white;
+    background-color: #9a9595;
+}
+
 
 
 /*If you want to see the page's grid*/
