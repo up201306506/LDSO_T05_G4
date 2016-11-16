@@ -14,7 +14,16 @@ var privacyList = [
     "Secreta"
 ];
 
+// Gender Dropdown
+var genderList = [
+    "",
+    "Feminino",
+    "Masculino",
+    "Outro"
+];
+
 module.exports = {
     "categoryList": categoryList,
-    "privacyList": privacyList
+    "privacyList": privacyList,
+    "genderList": genderList
 };

@@ -3,8 +3,8 @@ var express = require('express'),
     configDB = require('./../../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
     userController = require('./../../controllers/UserController'),
-    communityController = require('./../../controllers/CommunityController'),
-    userPrivileges = require('./../../config/userPrivileges');
+    userPrivileges = require('./../../config/userPrivileges'),
+    dropdownList = require('./../../config/dropdownLists');
 
 router.get('/:username', userPrivileges.ensureAuthenticated, function (req, res) {
     // GET username from url
@@ -53,7 +53,8 @@ router.get('/edit/:username', userPrivileges.ensureAuthenticated, function (req,
                     name: userData.name,
                     phone: userData.phone,
                     gender: userData.gender,
-                    email: userData.email
+                    email: userData.email,
+                    genderList: dropdownList.genderList
                 });
         });
     });

@@ -8,32 +8,40 @@ module.exports = {
         var user = db.collection('user');
 
         // Search for the user's username in the db
-        user.findOne({username: username, email: email}, function (err, userData) {
+        user.findOne({username: username}, function (err, userData1) {
             assert.equal(err, null);
 
-            // Verifies if there is another user with the same specs on the db
-            if (userData != null) {
-                console.log('This user already exists ' + username);
+            // If the db already has an user with the same username throws an error
+            if(userData1 != null){
                 callback(false);
-            } else {
-                // Inserts the new user
-                user.insertOne({
-                        name: name,
-                        username: username,
-                        email: email,
-                        password: pass,
-                        gender: gender,
-                        phone: phone,
-                        birthdate: birthdate
-                    },
-                    function (err, result) {
-                        assert.equal(err, null);
-                        assert.equal(1, result.result.n);
-                        assert.equal(1, result.ops.length);
+            }else{
+                user.findOne({email: email}, function (err, userData2) {
+                    assert.equal(err, null);
 
-                        console.log('Inserted a new user: ' + username);
-                        callback(true);
-                    });
+                    // If the db already has an user with the same email throws an error
+                    if(userData2 != null){
+                        callback(false);
+                    }else{
+                        // Inserts the new user
+                        user.insertOne({
+                                name: name,
+                                username: username,
+                                email: email,
+                                password: pass,
+                                gender: gender,
+                                phone: phone,
+                                birthdate: birthdate
+                            },
+                            function (err, result) {
+                                assert.equal(err, null);
+                                assert.equal(1, result.result.n);
+                                assert.equal(1, result.ops.length);
+
+                                console.log('Inserted a new user: ' + username);
+                                callback(true);
+                            });
+                    }
+                });
             }
         });
     },

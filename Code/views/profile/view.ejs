@@ -20,6 +20,8 @@
             <div class="edit">
                 <% if(isOwnProfile) { %>
                 <a href="/profile/edit/<%= username %>" class="label label-primary label-as-badge editbadge">Editar</a>
+                <% }else{ %>
+                <a href="#" class="label label-primary label-as-badge editbadge">Enviar Mensagem</a>
                 <% } %>
             </div>
 
