@@ -8,13 +8,13 @@ module.exports = {
         var user = db.collection('user');
 
         // Search for the user's username in the db
-        user.findOne({username: username}).toArray(function (err, docs) {
+        user.findOne({username: username, email: email}, function (err, userData) {
             assert.equal(err, null);
 
             // Verifies if there is another user with the same specs on the db
-            if (docs.length >= 1) {
+            if (userData != null) {
                 console.log('This user already exists ' + username);
-                db.close();
+                callback(false);
             } else {
                 // Inserts the new user
                 user.insertOne({
@@ -32,7 +32,7 @@ module.exports = {
                         assert.equal(1, result.ops.length);
 
                         console.log('Inserted a new user: ' + username);
-                        db.close();
+                        callback(true);
                     });
             }
         });

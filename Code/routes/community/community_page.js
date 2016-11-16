@@ -10,18 +10,6 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
     // GET community name from url
     var communityName = String(req.params.communityName);
 
-    // Connects to the db
-    mongo.connect(configDB.url, function (err, db) {
-        // Verifies if this user is enrolled in this community
-        communityController.isUserEnrolledInCommunity(db, req.user, communityName, function (community) {
-            if (community.length == 0) {
-                res.redirect('/');
-            } else {
-                // TODO Maybe do functions for every page???
-            }
-        });
-    });
-
     // TEMP
     var tempOfferArr = [
         {
@@ -36,11 +24,24 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
         }
     ];
 
-    res.render('community/community_page',
-        {
-            title: name,
-            offerArr: tempOfferArr
+    // Connects to the db
+    mongo.connect(configDB.url, function (err, db) {
+        // Verifies if this user is enrolled in this community
+        communityController.isUserEnrolledInCommunity(db, req.user, communityName, function (community) {
+            db.close();
+
+            // If user is not enrolled in the community, no community should have been returned
+            if (community == null) {
+                res.redirect('/');
+            } else {
+                res.render('community/community_page',
+                    {
+                        communityName: communityName,
+                        offerArr: tempOfferArr
+                    });
+            }
         });
+    });
 });
 
 module.exports = router;
