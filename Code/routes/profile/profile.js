@@ -1,35 +1,60 @@
 var express = require('express'),
     router = express.Router(),
-    assert = require('assert'),
-    userPrivileges = require('./../../config/userPrivileges'),
-    mongo = require('mongodb').MongoClient,
     configDB = require('./../../config/dbURL.js'),
-    userController = require('../../controllers/UserController');
+    mongo = require('mongodb').MongoClient,
+    userController = require('./../../controllers/UserController'),
+    communityController = require('./../../controllers/CommunityController'),
+    userPrivileges = require('./../../config/userPrivileges');
 
+router.get('/:username', userPrivileges.ensureAuthenticated, function (req, res) {
+    // GET username from url
+    var username = String(req.params.username);
 
+    // Creates a var that indicates if this profile is this user profile
+    var isOwnProfile = (username == req.user);
 
-/* View profile */
-router.get('/', userPrivileges.ensureAuthenticated, function (req, res) {
-
-    var userProfile = req.user;
-    if(typeof req.query.username != 'undefined'){
-        userProfile = req.query.username;
-    }
-
-    mongo.connect(configDB.url, function (err, db, next) {
-        userController.getUser(db, userProfile, function (err, userdata) {
+    // Connects to the db
+    mongo.connect(configDB.url, function (err, db) {
+        // Gets the user information
+        userController.getUser(db, username, function (userData) {
             db.close();
-            res.render('profile/view', {title: 'Local Exchange', userdata: userdata});
+
+            res.render('profile/view',
+                {
+                    title: 'Local Exchange - View Profile',
+                    username: username,
+                    isOwnProfile: isOwnProfile,
+                    password: userData.password,
+                    name: userData.name,
+                    phone: userData.phone,
+                    gender: userData.gender,
+                    email: userData.email
+                });
         });
     });
 });
 
-/* Get Edit Profile page */
-router.get('/edit', userPrivileges.ensureAuthenticated, function (req, res) {
-    mongo.connect(configDB.url, function (err, db, next) {
-        userController.getUser(db, req.user, function (err, userdata) {
+router.get('/edit/:username', userPrivileges.ensureAuthenticated, function (req, res) {
+    // GET username from url
+    var username = String(req.params.username);
+
+    // Connects to the db
+    mongo.connect(configDB.url, function (err, db) {
+        // Gets the user information
+        userController.getUser(db, username, function (userData) {
             db.close();
-            res.render('profile/edit', {title: 'Local Exchange', userdata: userdata});
+
+            res.render('profile/edit',
+                {
+                    title: 'Local Exchange - View Profile',
+                    userdata: userData,
+                    username: username,
+                    password: userData.password,
+                    name: userData.name,
+                    phone: userData.phone,
+                    gender: userData.gender,
+                    email: userData.email
+                });
         });
     });
 });
