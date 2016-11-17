@@ -11,108 +11,79 @@
 <body>
 <% include ./../templates/navbar.ejs %>
 
-<div class="container-fluid">
+<div class="container">
     <div class="row">
-        <div class="col-sm-2"></div>
-
-        <div class="col-sm-8">
+        <div class="col-md-offset-1 col-md-10">
             <h1>Editar Perfil</h1>
             <br>
 
-            <form role="form" action="#" method="post">
+            <form role="form" action="/profile/edit/<%= username %>" method="post">
                 <div class="form-horizontal">
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label for="name">Nome:</label>
-                            <input type="text" name="name" id="name" class="form-control" value="<%= name %>"
-                                   placeholder="Nome Completo" required>
-                        </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="username">Username:</label>
+                        <div class="col-sm-10"><input type="text" name="username" class="form-control" id="username"
+                                                      value="<%= username %>" disabled></div>
                     </div>
 
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label for="phone">Contato:</label>
-                            <input type="text" id="phone" name="phone" class="form-control" value="<%= phone %>"
-                                   placeholder="Contacto telefónico" required>
-                        </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="name">Nome:</label>
+                        <div class="col-sm-10"><input type="text" name="name" class="form-control" id="name"
+                                                      value="<%= name %>"></div>
+                    </div>
 
-                        <div class="form-group col-md-6">
-                            <label for="gender">Sexo:</label>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="phone">Contato:</label>
+                        <div class="col-sm-6"><input type="text" name="phone" class="form-control" id="phone"></div>
+
+                        <label class="control-label col-sm-1" for="gender">Sexo:</label>
+                        <div class="col-sm-3">
                             <select class="form-control" id="gender" name="gender">
-                                <% for(var index = 0; index < genderList; index++) { %>
+                                <% for(var index = 0; index < genderList.length; index++) { %>
                                 <% if(genderList[index] == gender) { %>
-                                <option selected>genderList[index]</option>
-                                <% } else { %>
-                                <option>genderList[index]</option>
+                                <option selected><%= genderList[index] %></option>
+                                <% }else{ %>
+                                <option><%= genderList[index] %></option>
                                 <% }} %>
                             </select>
                         </div>
                     </div>
 
-                    <div class="form-group col-md-6">
-                        <label for="sel_sex">Sexo:</label>
-                        <select class="form-control" id="sel_sex">
-                            <option
-                                    <% if(userdata.gender == "Outro"){ %>
-                                    selected="selected"
-                                    <% } %>
-                            >Outro
-                            </option>
-                            <option
-                                    <% if(userdata.gender == "Masculino"){ %>
-                                    selected="selected"
-                                    <% } %>
-                            >Masculino
-                            </option>
-                            <option
-                                    <% if(userdata.gender == "Feminino"){ %>
-                                    selected="selected"
-                                    <% } %>
-                            >Feminino
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control" value="" placeholder="Password"
-                               required>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label>Repita Password</label>
-                        <input type="password" name="password2" class="form-control" value="" placeholder="Password"
-                               required>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label>Endereço de Email</label>
-                        <input type="" name="email" class="form-control" value="<%= userdata.email %>"
-                               placeholder="Endereço de Email" required>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label>Repita o Endereço de Email</label>
-                        <input type="" name="email2" class="form-control" value="<%= userdata.email %>"
-                               placeholder="Endereço de Email" required>
-                    </div>
-
-                    <div class="form-group" id="buttons-panel">
-                        <div class="col-sm-5"></div>
-                        <div class="col-sm-1">
-                            <button type="submit" class="btn btn-default">Guardar</button>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">Email:</label>
+                        <div class="col-sm-4"><input type="email" name="email" class="form-control" id="email"
+                                                     value="<%= email %>">
                         </div>
-                        <div class="col-sm-1">
-                            <button type="button" class="btn btn-default"
-                                    onclick="location.href = '/profile/<%= username %>'">Voltar
+
+                        <label class="control-label col-sm-2" for="emailre">Repetir email:</label>
+                        <div class="col-sm-4"><input type="email" name="emailre" class="form-control"
+                                                     id="emailre"
+                                                     value="<%= email %>">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="password">Nova pass:</label>
+                        <div class="col-sm-4"><input type="password" name="password" class="form-control" id="password"
+                                                     value="<%= password %>">
+                        </div>
+
+                        <label class="control-label col-sm-2" for="passwordre">Repetir pass:</label>
+                        <div class="col-sm-4"><input type="password" name="passwordre" class="form-control"
+                                                     id="passwordre"
+                                                     value="<%= password %>">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-offset-2 col-sm-9">
+                        <div class="form-group text-center" id="buttons-panel">
+                            <button type="submit" class="btn btn-default">Criar</button>
+                            <button type="button" class="btn btn-default" onclick="location.href = '/'">Voltar
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-
-        <div class="col-sm-2"></div>
     </div>
 </div>
 

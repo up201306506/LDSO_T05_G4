@@ -1,18 +1,3 @@
 body {
     padding-top: 50px;
 }
-
-.vertical-align {
-    display: inline-block;
-    vertical-align: middle;
-    horiz-align: center;
-    float: none;
-    align-items: center;
-    margin-top: 10%;
-}
-
-.register{
-    margin: 10%;
-    margin-left: 20%;
-    margin-right: 20%;
-}

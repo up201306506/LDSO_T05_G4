@@ -3,7 +3,7 @@ var assert = require('assert');
 module.exports = {
 
     // Inserts a new user
-    insertUser: function (db, name, username, email, pass, gender, phone, birthdate, callback) {
+    insertUser: function (db, username, password, name, email, phone, gender, callback) {
         // Get User collection
         var user = db.collection('user');
 
@@ -27,17 +27,15 @@ module.exports = {
                                 name: name,
                                 username: username,
                                 email: email,
-                                password: pass,
+                                password: password,
                                 gender: gender,
-                                phone: phone,
-                                birthdate: birthdate
+                                phone: phone
                             },
                             function (err, result) {
                                 assert.equal(err, null);
                                 assert.equal(1, result.result.n);
                                 assert.equal(1, result.ops.length);
 
-                                console.log('Inserted a new user: ' + username);
                                 callback(true);
                             });
                     }
@@ -47,12 +45,12 @@ module.exports = {
     },
 
     // Verifies if an user exists
-    logIn: function (db, username, pass, callback) {
+    logIn: function (db, username, password, callback) {
         // Get User collection
         var user = db.collection('user');
 
         // Find the user in the db
-        user.findOne({username: username, password: pass}, function (err, user) {
+        user.findOne({username: username, password: password}, function (err, user) {
             assert.equal(err, null);
 
             // Process the search
@@ -74,6 +72,31 @@ module.exports = {
         });
     },
 
+    // Edit all informatio about an user
+    editUser: function (db, username, password, name, email, phone, gender, callback) {
+        // Get Community collection
+        var user = db.collection('user');
+
+        // Finds if the email is already taken
+        user.findOne({email: email}, function (err, userData) {
+            assert.equal(err, null);
+
+            // Verifies if email is not being used
+            if(userData == null || userData.username == username){ // Email not being used or is the same user
+                // Updates information about the user
+                user.updateOne({username: username},
+                    {
+                        $set: {password: password, name: name, email: email, phone: phone, gender: gender}
+                    },function (err) {
+                        assert.equal(err, null);
+
+                        callback(true);
+                    });
+            }else{
+                callback(false);
+            }
+        });
+    },
 
 
 

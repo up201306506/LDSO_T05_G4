@@ -38,7 +38,7 @@ router.post('/register', function (req, res) {
     } else {
         // If no error was found the new user will be inserted in the db
         mongo.connect(configDB.url, function (err, db) {
-            userController.insertUser(db, "", req.body.username, req.body.email, req.body.password, "", "", "", function (wasCreated) {
+            userController.insertUser(db, req.body.username, req.body.password, "", req.body.email, "", "", function (wasCreated) {
                 db.close();
 
                 // The login page will be rendered

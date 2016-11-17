@@ -27,7 +27,6 @@ module.exports = {
 
             // Verifies if there is another community with the same specs on the db
             if (communityData != null) {
-                console.log('This community already exists ' + communityName);
                 callback(false);
             } else {
                 // Inserts the new community
@@ -40,7 +39,6 @@ module.exports = {
                         assert.equal(1, result.result.n);
                         assert.equal(1, result.ops.length);
 
-                        console.log('Inserted a new community: ' + communityName);
                         callback(true);
                     });
             }
