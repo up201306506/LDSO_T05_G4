@@ -16,7 +16,10 @@
         <!-- -->
         <div class="container" id="header">
             <img class="img-responsive hidden-xs" src="<%= sender_image %>" alt="<%= sender %>">
-            <h2>Personal Message</h2>
+            <h2>
+                Personal Message
+                <span class="glyphicon glyphicon glyphicon-<%= message_type %>"data-toggle="tooltip" data-placement="right" title="<%= tooltip %>"></span>
+            </h2>
             <p>Sender: <strong><a href="#" id=""><%= sender %></a></strong></p>
             <p>Subject: <strong><a href="#" id=""><%= message_subject %></a></strong></p>
         </div>
@@ -44,6 +47,13 @@
     <p>!!!! Missing modal for the delete button</p>
     <p>!!!! Missing modal for the reply button</p>
     <p>!!!! Missing modal for the redirect button</p>
+
+    <script>
+        $(document).ready(function(){
+            //Tooltip function initializer
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 
 </body>
 </html>

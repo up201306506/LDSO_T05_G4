@@ -51,7 +51,10 @@ a, a:hover {
     padding-bottom: 20px;
 }
 
-
+.tooltip{
+    background-color: transparent;
+    color:green;
+}
 
 /*If you want to see the page's grid*/
 /*
