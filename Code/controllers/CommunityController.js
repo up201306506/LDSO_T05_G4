@@ -22,13 +22,12 @@ module.exports = {
         var community = db.collection('community');
 
         // Search for the community's name in the db
-        community.findOne({name: communityName}).toArray(function (err, docs) {
+        community.findOne({name: communityName}, function (err, communityData) {
             assert.equal(err, null);
 
             // Verifies if there is another community with the same specs on the db
-            if (docs.length >= 1) {
-                console.log('This community already exists ' + communityName);
-                db.close();
+            if (communityData != null) {
+                callback(false);
             } else {
                 // Inserts the new community
                 community.insertOne({
@@ -40,25 +39,55 @@ module.exports = {
                         assert.equal(1, result.result.n);
                         assert.equal(1, result.ops.length);
 
-                        console.log('Inserted a new community: ' + communityName);
-                        db.close();
+                        callback(true);
                     });
             }
         });
     },
 
     // Verifies if an user is enrolled in a community
-    isUserEnrolledInCommunity: function (db, username, communityName) {
+    isUserEnrolledInCommunity: function (db, username, communityName, callback) {
         // Get Community collection
         var community = db.collection('community');
 
         // Verifies if the user is member of the specified community
-        community.findOne({name: communityName, members: username}).toArray(function (err, community) {
+        community.findOne({name: communityName, members: username}, function (err, communityData) {
             assert.equal(err, null);
 
             // Process the community
             callback(community);
         });
+    },
+
+    // Retrieves all information of a community
+    getCommunityData: function (db, communityName, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Search for the community in the tb
+        community.findOne({name: communityName}, function (err, communityData) {
+            assert.equal(err, null);
+
+            // Process the community
+            callback(communityData);
+        });
+    },
+
+    // Edit all information of a community
+    editCommunityData: function (db, communityName, headOffice, category, description, privacy, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Update the community in the db
+        community.updateOne({name: communityName},
+            {
+                $set: {office: headOffice, category: category, description: description, privacy: privacy}
+            },function (err) {
+                assert.equal(err, null);
+
+                // Process the edit
+                callback();
+            });
     }
 }
 

@@ -1,0 +1,29 @@
+// Category Dropdown
+var categoryList = [
+    "Geral",
+    "Materiais",
+    "Mecânica",
+    "Jardinagem",
+    "Desporto"
+];
+
+// Privacy Dropdown
+var privacyList = [
+    "Pública",
+    "Privada",
+    "Secreta"
+];
+
+// Gender Dropdown
+var genderList = [
+    "",
+    "Feminino",
+    "Masculino",
+    "Outro"
+];
+
+module.exports = {
+    "categoryList": categoryList,
+    "privacyList": privacyList,
+    "genderList": genderList
+};

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %></title>
+    <title>Local Exchange - <%= communityName %></title>
 
     <% include ./../templates/header.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/community/community_page.css">
@@ -13,10 +13,13 @@
     <div id="side-container" class="col-md-3">
         <ul class="sidebar-nav">
             <li class="sidebar-title">
-                <%= title %>
+                <%= communityName %>
             </li>
             <li class="sidebar-subtitle">
-                <a href="#">yoyooyade</a>
+                <a href="/edit_community/<%= communityName %>">Editar</a>
+            </li>
+            <li>
+                <a href="#">Criar Oferta</a>
             </li>
         </ul>
     </div>

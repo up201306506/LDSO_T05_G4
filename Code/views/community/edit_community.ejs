@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %></title>
+    <title>Local Exchange - <%= communityName %></title>
 
     <% include ./../templates/header.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/community/edit_community.css">
@@ -10,62 +10,84 @@
 <% include ./../templates/navbar.ejs %>
 
 <div class="container-fluid">
-	<div class="col-sm-2"></div>
+    <div class="col-sm-2"></div>
 
-	<div class="col-sm-8">
-		<h1>Editar Comunidade</h1>
-		<br>
+    <div class="col-sm-8">
+        <h1>Editar Comunidade - <%= communityName %></h1>
+        <br>
 
-		<form>
-			<div class="form-horizontal">
-				<div class="form-group">
-					<label class="control-label col-sm-2" for="nome">Nome:</label>
-					<div class="col-sm-10"><input type="text" class="form-control" id="nome" placeholder="<%= name %>"></div>
-				</div>
+        <form role="form" action="/edit_community/<%= communityName %>/edit" method="post">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="communityName">Nome:</label>
+                    <div class="col-sm-10"><input type="text" class="form-control" id="communityName"
+                                                  placeholder="<%= communityName %>" disabled>
+                    </div>
+                </div>
 
-				<div class="form-group">
-					<label class="control-label col-sm-2" for="sede">Sede:</label>
-					<div class="col-sm-10"><input type="text" class="form-control" id="sede" placeholder="<%= headQuartes %>"></div>
-				</div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="headQuarter">Sede:</label>
+                    <div class="col-sm-10"><input type="text" class="form-control" name="headQuarter" id="headQuarter" value="<%= headQuartes %>">
+                    </div>
+                </div>
 
-				<div class="form-group">
-					<label class="control-label col-sm-2" for="descricao">Descrição:</label>
-					<div class="col-sm-10">
-						<textarea class="form-control" id="descricao" rows="3" placeholder="<%= description %>"></textarea>
-					</div>
-				</div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="description">Descrição:</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" name="description" id="description" rows="5" style="resize: none;"><%= description %></textarea>
+                    </div>
+                </div>
 
-				<div class="form-group">
-					<label class="control-label col-sm-2" for="categoria">Categoria:</label>
-					<div class="col-sm-4">
-						<select class="form-control" id="sel-categoria">
-							<option>Geral</option>
-							<option>Jardinagem</option>
-							<option>Mecânica</option>
-							<option>Materiais</option>
-						</select>
-					</div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="selcategory">Categoria:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="selcategory" id="selcategory">
+                            <% for(var index = 0; index < categoryList.length; index++) { %>
+                            <% if(categoryList[index] == category) { %>
+                            <option value="<%= categoryList[index] %>" selected>
+                                <%= categoryList[index] %>
+                            </option>
+                            <% } else { %>
+                            <option value="<%= categoryList[index] %>">
+                                <%= categoryList[index] %>
+                            </option>
+                            <% }} %>
+                        </select>
+                    </div>
 
-					<label class="control-label col-sm-2" for="visualizacao">Visualização:</label>
-					<div class="col-sm-2">
-						<select class="form-control" id="sel-visualizacao">
-							<option>Pública</option>
-							<option>Privada</option>
-							<option>Secreta</option>
-						</select>
-					</div>
-				</div>
+                    <label class="control-label col-sm-2" for="selprivacy">Visualização:</label>
+                    <div class="col-sm-2">
+                        <select class="form-control" name="selprivacy" id="selprivacy">
+                            <% for(var index = 0; index < privacyList.length; index++) { %>
+                            <% if(privacyList[index] == privacy) { %>
+                            <option value="<%= privacyList[index] %>" selected>
+                                <%= privacyList[index] %>
+                            </option>
+                            <% } else { %>
+                            <option value="<%= privacyList[index] %>">
+                                <%= privacyList[index] %>
+                            </option>
+                            <% }} %>
+                        </select>
+                    </div>
+                </div>
 
-				<div class="form-group" id="buttons-panel">
-					<div class="col-sm-5"></div>
-					<div id="save-button" class="col-sm-1"><button type="submit" class="btn btn-default">Guardar</button></div>
-					<div class="col-sm-1"><button type="button" class="btn btn-default" onclick="location.href = '#'">Voltar</button></div>
-				</div>
-			</div>
-		</form>
-	</div>
+                <div class="form-group" id="buttons-panel">
+                    <div class="col-sm-5"></div>
+                    <div id="save-button" class="col-sm-1">
+                        <button type="submit" class="btn btn-default">Guardar</button>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-default"
+                                onclick="location.href = '/community/<%= communityName %>'">Voltar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 
-	<div class="col-sm-2"></div>
+    <div class="col-sm-2"></div>
 </div>
 
 </body>

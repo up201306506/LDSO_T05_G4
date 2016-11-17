@@ -37,13 +37,20 @@ router.post('/register', function (req, res) {
         });
     } else {
         // If no error was found the new user will be inserted in the db
-        mongo.connect(configDB.url, function (err, db, next) {
-            userController.insertUser(db, "", req.body.username, req.body.email, req.body.password, "", "", "");
-        });
+        mongo.connect(configDB.url, function (err, db) {
+            userController.insertUser(db, req.body.username, req.body.password, "", req.body.email, "", "", function (wasCreated) {
+                db.close();
 
-        // Redirects to the exact same page to complete login
-        req.flash('success_msg', 'Registado com sucesso');
-        res.redirect('/');
+                // The login page will be rendered
+                if(wasCreated){
+                    req.flash('success_msg', 'Registado com sucesso');
+                }else{
+                    req.flash('error_msg', 'Utilizador já registado');
+                }
+
+                res.redirect('/');
+            });
+        });
     }
 });
 
@@ -60,6 +67,8 @@ passport.use(new LocalStrategy(
     function (username, password, done) {
         mongo.connect(configDB.url, function (err, db) {
             userController.logIn(db, username, password, function (err, user) {
+                db.close();
+
                 if (err) {
                     console.log(err);
                 } else if (user) {
@@ -67,8 +76,6 @@ passport.use(new LocalStrategy(
                 } else {
                     return done(null, false, {message: 'Credenciais inválidas'});
                 }
-
-                db.close();
             });
         });
     }

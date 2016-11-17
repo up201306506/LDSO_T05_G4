@@ -11,64 +11,73 @@
 <body>
 <% include ./../templates/navbar.ejs %>
 
-<div class="col-md-0 center-align datadiv">
-    <h3 class="dark-grey">Perfil <% if(userdata.username == user){ %><a href="profile/edit" class="label label-primary label-as-badge editbadge">Editar</a> <% } %></h3>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2"></div>
 
-    <div class="form-group col-lg-12">
-        <label>Username</label>
-        <h5><%= userdata.username %></h5>
+        <div class="col-md-8">
+            <h1>Perfil de Utilizador</h1>
+            <div class="edit">
+                <% if(isOwnProfile) { %>
+                <a href="/profile/edit/<%= username %>" class="label label-primary label-as-badge editbadge">Editar</a>
+                <% }else{ %>
+                <a href="#" class="label label-primary label-as-badge editbadge">Enviar Mensagem</a>
+                <% } %>
+            </div>
+
+            <div class="form-horizontal">
+                <label class="control-label col-sm-2" for="username">Username:</label>
+                <h1 id="username" class="lead"><%= username %></h1>
+            </div>
+
+            <div class="form-horizontal">
+                <label class="control-label col-sm-2" for="password">Password:</label>
+                <h1 id="password" class="lead">
+                    <% for(var index = 0; index < password.length; index++) { %>
+                    <span>-</span>
+                    <% } %>
+                </h1>
+            </div>
+
+            <div class="form-horizontal">
+                <label class="control-label col-sm-2" for="name">Name:</label>
+                <% if(name == "") { %>
+                <h1 id="name" class="lead notDefined">Não definido</h1>
+                <% }else{ %>
+                <h1 id="name" class="lead"><%= name %></h1>
+                <% } %>
+            </div>
+
+            <div class="form-horizontal">
+                <label class="control-label col-sm-2" for="gender">Sexo:</label>
+                <% if(phone == "") { %>
+                <h1 id="gender" class="lead notDefined">Não definido</h1>
+                <% }else{ %>
+                <h1 id="gender" class="lead"><%= gender %></h1>
+                <% } %>
+            </div>
+
+            <div class="form-horizontal">
+                <label class="control-label col-sm-2" for="email">E-mail:</label>
+                <% if(phone == "") { %>
+                <h1 id="email" class="lead notDefined">Não definido</h1>
+                <% }else{ %>
+                <h1 id="email" class="lead"><%= email %></h1>
+                <% } %>
+            </div>
+
+            <div class="form-horizontal">
+                <label class="control-label col-sm-2" for="phone">Contato:</label>
+                <% if(phone == "") { %>
+                <h1 id="phone" class="lead notDefined">Não definido</h1>
+                <% }else{ %>
+                <h1 id="phone" class="lead"><%= phone %></h1>
+                <% } %>
+            </div>
+
+            <div class="col-md-2"></div>
+        </div>
     </div>
-
-    <div class="form-group col-lg-12">
-        <label>Nome</label>
-        <% if(userdata.name == ""){ %>
-        <h5 class="notDefined">Não definido</h5>
-        <% } else{ %>
-        <h5><%= userdata.name %></h5>
-        <% } %>
-    </div>
-
-    <div class="form-group col-lg-12">
-        <label>Contacto</label>
-        <% if(userdata.phone == ""){ %>
-        <h5 class="notDefined">Não definido</h5>
-        <% } else{ %>
-        <h5><%= userdata.phone %></h5>
-        <% } %>
-    </div>
-
-    <div class="form-group col-lg-12">
-        <label>Data de nascimento</label>
-        <% if(userdata.birthdate == ""){ %>
-        <h5 class="notDefined">Não definido</h5>
-        <% } else{ %>
-        <h5><%= userdata.birthdate %></h5>
-        <% } %>
-    </div>
-
-    <div class="form-group col-lg-12">
-        <label>Sexo:</label>
-        <% if(userdata.gender == ""){ %>
-        <h5 class="notDefined">Não definido</h5>
-        <% } else{ %>
-        <h5><%= userdata.gender %></h5>
-        <% } %>
-    </div>
-
-    <% if(userdata.username == user){ %>
-    <div class="form-group col-lg-12">
-        <label>Endereço de Email</label>
-        <h5><%= userdata.email %></h5>
-    </div>
-
-    <div class="form-group col-lg-12">
-        <label>Password</label>
-        <a href="profile/edit" class="btn btn-link">Editar</a>
-    </div>
-    <% } %>
-
 </div>
-
-
 </body>
 </html>
