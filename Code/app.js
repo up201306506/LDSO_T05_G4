@@ -88,6 +88,7 @@ var webpage_communityHomepage = require('./routes/community/homepage');
 // offer
 var webpage_newoffer = require('./routes/offer/new_offer');
 var webpage_viewoffer = require('./routes/offer/viewoffer');
+var webpage_editoffer = require('./routes/offer/editoffer');
 // messaging
 var webpage_messageinbox = require('./routes/messaging/inbox');
 var webpage_message = require('./routes/messaging/message');
@@ -105,13 +106,12 @@ app.use('/community', webpage_communitypage);
 app.use('/create_community', webpage_createCommunity);
 app.use('/edit_community', webpage_editCommunity);
 app.use('/community_users', webpage_communityUserList);
-
 // test page
 app.use('/test_community', webpage_communityHomepage);
-
 // offer
 app.use('/newoffer', webpage_newoffer);
 app.use('/viewoffer', webpage_viewoffer);
+app.use('/editoffer', webpage_editoffer);
 // messaging
 app.use('/message/inbox', webpage_messageinbox);
 app.use('/message/message', webpage_message);
