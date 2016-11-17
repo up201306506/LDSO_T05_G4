@@ -43,11 +43,12 @@ a, a:hover {
     text-align: right;
 }
 #interactive_pane{
-    padding-top: 25px;
     display: block;
     width: 100%;
     color: white;
     background-color: #9a9595;
+    padding-right: 45px;
+    padding-bottom: 20px;
 }
 
 
