@@ -11,9 +11,35 @@
 <body>
     <% include ../templates/navbar.ejs %>
 
-    No one here but us chickens...
+    <div class="container"id="main_body">
 
-    And it's turtles all the way down.
+        <!-- -->
+        <div class="container" id="header">
+            <img class="img-responsive hidden-xs" src="<%= sender_image %>" alt="<%= sender %>">
+            <h2>Personal Message</h2>
+            <p>Sender: <strong><a href="#" id=""><%= sender %></a></strong></p>
+            <p>Subject: <strong><a href="#" id=""><%= message_subject %></a></strong></p>
+        </div>
+
+        <!-- -->
+        <div class="messageContent">
+            <article><%= message_content %></article>
+        </div>
+
+        <!-- -->
+
+        <div class="container" id="messageMeta">
+            <p>DATA E HORA???</p>
+        </div>
+
+        <!-- -->
+        <div class="container" id="interactive_pane">
+            <p>Butões de eliminar, responder e reencaminhar</p>
+        </div>
+
+
+    </div>
+
 
 </body>
 </html>
