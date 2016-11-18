@@ -71,7 +71,7 @@ router.post('/:communityName/edit', userPrivileges.ensureAuthenticated, function
         mongo.connect(configDB.url, function (err, db, next) {
             // Edit the community info in the db
             communityController.editCommunityData(db, communityName, req.body.headQuarter,
-                req.body.selcategory, req.body.description, req.body.selprivacy, function () {
+                req.body.selcategory, req.body.description, req.body.privacy, function () {
                     db.close();
 
                     req.flash('success_msg', 'Comunidade editada com sucesso');

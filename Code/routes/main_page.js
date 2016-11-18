@@ -24,7 +24,7 @@ router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
 
     mongo.connect(configDB.url, function (err, db, next) {
         // Get this user enrolled communities from the db
-        communityController.getUserEnrolledCommunities(db, req.user, function (communities) {
+        communityController.getUserEnrolledCommunities(db, req.user, true, function (communities) {
             db.close();
 
             // TODO Get all offers visible to this user

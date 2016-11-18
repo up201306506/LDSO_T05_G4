@@ -9,70 +9,75 @@
 <body>
 <% include templates/login_navbar.ejs %>
 
-<div class="container-fluid">
-    <section class="container">
-        <div class="container-page">
-			<div class="col-md-9" id="questions">
-				<article id="q1">
-					<h1>Questão 1?</h1>
-					<br/>
-					<p class="lead">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non auctor
-						magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie. Pellentesque
-						habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-					</p>
-				</article>
-				<br/>
-				
-				<article id="q2">
-					<h1>Questão 2?</h1>
-					<br/>
-					<p class="lead">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non auctor
-						magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie. Pellentesque
-						habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-					</p>
-				</article>
-				<br/>
-				
-				<article id="q3">
-					<h1>Questão 3?</h1>
-					<br/>
-					<p class="lead">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non auctor
-						magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie. Pellentesque
-						habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-					</p>
-				</article>
-				<br/>
-				
-				<article id="q4">
-					<h1>Questão 4?</h1>
-					<br/>
-					<p class="lead">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non auctor
-						magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie. Pellentesque
-						habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-					</p>
-				</article>
-				<br/>
-				
-			</div>
-			
-			<div class="col-md-3">
-				<div id="aside-nav" class="navbar navbar-right text-center">
-					<button id="back-button" class="btn btn-default" onclick="location.href = '#'">Voltar</button>
-					
-					<ul class="list-group">
-						<li class="list-group-item"><a href="#q1">Questão 1</a></li>
-						<li class="list-group-item"><a href="#q2">Questão 2</a></li>
-						<li class="list-group-item"><a href="#q3">Questão 3</a></li>
-						<li class="list-group-item"><a href="#q4">Questão 4</a></li>
-					</ul>
-				</div>
-			</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-10" id="questions">
+            <div class="well">
+                <article id="q1">
+                    <h2>Questão 1?</h2>
+                    <p class="lead">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non
+                        auctor
+                        magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie.
+                        Pellentesque
+                        habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                    </p>
+                </article>
+            </div>
+
+            <div class="well">
+                <article id="q2">
+                    <h2>Questão 2?</h2>
+                    <p class="lead">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non
+                        auctor
+                        magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie.
+                        Pellentesque
+                        habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                    </p>
+                </article>
+            </div>
+
+            <div class="well">
+                <article id="q3">
+                    <h2>Questão 3?</h2>
+                    <p class="lead">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non
+                        auctor
+                        magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie.
+                        Pellentesque
+                        habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                    </p>
+                </article>
+            </div>
+
+            <div class="well">
+                <article id="q4">
+                    <h2>Questão 4?</h2>
+                    <p class="lead">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non
+                        auctor
+                        magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie.
+                        Pellentesque
+                        habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                    </p>
+                </article>
+            </div>
         </div>
-    </section>
+
+        <div class="col-sm-2">
+            <div id="back-button" class="text-center">
+                <button id="back-button" class="btn btn-default" onclick="location.href = '/'">Voltar</button>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item text-center"><a href="#q1">Questão 1</a></li>
+                <li class="list-group-item text-center"><a href="#q2">Questão 2</a></li>
+                <li class="list-group-item text-center"><a href="#q3">Questão 3</a></li>
+                <li class="list-group-item text-center"><a href="#q4">Questão 4</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 </body>

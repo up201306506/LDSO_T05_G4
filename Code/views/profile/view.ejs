@@ -11,71 +11,114 @@
 <body>
 <% include ./../templates/navbar.ejs %>
 
-<div class="container-fluid">
+<div class="container">
     <div class="row">
-        <div class="col-md-2"></div>
-
-        <div class="col-md-8">
+        <div class="col-sm-offset-1 col-sm-8">
             <h1>Perfil de Utilizador</h1>
-            <div class="edit">
-                <% if(isOwnProfile) { %>
-                <a href="/profile/edit/<%= username %>" class="label label-primary label-as-badge editbadge">Editar</a>
-                <% }else{ %>
-                <a href="#" class="label label-primary label-as-badge editbadge">Enviar Mensagem</a>
-                <% } %>
-            </div>
 
-            <div class="form-horizontal">
-                <label class="control-label col-sm-2" for="username">Username:</label>
-                <h1 id="username" class="lead"><%= username %></h1>
-            </div>
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="username">Username</label>
+                            <input type="text" name="username" class="form-control" id="username"
+                                   value="<%= username %>"
+                                   disabled>
+                        </div>
+                    </div>
 
-            <div class="form-horizontal">
-                <label class="control-label col-sm-2" for="password">Password:</label>
-                <h1 id="password" class="lead">
-                    <% for(var index = 0; index < password.length; index++) { %>
-                    <span>-</span>
-                    <% } %>
-                </h1>
-            </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="pull-right edit">
+                                <% if(isOwnProfile) { %>
+                                <a href="/profile/edit/<%= username %>"
+                                   class="label label-primary label-as-badge editbadge">Editar</a>
+                                <% }else{ %>
+                                <a href="#" class="label label-primary label-as-badge editbadge">Enviar Mensagem</a>
+                                <% } %>
+                            </div>
 
-            <div class="form-horizontal">
-                <label class="control-label col-sm-2" for="name">Name:</label>
-                <% if(name == "") { %>
-                <h1 id="name" class="lead notDefined">Não definido</h1>
-                <% }else{ %>
-                <h1 id="name" class="lead"><%= name %></h1>
-                <% } %>
-            </div>
+                            <% if(isOwnProfile) { %>
+                            <label class="control-label" for="password">Password</label>
+                            <input type="password" name="password" class="form-control" id="password"
+                                   value="<%= password %>"
+                                   disabled>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="form-horizontal">
-                <label class="control-label col-sm-2" for="gender">Sexo:</label>
-                <% if(phone == "") { %>
-                <h1 id="gender" class="lead notDefined">Não definido</h1>
-                <% }else{ %>
-                <h1 id="gender" class="lead"><%= gender %></h1>
-                <% } %>
-            </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label class="control-label" for="name">Nome</label>
+                            <input type="text" name="name" class="form-control" id="name"
+                                    <% if(name != "") { %>
+                                   value="<%= name %>"
+                                    <% }else{ %>
+                                   placeholder="Não definido"
+                                    <% } %>
+                                   disabled>
+                        </div>
+                    </div>
 
-            <div class="form-horizontal">
-                <label class="control-label col-sm-2" for="email">E-mail:</label>
-                <% if(phone == "") { %>
-                <h1 id="email" class="lead notDefined">Não definido</h1>
-                <% }else{ %>
-                <h1 id="email" class="lead"><%= email %></h1>
-                <% } %>
-            </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label" for="gender">Sexo</label>
+                            <input type="text" name="gender" class="form-control" id="gender"
+                                    <% if(gender != "") { %>
+                                   value="<%= gender %>"
+                                    <% }else{ %>
+                                   placeholder="Não definido"
+                                    <% } %>
+                                   disabled>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="form-horizontal">
-                <label class="control-label col-sm-2" for="phone">Contato:</label>
-                <% if(phone == "") { %>
-                <h1 id="phone" class="lead notDefined">Não definido</h1>
-                <% }else{ %>
-                <h1 id="phone" class="lead"><%= phone %></h1>
-                <% } %>
-            </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group well-bottom">
+                            <label class="control-label" for="email">Email</label>
+                            <input type="text" name="email" class="form-control" id="email"
+                                   value="<%= email %>"
+                                   disabled>
+                        </div>
+                    </div>
 
-            <div class="col-md-2"></div>
+                    <div class="col-sm-6">
+                        <div class="form-group well-bottom">
+                            <label class="control-label" for="phone">Contacto</label>
+                            <input type="text" name="phone" class="form-control" id="phone"
+                                    <% if(phone != "") { %>
+                                   value="<%= phone %>"
+                                    <% }else{ %>
+                                   placeholder="Não definido"
+                                    <% } %>
+                                   disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <h1>Comunidades</h1>
+
+            <div class="well">
+                <ul class="list-group well-bottom">
+                    <% if(communityArr.length == 0) { %>
+                    <li class="list-group-item text-center">
+                        <span>Nenhuma Comunidade</span>
+                    </li>
+                    <% } else { %>
+                    <% for(var index = 0; index < communityArr.length; index++) { %>
+                    <li class="list-group-item text-center">
+                        <a href="/community/<%= communityArr[index].name %>"><%= communityArr[index].name %></a>
+                    </li>
+                    <% }} %>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

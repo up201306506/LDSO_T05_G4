@@ -10,48 +10,50 @@
 <% include ./../templates/navbar.ejs %>
 
 <div class="container">
-    <div id="side-container" class="col-md-3">
-        <ul class="sidebar-nav">
-            <li class="sidebar-title">
-                <%= communityName %>
-            </li>
-            <li class="sidebar-subtitle">
-                <a href="/edit_community/<%= communityName %>">Editar</a>
-            </li>
-            <li>
-                <a href="#">Criar Oferta</a>
-            </li>
-        </ul>
-    </div>
-
-    <div class="col-md-9">
-        <% for(var index = 0; index < offerArr.length; index++) { %>
-        <div class="row offer-area">
-            <div class="offer-title">
-                <a href="#"><%= offerArr[index].offerName %></a>
+    <div class="row">
+        <div class="col-md-2">
+            <div id="side-panel" class="text-center">
+                <h3 id="side-title"><%= communityName %></h3>
+                <a id="edit-button" class="btn btn-primary" href="/edit_community/<%= communityName %>">Editar Comunidade</a>
+                <a class="btn btn-primary" href="/">Voltar</a>
             </div>
 
-            <div class="offer-content">
-                <div class="row">
-                    <div class="visible-lg col-sm-3">
-                        <img width="220" height="220" src="http://placehold.it/420x320" />
+            <ul class="list-group">
+                <li class="list-group-item text-center">
+                    <a href="#">Criar Oferta</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-10">
+            <% for(var index = 0; index < offerArr.length; index++){ %>
+            <div class="well">
+                <div class="offer-head">
+                    <span>Criado por: <a>Nome do user</a></span>
+                </div>
+
+                <div class="row offer-content">
+                    <div class="col-sm-4">
+                        <img class="img-responsive visible-md visible-lg" src="http://placehold.it/420x320"/>
                     </div>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                         <p class="lead">
-                            <%= offerArr[index].offerDescription %>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non
+                            auctor
+                            magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie.
+                            Pellentesque
+                            habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
                         </p>
-
-                        <div class="row">
-                            <div class="col-sm-2 pull-right">
-                                <a href="#" class="btn btn-default offer-button" role="button">Abrir oferta</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
+
+                <div class="row offer-footer">
+                    <a class="btn btn-default pull-right" href="#">Abrir</a>
+                </div>
             </div>
+            <% } %>
         </div>
-        <% } %>
     </div>
 </div>
 </body>

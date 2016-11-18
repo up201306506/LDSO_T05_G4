@@ -3,6 +3,7 @@ var express = require('express'),
     configDB = require('./../../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
     userController = require('./../../controllers/UserController'),
+    communityController = require('./../../controllers/CommunityController'),
     userPrivileges = require('./../../config/userPrivileges'),
     dropdownList = require('./../../config/dropdownLists');
 
@@ -17,19 +18,23 @@ router.get('/:username', userPrivileges.ensureAuthenticated, function (req, res)
     mongo.connect(configDB.url, function (err, db) {
         // Gets the user information
         userController.getUser(db, username, function (userData) {
-            db.close();
+            // Gets user enrolled communities
+            communityController.getUserEnrolledCommunities(db, username, isOwnProfile, function (communitiesArr) {
+                db.close();
 
-            res.render('profile/view',
-                {
-                    title: 'Local Exchange - View Profile',
-                    username: username,
-                    isOwnProfile: isOwnProfile,
-                    password: userData.password,
-                    name: userData.name,
-                    phone: userData.phone,
-                    gender: userData.gender,
-                    email: userData.email
-                });
+                res.render('profile/view',
+                    {
+                        title: 'Local Exchange - View Profile',
+                        username: username,
+                        isOwnProfile: isOwnProfile,
+                        password: userData.password,
+                        name: userData.name,
+                        phone: userData.phone,
+                        gender: userData.gender,
+                        email: userData.email,
+                        communityArr: communitiesArr
+                    });
+            });
         });
     });
 });

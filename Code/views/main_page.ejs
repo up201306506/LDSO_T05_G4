@@ -11,50 +11,52 @@
 <% include templates/alert_messages.ejs %>
 
 <div class="container">
-    <div id="side-container" class="col-md-3">
-        <ul class="sidebar-nav">
-            <li class="sidebar-title">
-                Comunidades
-            </li>
-            <li class="sidebar-subtitle">
-                <a href="/create_community">Criar comunidade</a>
-            </li>
-            <% for(var index = 0; index < communityArr.length; index++) { %>
-            <li>
-                <a href="/community/<%= communityArr[index].name %>"><%= communityArr[index].name %></a>
-            </li>
-            <% } %>
-        </ul>
-    </div>
-
-    <div class="col-md-9">
-        <% for(var index = 0; index < offerArr.length; index++) { %>
-        <div class="row offer-area">
-            <div class="offer-title">
-                <a href="#"><%= offerArr[index].communityName %></a> : <a href="#"><%= offerArr[index].offerName %></a>
+    <div class="row">
+        <div class="col-md-2">
+            <div id="side-panel" class="text-center">
+                <h3 id="side-title">Comunidades</h3>
+                <a class="btn btn-primary" href="/create_community">Criar comunidade</a>
             </div>
 
-            <div class="offer-content">
-                <div class="row">
-                    <div class="visible-lg col-sm-3">
-                        <img width="220" height="220" src="http://placehold.it/420x320" />
+            <ul class="list-group">
+                <% for(var index = 0; index < communityArr.length; index++) { %>
+                <li class="list-group-item text-center">
+                    <a href="/community/<%= communityArr[index].name %>"><%= communityArr[index].name %></a>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+
+        <div class="col-md-10">
+            <% for(var index = 0; index < offerArr.length; index++) { %>
+            <div class="well">
+                <div class="offer-head">
+                    <h4 class="offer-title"><a><%= offerArr[index].communityName %></a></h4>
+                    <span>Criado por: <a>Nome do user</a></span>
+                </div>
+
+                <div class="row offer-content">
+                    <div class="col-sm-4">
+                        <img class="img-responsive visible-md visible-lg" src="http://placehold.it/420x320" />
                     </div>
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                         <p class="lead">
-                            <%= offerArr[index].offerDescription %>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non
+                            auctor
+                            magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie.
+                            Pellentesque
+                            habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
                         </p>
-
-                        <div class="row">
-                            <div class="col-sm-2 pull-right">
-                                <a href="#" class="btn btn-default offer-button" role="button">Abrir oferta</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
+
+                <div class="row offer-footer">
+                    <a class="btn btn-default pull-right" href="#">Ver detalhes</a>
+                </div>
             </div>
+            <% } %>
         </div>
-        <% } %>
     </div>
 </div>
 </body>
