@@ -32,26 +32,57 @@ a, a:hover {
 
 .messageContent {
     border: solid 1px black;
+    position:relative;
 
     display: block;
-    min-height: 35px;
+    min-height: 115px;
     word-wrap: break-word;
 }
 
 #messageMeta{
-    display: block;
     width: 100%;
-    color: white;
-    background-color: #9a9595;
-
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 15px;
 }
 #interactive_pane{
     display: block;
     width: 100%;
     color: white;
     background-color: #9a9595;
+    padding-top: 2px;
+    padding-right: 25px;
+    padding-bottom: 20px;
 }
 
+.tooltip{
+    background-color: transparent;
+    color:green;
+}
+
+.modal-header, h4, .close {
+    background-color: #9a9595;
+    color:white;
+    text-align: center;
+    font-size: 30px;
+}
+.modal-body{
+    background-color: white;
+}
+.modal-footer {
+    background-color: #9a9595;
+}
+
+#delete_modal > .modal-dialog > .modal-content > .modal-footer{
+    background-color: white;
+}
+
+#editor {
+    overflow: auto; max-height:700px; height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
 
 /*If you want to see the page's grid*/
