@@ -23,7 +23,7 @@ router.get('/', function(req, res, next) {
         message_type: message_type,
         tooltip: tooltip,
         message_subject: "TEST SUBJECT TEST SUBJECT",
-        message_content: "TEST TEST TEST TEST TEST TEST TEST",
+        message_content: "A MESSAGE A MESSAGE A MESSAGE A MESSAGE A MESSAGE A MESSAGE A MESSAGE A MESSAGE A MESSAGE ",
         sender_image: "/images/placeholder.jpg"
     });
 });
