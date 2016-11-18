@@ -43,6 +43,8 @@ router.post('/:communityName/edit', userPrivileges.ensureAuthenticated, function
     // Verifies if the form is completed
     req.checkBody('headQuarter', 'Sede da comunidade necessária').notEmpty();
     req.checkBody('description', 'Descricao da comunidade necessária').notEmpty();
+    req.checkBody('category', 'É necessário escolher uma categoria').notEmpty();
+    req.checkBody('privacy', 'É necessário escolher o tipo de privacidade').notEmpty();
 
     // If an error is found an error message will be displayed
     var errors = req.validationErrors();

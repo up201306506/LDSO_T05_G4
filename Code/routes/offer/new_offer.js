@@ -15,8 +15,8 @@ router.get('/', userPrivileges.ensureAuthenticated, function(req, res, next) {
 
 router.post('/', upload.single("offer_image"), function(req, res, next) {
     req.checkBody('offer_name', 'Nome da oferta é necessário').notEmpty();
-    req.checkBody('offer_description', 'Username é necessário').notEmpty();
-    req.checkBody('offer_price', 'Username é necessário').notEmpty();
+    req.checkBody('offer_description', 'É necessária uma decrição para a oferta').notEmpty();
+    req.checkBody('offer_price', 'É necessário colocar um preço na oferta').notEmpty();
 
     var fileName = "";
     if(req.file) fileName = req.file.filename;
