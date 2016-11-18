@@ -47,7 +47,6 @@ router.post('/register', function (req, res) {
                 }else{
                     req.flash('error_msg', error);
                 }
-
                 res.redirect('/login');
             });
         });
