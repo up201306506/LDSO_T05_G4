@@ -1,6 +1,12 @@
-<% if (error.length > 0){ %>
-<div class="alert alert-danger"><%= error %></div>
-<% } %>
+<% if(hasOwnProperty("errors")){  %>
+<div class="alert alert-danger">
+    <ul>
+        <% errors.forEach(function(error) { %>
+        <li><%= error.msg %></li>
+        <% }); %>
+    </ul>
+</div>
+<%  } %>
 
 <% if (success_msg.length > 0){ %>
 <div class="alert alert-success"><%= success_msg %></div>
