@@ -1,65 +1,26 @@
-body {
-    padding-top: 50px;
+#side-panel {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E9E9E9;
+    margin-bottom: 20px;
 }
 
-#side-container {
-    margin-left: -5rem;
-    margin-right: 2rem;
+#side-title {
+    margin-top: 0px;
 }
 
-.sidebar-nav {
-    list-style: none;
+#edit-button {
+    margin-bottom: 10px;
 }
 
-.sidebar-nav > .sidebar-title {
-    height: 45px;
-    font-size: 22px;
-    line-height: 60px;
-}
-
-.sidebar-nav > .sidebar-subtitle {
-    height: 45px;
-    font-size: 18px;
-    line-height: 30px;
-}
-
-.sidebar-nav li {
-    font-size: 16px;
-    text-indent: 20px;
-    line-height: 40px;
-}
-
-.offer-area {
-    margin-top: 5rem;
-    border-bottom: solid 1px #999999;
-    padding-bottom: 3rem;
+.offer-head {
+    margin-bottom: 20px;
 }
 
 .offer-title {
-    font-size: 18px;
-    margin-left: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0px;
 }
 
-.lead {
-    margin-left: 3rem;
-}
-
-.offer-button {
-    margin-top: 2rem;
-}
-
-a {
-    text-decoration: none;
-    color: #999999;
-}
-
-a:hover {
-    text-decoration: none;
-    color: #000;
-    background: rgba(255,255,255,0.2);
-}
-
-a:active, a:focus {
-    text-decoration: none;
+.offer-footer {
+    margin-top: 20px;
+    margin-right: 0px;
 }

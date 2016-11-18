@@ -1,19 +1,32 @@
-var assert = require('assert');
+var assert = require('assert'),
+    dropdownList = require('./../config/dropdownLists');
 
 module.exports = {
 
     // Get the enrolled communities by an user
-    getUserEnrolledCommunities: function (db, username, callback) {
+    getUserEnrolledCommunities: function (db, username, doNotShowSecretCommunities, callback) {
         // Get Community collection
         var community = db.collection('community');
 
-        // Get a list of communities that this user is member of
-        community.find({members: username}).toArray(function (err, communities) {
-            assert.equal(err, null);
+        if (doNotShowSecretCommunities) {
+            // Get a list of communities that this user is member of
+            community.find({members: username}).toArray(function (err, communities) {
+                assert.equal(err, null);
 
-            // Process the list of communities
-            callback(communities);
-        });
+                // Process the list of communities
+                callback(communities);
+            });
+        } else {
+            // Get a list of communities that this user is member of
+            community.find({members: username,
+                $or: [{privacy: dropdownList.privacyList[0]}, {privacy: dropdownList.privacyList[1]}]
+            }).toArray(function (err, communities) {
+                assert.equal(err, null);
+
+                // Process the list of communities
+                callback(communities);
+            });
+        }
     },
 
     // Insert a new community in the db
@@ -82,7 +95,7 @@ module.exports = {
         community.updateOne({name: communityName},
             {
                 $set: {office: headOffice, category: category, description: description, privacy: privacy}
-            },function (err) {
+            }, function (err) {
                 assert.equal(err, null);
 
                 // Process the edit

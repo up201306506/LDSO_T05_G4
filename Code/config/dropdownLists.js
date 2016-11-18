@@ -9,9 +9,9 @@ var categoryList = [
 
 // Privacy Dropdown
 var privacyList = [
-    "Pública",
-    "Privada",
-    "Secreta"
+    "Pública", // 0
+    "Privada", // 1
+    "Secreta" // 2
 ];
 
 // Gender Dropdown
