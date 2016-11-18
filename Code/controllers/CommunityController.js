@@ -151,3 +151,11 @@ var removeUserFromCommunity = function (db, name, member, callback) {
         callback(result);
     });
 }
+
+var removeCommunity = function ( db, name, callback) {
+    var community = db.collection('community');
+    community.deleteOne({name: name}, function (err, results) {
+        assert.equal(err, null);
+        callback(results);
+    });
+}
