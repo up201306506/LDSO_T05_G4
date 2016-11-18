@@ -38,17 +38,17 @@ router.post('/register', function (req, res) {
     } else {
         // If no error was found the new user will be inserted in the db
         mongo.connect(configDB.url, function (err, db) {
-            userController.insertUser(db, req.body.username, req.body.password, "", req.body.email, "", "", function (wasCreated) {
+            userController.insertUser(db, req.body.username, req.body.password, "", req.body.email, "", "", function (error) {
                 db.close();
 
                 // The login page will be rendered
-                if(wasCreated){
+                if(!error){
                     req.flash('success_msg', 'Registado com sucesso');
                 }else{
-                    req.flash('error_msg', 'Utilizador já registado');
+                    req.flash('error_msg', error);
                 }
 
-                res.redirect('/');
+                res.redirect('/login');
             });
         });
     }

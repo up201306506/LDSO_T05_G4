@@ -13,14 +13,14 @@ module.exports = {
 
             // If the db already has an user with the same username throws an error
             if(userData1 != null){
-                callback(false);
+                callback("Username já em uso");
             }else{
                 user.findOne({email: email}, function (err, userData2) {
                     assert.equal(err, null);
 
                     // If the db already has an user with the same email throws an error
                     if(userData2 != null){
-                        callback(false);
+                        callback("Email já me uso");
                     }else{
                         // Inserts the new user
                         user.insertOne({
@@ -36,7 +36,7 @@ module.exports = {
                                 assert.equal(1, result.result.n);
                                 assert.equal(1, result.ops.length);
 
-                                callback(true);
+                                callback(null);
                             });
                     }
                 });
