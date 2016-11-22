@@ -9,7 +9,7 @@ module.exports = {
         var messages = db.collection('messages');
 
         //add message to collection
-        messages.insertOne({sender:sender, receiver:receiver, starred:false, content:content, date:date, type:type, deleted:false},
+        messages.insertOne({sender:sender, receiver:receiver, read:false, starred:false, content:content, date:date, type:type, deleted:false},
             function (err,result) {
                 assert.equal(err,null);
                 assert.equal(1, result.result.n);
@@ -47,6 +47,12 @@ module.exports = {
     //Get messages to user with star
     //Get messages of a specific type
     //Get messages with the flag "deleted"
+
+    //Set message as read
+    //Set message as deleted - It should have a TTL afterwards
+    //Undelete message - It should have TTL removed
+
+    //Switch a message's star status
 
     //Remove Message
     removeMessage : function ( db, id, callback) {
