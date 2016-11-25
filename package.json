@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node .Code/bin/www",
+    "start": "node Code/bin/www",
 	"preinstall": "cd Code"
   },
   "dependencies": {
