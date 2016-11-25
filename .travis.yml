@@ -4,6 +4,4 @@ node_js:
 
 notifications:
   slack: ldsot05grupo4:xhOmhs4AsqvYEunlO4mOBcNv
-  
-before_install:
-  - cd Code
+ 
