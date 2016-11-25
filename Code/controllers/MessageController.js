@@ -1,24 +1,19 @@
 var assert = require('assert');
-var configDB = require('./../config/dbURL.js');
 
 module.exports = {
 
     //Create a new Message
-    insertMessage : function (db, sender, receiver, content, date, type, callback) {
+    insertMessage : function (db, sender, receiver, subject, content, date, type, callback) {
         // Get messages collection
         var messages = db.collection('messages');
 
         //add message to collection
-        messages.insertOne({sender:sender, receiver:receiver, read:false, starred:false, content:content, date:date, type:type, deleted:false},
+        messages.insertOne({sender:sender, receiver:receiver, subject:subject, content:content, read:false, starred:false, date:date, type:type, deleted:false},
             function (err,result) {
-                assert.equal(err,null);
-                assert.equal(1, result.result.n);
-                assert.equal(1, result.ops.length);
                 console.log('Inserted 1 document into the db');
                 callback(result);
             });
     },
-
 
     //Get specific message with id
     getMessageByID : function (db, id, callback ) {
@@ -30,9 +25,8 @@ module.exports = {
         });
     },
 
-
     //Get messages sent to user
-    getUserMessages : function(db, username, callback) {
+    getMessagesByUser : function(db, username, callback) {
 
         var messages = db.collection('messages');
 
@@ -45,14 +39,38 @@ module.exports = {
 
 
     //Get messages to user with star
+    getStarredUserMessages : function(){
+    },
+
     //Get messages of a specific type
+    getMessagesByUserByType : function(){
+
+    },
+
     //Get messages with the flag "deleted"
+    getMessagesByUserDeleted : function(){
+
+    },
 
     //Set message as read
+    setMessageAsRead : function(){
+
+    },
+
     //Set message as deleted - It should have a TTL afterwards
+    setMessageAsDeleted : function(){
+
+    },
+
     //Undelete message - It should have TTL removed
+    setMessageAsUndeleted : function(){
+
+    },
 
     //Switch a message's star status
+    setMessageAsStarred : function(){
+
+    },
 
     //Remove Message
     removeMessage : function ( db, id, callback) {
