@@ -81,12 +81,8 @@ var webpage_communitypage = require('./routes/community/community_page');
 var webpage_createCommunity = require('./routes/community/create_community');
 var webpage_editCommunity = require('./routes/community/edit_community');
 var webpage_communityUserList = require('./routes/community/community_user_list');
-
-// test page
-var webpage_communityHomepage = require('./routes/community/homepage');
-
 // offer
-var webpage_newoffer = require('./routes/offer/new_offer');
+var webpage_createOffer = require('./routes/offer/create_offer');
 var webpage_viewoffer = require('./routes/offer/viewoffer');
 var webpage_editoffer = require('./routes/offer/editoffer');
 // messaging
@@ -106,10 +102,8 @@ app.use('/community', webpage_communitypage);
 app.use('/create_community', webpage_createCommunity);
 app.use('/edit_community', webpage_editCommunity);
 app.use('/community_users', webpage_communityUserList);
-// test page
-app.use('/test_community', webpage_communityHomepage);
 // offer
-app.use('/newoffer', webpage_newoffer);
+app.use('/create_offer', webpage_createOffer);
 app.use('/viewoffer', webpage_viewoffer);
 app.use('/editoffer', webpage_editoffer);
 // messaging

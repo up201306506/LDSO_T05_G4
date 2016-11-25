@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= communityName %></title>
+
+    <% include ./../templates/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/offer/create_offer.css">
+</head>
+<body>
+<% include ./../templates/navbar.ejs %>
+<% include ./../templates/alert_messages.ejs %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-offset-2 col-sm-8">
+            <h1>Criar Oferta em <%= communityName %></h1>
+
+            <form role="form" action="/create_offer/<%= communityName %>/create" method="post">
+                <div class="form-group">
+                    <label class="control-label" for="offerTitle">Titulo</label>
+                    <input type="text" name="offerTitle" class="form-control" id="offerTitle">
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="offerDescription">Descrição</label>
+                    <textarea class="form-control" name="offerDescription" id="offerDescription" rows="5"></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label" for="offerPrice">Preço</label>
+                            <input type="text" name="offerPrice" class="form-control" id="offerPrice">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label" for="offerType">Tipo</label>
+                            <div id="offerType">
+                                <div class="radio text-center">
+                                    <label id="offerTypeMaterial">
+                                        <input type="radio" name="offerType" value="Material"> Material
+                                    </label>
+
+                                    <label>
+                                        <input type="radio" name="offerType" value="Servicos"> Serviços
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label" for="offerImage">Imagem</label>
+                            <input type="file" name="offerImage" class="form-control" id="offerImage">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-offset-1 col-sm-9">
+                    <div class="form-group text-center" id="buttons-panel">
+                        <button type="submit" class="btn btn-default">Criar</button>
+                        <button type="button" class="btn btn-default" onclick="location.href = '/community/<%= communityName %>'">Voltar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
