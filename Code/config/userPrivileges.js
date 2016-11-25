@@ -3,7 +3,8 @@ function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     } else {
-        req.flash('error_msg', 'É necessário estar autenticado');
+        if(req.originalUrl != '/')
+            req.flash('error_msg', 'É necessário estar autenticado');
         res.redirect('/login');
     }
 }
