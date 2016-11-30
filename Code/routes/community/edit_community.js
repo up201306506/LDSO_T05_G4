@@ -19,7 +19,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
 
             // If this community does not exist in the tb
             if (communityData == null) {
-                res.redirect('/');
+                res.redirect('/message/inbox');
             } else {
                 res.render('community/edit_community',
                     {

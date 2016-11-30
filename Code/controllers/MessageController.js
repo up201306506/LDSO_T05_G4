@@ -1,6 +1,19 @@
 var assert = require('assert');
+var ObjectID = require('mongodb').ObjectID;
 
 module.exports = {
+
+    /*
+        sender: username
+        receiver: username
+        subject: text
+        content: inner_html?? text??
+        date: date
+        type: "offer", "conversation"
+        read: bool
+        starred: bool
+        deleted: bool
+     */
 
     //Create a new Message
     insertMessage : function (db, sender, receiver, subject, content, date, type, callback) {
@@ -19,10 +32,16 @@ module.exports = {
     getMessageByID : function (db, id, callback ) {
         var messages = db.collection('messages');
 
-        messages.find( { _id:id } ).toArray(function(err,result){
-            assert.equal(err, null);
-            callback(result);
-        });
+        if(ObjectID.isValid(id)) {
+            //console.log("A VALID MESSAGE ID");
+            messages.findOne({_id: ObjectID(id)}, function (err, result) {
+                assert.equal(err, null);
+                callback(result);
+            });
+        } else {
+            //console.log("AN INVALID MESSAGE ID");
+            callback(null)
+        }
     },
 
     //Get messages sent to user
