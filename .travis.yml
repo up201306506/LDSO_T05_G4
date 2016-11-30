@@ -4,7 +4,3 @@ node_js:
 
 notifications:
   slack: ldsot05grupo4:xhOmhs4AsqvYEunlO4mOBcNv
-	template:
-		- "Yoyo boys! Era só para saberem que o Mr. %{author} fez um commit na branch %{branch} com a mensagem (%{commit_message})"
-		- Eu desculpava o spam, mas o spam nunca acaba!
-		- "Resultado da build: %{result} em %{elapsed_time}"
