@@ -4,7 +4,24 @@ configDB = require('./../../config/dbURL.js'),
     messagingController = require("./../../controllers/MessageController.js"),
     mongo = require('mongodb').MongoClient;
 
+//
+//Incomplete URL Redirections
+//
 router.get('/', function(req, res) {
+    res.redirect('/message/inbox');
+});
+router.get('/id/', function(req, res) {
+    //!!!! Needs warning about unknown message ID
+    res.redirect('/');
+});
+
+//
+//Finished Webpage Templates - To be replaced with functional pages
+//
+router.get('/inbox', function(req, res) {
+    res.render('messaging/inbox', { title: 'Message Inbox' });
+});
+router.get('/message', function(req, res) {
     var fetched_type = "offer", message_type, tooltip;
 
     if(fetched_type == "conversation"){
@@ -19,16 +36,26 @@ router.get('/', function(req, res) {
     }
 
     res.render('messaging/message', {
-        title: 'Message from Another User',
+        title: 'A TEMPLATE FOR VIEWING MESSAGES',
         sender: "SenderUser",
         message_type: message_type,
         tooltip: tooltip,
         message_subject: "TEST SUBJECT TEST SUBJECT",
-        message_content: "A MESSAGE A MESSAGE A MESSAGE A MESSAGE A MESSAGE A MESSAGE A MESSAGE A MESSAGE A MESSAGE ",
+        message_content: "YOU ARE VIEWING A TEMPLATE. HEAD OVER TO /message/test/(id) TO VIEW DATABASE MESSAGES",
         sender_image: "/images/placeholder.jpg"
     });
 });
 
+//
+//Finished Webpages
+//
+
+
+//
+// TESTS and half done implementations - I will delete as soon as they find their proper place
+//
+
+//Should become /id/:id and replace the /message template completely
 router.get('/test/:id', function(req, res) {
     // Get id from url
     var id = req.params.id;
@@ -38,8 +65,10 @@ router.get('/test/:id', function(req, res) {
             db.close();
             console.log(data);
 
-            if(data == null)
-                res.redirect('/');
+            if(data == null){
+                //!!!! Needs warning about unknown message ID
+                res.redirect('/message/inbox');
+            }
             else
             {
                 var message_type, tooltip;

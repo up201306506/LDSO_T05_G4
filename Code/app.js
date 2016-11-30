@@ -86,8 +86,7 @@ var webpage_createOffer = require('./routes/offer/create_offer');
 var webpage_viewoffer = require('./routes/offer/viewoffer');
 var webpage_editoffer = require('./routes/offer/editoffer');
 // messaging
-var webpage_messageinbox = require('./routes/messaging/inbox');
-var webpage_message = require('./routes/messaging/message');
+var controller_message = require('./routes/messaging/message');
 
 // pages url's
 // unspecified
@@ -107,8 +106,7 @@ app.use('/create_offer', webpage_createOffer);
 app.use('/viewoffer', webpage_viewoffer);
 app.use('/editoffer', webpage_editoffer);
 // messaging
-app.use('/message/inbox', webpage_messageinbox);
-app.use('/message/message', webpage_message);
+app.use('/message/', controller_message);
 
 //---------------------------------------------------------------------
 
