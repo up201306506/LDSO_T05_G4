@@ -48,6 +48,16 @@ router.post('/:communityName/edit', userPrivileges.ensureAuthenticated, function
 
     // If an error is found an error message will be displayed
     var errors = req.validationErrors();
+
+    if(dropdownList.categoryList.indexOf(req.body.category) == -1){
+        if(errors.constructor != Array) errors = [];
+        errors.push({msg:'Categoria não válida'} );
+    }
+    if(dropdownList.privacyList.indexOf(req.body.privacy) == -1){
+        if(errors.constructor != Array) errors = [];
+        errors.push({msg:'Tipo de visualização não válida'} );
+    }
+
     if (errors) {
         // Connects to the db
         mongo.connect(configDB.url, function (err, db) {

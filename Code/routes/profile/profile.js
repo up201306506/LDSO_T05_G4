@@ -76,9 +76,13 @@ router.post('/edit/:username', userPrivileges.ensureAuthenticated, function (req
     req.checkBody('email', 'Email é necessário').notEmpty();
     req.checkBody('email', 'Email inválido').isEmail();
     req.checkBody('emailre', 'Emails não coincidem').equals(req.body.email);
-
-    // Verifies if there is any error
     var errors = req.validationErrors();
+
+    if(req.body.gender != '' && dropdownList.genderList.indexOf(req.body.gender) == -1){
+        if(errors.constructor != Array) errors = [];
+        errors.push({msg:'Género inválido'} );
+    }
+
     if (errors) {
         req.flash('errors', errors);
         // If an error was found an error message will appear
