@@ -63,14 +63,19 @@ router.get('/test/:id', function(req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessageByID(db, id, function(data){
             db.close();
-            console.log(data);
+            //console.log(data);
 
             if(data == null){
                 //!!!! Needs warning about unknown message ID
                 res.redirect('/message/inbox');
             }
-            else
-            {
+            else if(req.user != data.receiver) {
+                console.log("ACESS: redirecting " + req.user + " for attempting to see message belonging to "+ data.receiver)
+                res.redirect('/message/inbox');
+
+                return;
+            }
+            else {
                 var message_type, tooltip;
 
                 if(data.type == "conversation"){
@@ -97,10 +102,15 @@ router.get('/test/:id', function(req, res) {
         });
     });
 });
+//Should replace /inbox
+router.get('/test_inbox', function (req, res) {
+    res.render('messaging/inbox', { title: 'Message Inbox' });
+});
+
 
 router.get('/test_create', function(req, res){
     mongo.connect(configDB.url, function (err, db) {
-        messagingController.insertMessage(db, "UserTest1", "zzzzzzzz", "TestSubject", "OLA!!!", "2016-05-26T05:00:00.000Z", "TestType", function(success){
+        messagingController.insertMessage(db, "xxxxxxxx", "zzzzzzzz", "TestSubject", "OLA!!!", "2016-05-26T05:00:00.000Z", "TestType", function(success){
             db.close();
             console.log(success.ops);
             res.render("test", {title: "test_create", content1: success.ops })
