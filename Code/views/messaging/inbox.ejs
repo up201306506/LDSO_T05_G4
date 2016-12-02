@@ -13,6 +13,7 @@
 </head>
 <body>
 <% include ../templates/navbar.ejs %>
+<% include ../templates/alert_messages.ejs %>
 
 <div class="container"id="main_body">
     <div class=row">
@@ -167,22 +168,22 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
+            <form id="New_Message_Form" class="form-horizontal" role="form" action="/message/new" method="post">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4><span class="glyphicon glyphicon-envelope"></span> Send a New Message</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form">
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="compose_recipient">To:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="compose_recipient" placeholder="The username field needs a typeahead implementation">
+                            <input name="receiver" type="text" class="form-control" id="compose_recipient" placeholder="The username field needs a typeahead implementation">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="compose_subject">Subject:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="compose_subject" placeholder="Enter Subject">
+                            <input name="subject" type="text" class="form-control" id="compose_subject" placeholder="Enter Subject">
                         </div>
                     </div>
 
@@ -193,9 +194,9 @@
                                 <option value="Conversation" selected>Conversation</option>
                                 <option value="Offer">Offer</option>
                             </select>
+                            <input name="type" value="conversation" hidden>
                         </div>
                     </div>
-
 
 
                     <!-- TextArea Input. If you're reading this, go HERE: http://mindmup.github.io/bootstrap-wysiwyg/ -->
@@ -216,17 +217,17 @@
                                 </div>
                             </div>
                             <div class="">
-                                <div id="editor" contenteditable="true">
-                                </div>
+                                <div id="editor" contenteditable="true"></div>
                             </div>
+                            <input id="content_input" name="content" value="" hidden>
                         </div>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-default">Send</button>
+                <button type="button" class="btn btn-default" onclick="sendMessage()">Send</button>
             </div>
+            </form>
         </div>
 
     </div>
@@ -240,7 +241,14 @@
         //Textarea Initializer
         $('#editor').wysiwyg();
         $('#launch').click();
+
     });
+
+    function sendMessage(){
+        $('#content_input').attr('value', $('#editor').html());
+        $('#New_Message_Form').submit();
+    }
+
 </script>
 
 

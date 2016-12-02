@@ -1,9 +1,8 @@
-var express = require('express');
-var router = express.Router();
-configDB = require('./../../config/dbURL.js'),
-    messagingController = require("./../../controllers/MessageController.js"),
-    mongo = require('mongodb').MongoClient;
-
+var express = require('express'),
+    router = express.Router(),
+    configDB = require('./../../config/dbURL.js'),
+    mongo = require('mongodb').MongoClient,
+    messagingController = require("./../../controllers/MessageController.js");
 //
 //Incomplete URL Redirections
 //
@@ -46,16 +45,64 @@ router.get('/message', function(req, res) {
     });
 });
 
+
 //
 //Finished Webpages
 //
 
+router.post('/new', function(req, res) {
+    // Verifies if the form is completed
+    req.checkBody('receiver', 'Por Favor indique um remetente para a mensagem').notEmpty();
+    req.checkBody('subject', 'Por Favor indique um tema para a mensagem').notEmpty();
+    req.checkBody('type', 'A mensagem tem de ter um tipo').notEmpty();
+    req.checkBody('content', 'A mensagem tem de ter um conteudo').notEmpty();
+    var errors = req.validationErrors();
+
+    //User not logged in???
+    if(req.user == undefined){
+        if(errors.constructor != Array) errors = [];
+        errors.push({msg:'Houve um problema em encontrar o teu ID de utilizador'} );
+    }
+
+    /*
+        TODO:
+            Verificar se existe o utilizador remetente
+
+     */
+
+
+    if (errors) {
+        // If an error was found an error message should appear
+        console.log("!!!!!!!! Message NOT Created")
+        console.log(errors);
+
+        //Redirect
+        req.flash('errors', errors);
+        res.redirect('/message/inbox');
+    } else {
+
+        // If no error is found a new message will be sent
+        console.log("!!!!!!!! Message Created")
+        console.log(req.body);
+
+        //MESSAGE CREATION
+        mongo.connect(configDB.url, function (err, db) {
+            // function (db, sender, receiver, subject, content, date, type, callback)
+            messagingController.insertMessage(db, req.user, req.body.receiver, req.body.subject, req.body.content, new Date(), req.body.type, function(success){
+                db.close();
+
+                req.flash('success_msg', 'Mensagem enviada!');
+                res.redirect('/message/inbox');
+            } );
+        });
+    }
+});
 
 //
 // TESTS and half done implementations - I will delete as soon as they find their proper place
 //
 
-//Should become /id/:id and replace the /message template completely
+    //Should become /id/:id and replace the /message template completely
 router.get('/test/:id', function(req, res) {
     // Get id from url
     var id = req.params.id;
@@ -102,11 +149,10 @@ router.get('/test/:id', function(req, res) {
         });
     });
 });
-//Should replace /inbox
+    //Should replace /inbox later
 router.get('/test_inbox', function (req, res) {
     res.render('messaging/inbox', { title: 'Message Inbox' });
 });
-
 
 router.get('/test_create', function(req, res){
     mongo.connect(configDB.url, function (err, db) {
