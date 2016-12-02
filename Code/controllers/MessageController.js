@@ -82,11 +82,19 @@ module.exports = {
                     callback(true);
                 });
         } else {
-            callback(false)
+            callback(false);
         }
+    },
 
+    //Set all messages to user as read
+    setAllMessageAsRead : function(db, user, callback){
+        var messages = db.collection('messages');
 
-
+        messages.update({receiver:user}, {$set: {read:true}}, {multi:true}, function(err) {
+            assert.equal(null, err);
+            }
+        );
+        callback(false);
     },
 
     //Set message as deleted - It should have a TTL afterwards

@@ -63,7 +63,15 @@ router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
 router.get('/id/', userPrivileges.ensureAuthenticated, function(req, res) {
     res.redirect('/inbox');s
 });
-
+router.get('/inbox/markAllRead', userPrivileges.ensureAuthenticated, function (req, res) {
+    mongo.connect(configDB.url, function (err, db){
+        messagingController.setAllMessageAsRead(db, req.user, function(result) {
+            db.close();
+            console.log("TEST");
+            res.redirect('/message/inbox');
+        });
+    });
+});
 
 
 //

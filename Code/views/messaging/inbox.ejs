@@ -38,7 +38,7 @@
             <!-- Header -->
             <div id=Inbox_Header">
                 <!-- Mark Read Button -->
-                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Mark all as Read" onclick="markReadButton()">Mark all as Read</button>
+                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Mark all as Read" onclick="location.href = './inbox/markAllRead';">Mark all as Read</button>
                 <!-- Refresh Button -->
                 <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Refresh" onclick="location.reload();">
                     &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;&nbsp;</button>
@@ -243,10 +243,6 @@
     function sendMessage(){
         $('#content_input').attr('value', $('#editor').html());
         $('#New_Message_Form').submit();
-    }
-
-    function markReadButton(){
-        location.reload();
     }
 
 </script>
