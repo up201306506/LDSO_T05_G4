@@ -15,7 +15,7 @@
         <div class="col-sm-offset-2 col-sm-8">
             <h1>Criar Oferta em <%= communityName %></h1>
 
-            <form role="form" action="/create_offer/<%= communityName %>/create" method="post">
+            <form role="form" action="/create_offer/<%= communityName %>/create" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="control-label" for="offerTitle">Titulo</label>
                     <input type="text" name="offerTitle" class="form-control" id="offerTitle">

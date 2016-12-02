@@ -2,8 +2,8 @@ var express = require('express'),
     router = express.Router(),
     configDB = require('./../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
-    userController = require('./../controllers/UserController'),
     communityController = require('./../controllers/CommunityController'),
+    offerController = require('./../controllers/OfferController'),
     userPrivileges = require('./../config/userPrivileges');
 
 router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
@@ -25,6 +25,8 @@ router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
     mongo.connect(configDB.url, function (err, db, next) {
         // Get this user enrolled communities from the db
         communityController.getUserEnrolledCommunities(db, req.user, true, function (communities) {
+            console.log(communities);
+
             db.close();
 
             // TODO Get all offers visible to this user
