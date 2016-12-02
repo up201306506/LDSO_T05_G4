@@ -62,12 +62,10 @@ module.exports = {
 
     //Get messages of a specific type
     getMessagesByUserByType : function(){
-
     },
 
     //Get messages with the flag "deleted"
     getMessagesByUserDeleted : function(){
-
     },
 
     //Set message as read - Call this in the getMessageByID() callback
