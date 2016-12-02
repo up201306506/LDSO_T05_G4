@@ -251,36 +251,4 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
     // TODO: Styling - Make this look like the rest of the site
 
 
-//
-// TESTS
-//
-
-router.get('/test_get_name', function(req, res){
-    mongo.connect(configDB.url, function (err, db) {
-        messagingController.getMessagesByUser(db, "zzzzzzzz", function(success_fetch){
-            db.close();
-
-            console.log(success_fetch);
-
-            res.render("test", {title: "test_get_name", content1: success_fetch })
-        });
-    });
-});
-router.get('/test_get_id/:id', function(req, res){
-    // Get id from url
-    var id = req.params.id;
-
-    mongo.connect(configDB.url, function (err, db) {
-        messagingController.getMessageByID(db, id, function(success_fetch){
-            db.close();
-            console.log(success_fetch);
-            if(success_fetch == null)
-                res.render("test", {title: "test_get_id", content1: "There was no content in the database for that id OR the id is invalid" })
-            else
-                res.render("test", {title: "test_get_id", content1: success_fetch })
-        });
-    });
-});
-
-
 module.exports = router;

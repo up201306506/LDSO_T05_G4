@@ -6,10 +6,6 @@
     <% include ../templates/header.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/messaging/inbox.css">
 
-    <!-- Text-area editor with buttons -->
-    <script type="text/javascript" src="https://rawgithub.com/mindmup/bootstrap-wysiwyg/master/bootstrap-wysiwyg.js"></script>
-    <script src="https://rawgithub.com/mindmup/bootstrap-wysiwyg/master/external/jquery.hotkeys.js"></script>
-
 </head>
 <body>
 <% include ../templates/navbar.ejs %>
@@ -231,6 +227,10 @@
     </div>
 </div>
 
+<!-- Text-area editor with buttons -->
+<script type="text/javascript" src="https://rawgithub.com/mindmup/bootstrap-wysiwyg/master/bootstrap-wysiwyg.js"></script>
+<script src="https://rawgithub.com/mindmup/bootstrap-wysiwyg/master/external/jquery.hotkeys.js"></script>
+
 <script>
     $(document).ready(function(){
         //Tooltip function initializer
@@ -241,12 +241,10 @@
         $('#launch').click();
 
     });
-
     function sendMessage(){
         $('#content_input').attr('value', $('#editor').html());
         $('#New_Message_Form').submit();
     }
-
     function toggleStar(element){
         //console.log($(element).attr('star_id'));
         $(element).toggleClass("glyphicon-star glyphicon-star-empty");
@@ -262,7 +260,6 @@
             });
         }
     }
-
     function trashCanButton(element){
         //console.log($(element).attr('delete_id'));
 
@@ -274,7 +271,6 @@
             window.location.href = "/message/delete/"+$(element).attr('delete_id');
         }
     }
-
 </script>
 
 
