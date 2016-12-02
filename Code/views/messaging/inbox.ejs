@@ -25,11 +25,11 @@
             <hr>
             <!-- Bottom Buttons -->
             <ul class="nav nav-pills nav-stacked">
-                <li class="active"><a href="#"><span class="badge pull-right">New</span> Inbox </a></li>
-                <li><a href="#">Offers</a></li>
-                <li><a href="#">Important</a></li>
-                <li><a href="#">Sent Mail</a></li>
-                <li><a href="#">Deleted</a></li>
+                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href="#"><span class="badge pull-right">New</span> Inbox </a></li>
+                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href="#">Offers</a></li>
+                <li <%if(inboxType=="Star"){%> class="active" <%}%> ><a href="#">Star</a></li>
+                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href="#">Sent Mail</a></li>
+                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href="#">Deleted</a></li>
             </ul>
         </div>
 
@@ -38,9 +38,9 @@
             <!-- Header -->
             <div id=Inbox_Header">
                 <!-- Mark Read Button -->
-                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Mark all as Read">Mark all as Read</button>
+                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Mark all as Read" onclick="location.href = './inbox/markAllRead';">Mark all as Read</button>
                 <!-- Refresh Button -->
-                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Refresh">
+                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Refresh" onclick="location.reload();">
                     &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;&nbsp;</button>
                 <!-- Title -->
                 <h2><%= user %>'s Inbox</h2>
@@ -52,33 +52,35 @@
             <ul class="list-group" id="Inbox_Contents">
 
                 <% for(var i = 0; i < userMessages.length; i++) { %>
-                <li class="list-group-item message_item <%if(!userMessages[i].read){%>active<%}%>">
-                    <!-- Star -->
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <!-- Other User's Name -->
-                    <a href="./id/<%= userMessages[i]._id %>">
-                        <div class="message_sender_username">
-                            <span class="message_sender_username_text"><%= userMessages[i].sender %></span>
-                        </div>
-                        <div class="message_preview">
-                            <!-- Message Subject -->
-                            <span class="message_subject"><%= userMessages[i].subject %> - </span>
-                            <!-- Message Preview -->
-                            <span class="message_preview_text"><%= userMessages[i].content %></span>
-                        </div>
-                    </a>
+                <% if(!userMessages[i].deleted){%>
+                    <li class="list-group-item message_item <%if(!userMessages[i].read){%>active<%}%>">
+                        <!-- Star -->
+                        <a href="#"><span class="glyphicon glyphicon-star<%= userMessages[i].starred ? "" : "-empty" %>" delete_id="<%= userMessages[i]._id %>" onclick="toggleStar(this)"></span></a>
+                        <!-- Other User's Name -->
+                        <a href="./id/<%= userMessages[i]._id %>">
+                            <div class="message_sender_username">
+                                <span class="message_sender_username_text"><%= userMessages[i].sender %></span>
+                            </div>
+                            <div class="message_preview">
+                                <!-- Message Subject -->
+                                <span class="message_subject"><%= userMessages[i].subject %></span>
+                                <!-- Message Preview -->
+                                <span class="message_preview_text hidden-xs hidden-sm"> - <%= userMessages[i].content %></span>
+                            </div>
+                        </a>
 
-                    <div class="pull-right">
-                        <!-- Type -->
-                        <span class="glyphicon glyphicon-<%= userMessages[i].type %>"
-                              data-toggle="tooltip" data-placement="left" title="<%= userMessages[i].typePopup %>"></span>
-                        <!-- Receive Date -->
-                        <span class="badge">25/12/1970</span>
-                        <!-- Trash Can -->
-                        <a href="#"><span class="glyphicon glyphicon-trash"
-                                          data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
-                    </div>
-                </li>
+                        <div class="pull-right">
+                            <!-- Type -->
+                            <span class="glyphicon glyphicon-<%= userMessages[i].type %>"
+                                  data-toggle="tooltip" data-placement="left" title="<%= userMessages[i].typePopup %>"></span>
+                            <!-- Receive Date -->
+                            <span class="badge">25/12/1970</span>
+                            <!-- Trash Can -->
+                            <a href="#"><span class="glyphicon glyphicon-trash" onclick="trashCanButton(this)" delete_id="<%= userMessages[i]._id %>"
+                                              data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
+                        </div>
+                    </li>
+                <% } %>
                 <% } %>
 
 
@@ -243,6 +245,30 @@
     function sendMessage(){
         $('#content_input').attr('value', $('#editor').html());
         $('#New_Message_Form').submit();
+    }
+
+    function toggleStar(element){
+        //console.log($(element).attr('star_id'));
+        $(element).toggleClass("glyphicon-star glyphicon-star-empty");
+        if($(element).hasClass("glyphicon-star"))
+        {
+            console.log("Starred");
+        }else
+        {
+            console.log("Unstarred");
+        }
+    }
+
+    function trashCanButton(element){
+        //console.log($(element).attr('delete_id'));
+
+        var red = $(element).attr('red');
+        if (!(typeof red !== typeof undefined && red !== false)) {
+            $(element).attr('red', true);
+            $(element).css("color","red");
+        } else {
+            window.location.href = "/message/delete/"+$(element).attr('delete_id');
+        }
     }
 
 </script>

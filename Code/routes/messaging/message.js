@@ -63,7 +63,44 @@ router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
 router.get('/id/', userPrivileges.ensureAuthenticated, function(req, res) {
     res.redirect('/inbox');s
 });
+router.get('/inbox/markAllRead', userPrivileges.ensureAuthenticated, function (req, res) {
+    mongo.connect(configDB.url, function (err, db){
+        messagingController.setAllMessageAsRead(db, req.user, function(result) {
+            db.close();
+            res.redirect('/message/inbox');
+        });
+    });
+});
 
+router.get('/delete/:id', userPrivileges.ensureAuthenticated, function (req, res) {
+    // Get id from url
+    var id = req.params.id;
+
+    mongo.connect(configDB.url, function (err, db){
+        messagingController.getMessageByID(db, id, function(data){
+
+            //Redirection Checks
+            if(data == null){
+                //TODO: Needs warning about unknown message ID
+                res.redirect('/message/inbox');
+                return;
+            }
+            if(req.user != data.receiver) {
+                console.log("ACESS: redirecting " + req.user + " for attempting to delete message belonging to "+ data.receiver)
+                res.redirect('/message/inbox');
+                return;
+            }
+
+            messagingController.setMessageAsDeleted(db,id, function(result){
+                db.close();
+                res.redirect('/message/inbox');
+            });
+        });
+    });
+});
+router.get('/star/:id', userPrivileges.ensureAuthenticated, function (req, res) {
+    res.redirect('/message/inbox');
+});
 
 
 //
@@ -78,20 +115,23 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
 
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessageByID(db, id, function(data){
-            db.close();
-            //console.log(data);
 
+            //Redirection Checks
             if(data == null){
-                //!!!! Needs warning about unknown message ID
+                //TODO: warning about unknown message ID
                 res.redirect('/message/inbox');
-            }
-            else if(req.user != data.receiver) {
-                console.log("ACESS: redirecting " + req.user + " for attempting to see message belonging to "+ data.receiver)
-                res.redirect('/message/inbox');
-
                 return;
             }
-            else {
+            if(req.user != data.receiver) {
+                console.log("ACESS: redirecting " + req.user + " for attempting to see message belonging to "+ data.receiver)
+                res.redirect('/message/inbox');
+                return;
+            }
+
+            messagingController.setMessageAsRead(db,id, function(result){
+                db.close();
+
+                //console.log(data);
                 var message_type, tooltip;
 
                 if(data.type == "conversation"){
@@ -114,17 +154,17 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
                     message_content: data.content,
                     sender_image: "/images/placeholder.jpg"
                 });
-            }
+
+            });
         });
     });
 });
 
     //TODO: Message preview should show escaped text, no format tags
-    //TODO: Make message deleting button work.
     //TODO: Make message starring button work.
-    //TODO: Mark as Read button
-    //TODO: Refresh Button
     //TODO: Convert dates to something nice to look at.
+    //TODO: New Message Badge appearing only when there's unread messages
+    //TODO: Pagination - Remind, this should replace the message fetching function with one that ignores "deleted" ones
 router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, req.user, function(userMessages){
@@ -144,14 +184,13 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
                     userMessages[i].type = "warning-sign";
                     userMessages[i].typePopup = "System Notification";
                 }
-
-
             }
 
             res.render('messaging/inbox',
                 {
                     title: 'Message Inbox',
-                    userMessages: userMessages
+                    userMessages: userMessages,
+                    inboxType: 'Inbox'
                 }
             );
         });
