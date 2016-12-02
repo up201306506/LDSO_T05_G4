@@ -20,7 +20,11 @@
             Personal Message
             <span class="glyphicon glyphicon glyphicon-<%= message_type %>"data-toggle="tooltip" data-placement="right" title="<%= tooltip %>"></span>
         </h2>
+        <%if(messageReceiver) {%>
         <p>Sender: <strong><a href="#" id=""><%= sender %></a></strong></p>
+        <%} else {%>
+        <p>Receiver: <strong><a href="#" id=""><%= receiver %></a></strong></p>
+        <%}%>
         <p>Subject: <strong><a href="#" id=""><%= message_subject %></a></strong></p>
     </div>
 
@@ -33,6 +37,7 @@
         </div>
     </div>
 
+    <%if(messageReceiver) {%>
     <div class="container" id="interactive_pane">
         <div class="btn-group pull-right" role="group" aria-label="Basic example">
             <%if(!deleted){%>
@@ -42,6 +47,7 @@
             <%}%>
         </div>
     </div>
+    <% } %>
 </div>
 
 <!-- -->
@@ -226,6 +232,7 @@
         $("#editor_redirect").wysiwyg();
         $('#launch').click();
     });
+
     function sendReply(){
         $('#reply_content_input').attr('value', $('#editor').html());
         $('#reply_form').submit();

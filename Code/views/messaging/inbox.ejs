@@ -52,7 +52,7 @@
                         <!-- Star -->
                         <a href="#"><span class="glyphicon glyphicon-star<%= userMessages[i].starred ? "" : "-empty" %>" star_id="<%= userMessages[i]._id %>" onclick="toggleStar(this)"></span></a>
                         <!-- Other User's Name -->
-                        <a href="./id/<%= userMessages[i]._id %>">
+                        <a href="./<%= inboxType=="Sent" ? "sent" : "id" %>/<%=  userMessages[i]._id %>">
                             <div class="message_sender_username">
                                 <%if(inboxType == "Sent") {%>
                                 <span class="message_sender_username_text"><%= userMessages[i].receiver %></span>

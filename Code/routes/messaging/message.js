@@ -216,6 +216,7 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
                     title: 'Personal Message',
                     message_id: id,
                     sender: data.sender,
+                    messageReceiver: true,
                     message_type: message_type,
                     tooltip: tooltip,
                     message_subject: data.subject,
@@ -225,6 +226,57 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
                 });
 
             });
+        });
+    });
+});
+router.get('/sent/:id', userPrivileges.ensureAuthenticated, function(req, res) {
+    // Get id from url
+    var id = req.params.id;
+
+    mongo.connect(configDB.url, function (err, db) {
+        messagingController.getMessageByID(db, id, function(data){
+            db.close();
+
+            //Redirection Checks
+            if(data == null){
+                //TODO: warning about unknown message ID
+                res.redirect('/message/inbox');
+                return;
+            }
+            if(req.user != data.sender) {
+                console.log("ACESS: redirecting " + req.user + " for attempting to see message belonging to "+ data.sender)
+                res.redirect('/message/inbox');
+                return;
+            }
+
+            //console.log(data);
+            var message_type, tooltip;
+
+            if(data.type == "conversation"){
+                message_type = "user";
+                tooltip = "Conversation";
+            } else if(data.type == "offer") {
+                message_type = "leaf"
+                tooltip = "Offer Related";
+            } else {
+                message_type = "warning-sign"
+                tooltip = "Unknown Message Type";
+            }
+
+            res.render('messaging/message', {
+                title: 'Personal Message',
+                message_id: id,
+                sender: data.sender,
+                receiver: data.receiver,
+                messageReceiver: false,
+                message_type: message_type,
+                tooltip: tooltip,
+                message_subject: data.subject,
+                message_content: data.content,
+                deleted: data.deleted,
+                sender_image: "/images/placeholder.jpg"
+            });
+
         });
     });
 });
