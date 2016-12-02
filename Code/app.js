@@ -104,7 +104,7 @@ app.use('/edit_community', webpage_editCommunity);
 app.use('/community_users', webpage_communityUserList);
 // offer
 app.use('/create_offer', webpage_createOffer);
-app.use('/viewoffer', webpage_viewoffer);
+app.use('/view_offer', webpage_viewoffer);
 app.use('/editoffer', webpage_editoffer);
 // messaging
 app.use('/message/inbox', webpage_messageinbox);
