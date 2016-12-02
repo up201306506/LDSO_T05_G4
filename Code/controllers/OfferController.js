@@ -41,7 +41,36 @@ module.exports = {
         });
     },
 
+    // Gets all offers from a community
+    getCommunityOffers: function (db, communityName, callback) {
+        // Get offer collection
+        var offer = db.collection('offer');
 
+        // Get a list of offers of community communityName
+        offer.find({communityName: communityName}).toArray(function (err, offers) {
+            assert.equal(err, null);
+
+            callback(offers);
+        });
+    },
+
+    // Gets all offers from a list of communities
+    getCommunityListOffers: function (db, communityList, callback) {
+        // Get offer collection
+        var offer = db.collection('offer');
+
+
+
+
+
+
+        // Get a list of offers of community communityName
+        offer.find({userName: userName}).toArray(function (err, offers) {
+            assert.equal(err, null);
+
+            callback(offers);
+        });
+    },
 
 
 
