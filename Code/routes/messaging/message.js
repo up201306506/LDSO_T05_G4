@@ -98,6 +98,32 @@ router.get('/delete/:id', userPrivileges.ensureAuthenticated, function (req, res
         });
     });
 });
+router.get('/undelete/:id', userPrivileges.ensureAuthenticated, function (req, res) {
+    // Get id from url
+    var id = req.params.id;
+
+    mongo.connect(configDB.url, function (err, db){
+        messagingController.getMessageByID(db, id, function(data){
+
+            //Redirection Checks
+            if(data == null){
+                //TODO: Needs warning about unknown message ID
+                res.redirect('/message/inbox');
+                return;
+            }
+            if(req.user != data.receiver) {
+                console.log("ACESS: redirecting " + req.user + " for attempting to undelete message belonging to "+ data.receiver)
+                res.redirect('/message/inbox');
+                return;
+            }
+
+            messagingController.setMessageAsUndeleted(db,id, function(result){
+                db.close();
+                res.redirect('/message/inbox');
+            });
+        });
+    });
+});
 router.get('/star/:id', userPrivileges.ensureAuthenticated, function (req, res) {// Get id from url
     var id = req.params.id;
 

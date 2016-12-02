@@ -144,8 +144,21 @@ module.exports = {
     },
 
     //Undelete message - It should have TTL removed
-    setMessageAsUndeleted : function(){
+    setMessageAsUndeleted : function(db, id , callback){
+        var messages = db.collection('messages');
 
+        if(ObjectID.isValid(id)) {
+            messages.updateOne(
+                {_id: ObjectID(id)},
+                {$set: {deleted: false}},
+                function (err)
+                {
+                    assert.equal(err, null);
+                    callback(true);
+                });
+        } else {
+            callback(false);
+        }
     },
 
     //Switch a message's star status
