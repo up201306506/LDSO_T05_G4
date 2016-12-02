@@ -98,8 +98,53 @@ router.get('/delete/:id', userPrivileges.ensureAuthenticated, function (req, res
         });
     });
 });
-router.get('/star/:id', userPrivileges.ensureAuthenticated, function (req, res) {
-    res.redirect('/message/inbox');
+router.get('/star/:id', userPrivileges.ensureAuthenticated, function (req, res) {// Get id from url
+    var id = req.params.id;
+
+    mongo.connect(configDB.url, function (err, db){
+        messagingController.getMessageByID(db, id, function(data){
+
+            //Redirection Checks
+            if(data == null){
+                //TODO: Needs warning about unknown message ID
+                res.sendStatus(400);
+                return;
+            }
+            if(req.user != data.receiver) {
+                res.sendStatus(403);
+                return;
+            }
+
+            messagingController.toggleMessageStarred(db,id,true,function(result){
+                db.close();
+                res.sendStatus(206);
+            });
+        });
+    });
+});
+router.get('/unstar/:id', userPrivileges.ensureAuthenticated, function (req, res) {// Get id from url
+    var id = req.params.id;
+
+    mongo.connect(configDB.url, function (err, db){
+        messagingController.getMessageByID(db, id, function(data){
+
+            //Redirection Checks
+            if(data == null){
+                //TODO: Needs warning about unknown message ID
+                res.sendStatus(400);
+                return;
+            }
+            if(req.user != data.receiver) {
+                res.sendStatus(403);
+                return;
+            }
+
+            messagingController.toggleMessageStarred(db,id,false,function(result){
+                db.close();
+                res.sendStatus(206);
+            });
+        });
+    });
 });
 
 
@@ -147,6 +192,7 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
 
                 res.render('messaging/message', {
                     title: 'Personal Message',
+                    message_id: id,
                     sender: data.sender,
                     message_type: message_type,
                     tooltip: tooltip,
@@ -169,7 +215,6 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, req.user, function(userMessages){
             db.close();
-            console.log(userMessages);
 
             for(var i = 0; i < userMessages.length; i++){
                 if(userMessages[i].type == "conversation"){
@@ -204,38 +249,6 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
         //TODO: Page for "sent" mail, shows contents but doesn't let you delete or redirect it, and has Receiver opposed to Sender
 
     // TODO: Styling - Make this look like the rest of the site
-
-
-//
-// TESTS
-//
-
-router.get('/test_get_name', function(req, res){
-    mongo.connect(configDB.url, function (err, db) {
-        messagingController.getMessagesByUser(db, "zzzzzzzz", function(success_fetch){
-            db.close();
-
-            console.log(success_fetch);
-
-            res.render("test", {title: "test_get_name", content1: success_fetch })
-        });
-    });
-});
-router.get('/test_get_id/:id', function(req, res){
-    // Get id from url
-    var id = req.params.id;
-
-    mongo.connect(configDB.url, function (err, db) {
-        messagingController.getMessageByID(db, id, function(success_fetch){
-            db.close();
-            console.log(success_fetch);
-            if(success_fetch == null)
-                res.render("test", {title: "test_get_id", content1: "There was no content in the database for that id OR the id is invalid" })
-            else
-                res.render("test", {title: "test_get_id", content1: success_fetch })
-        });
-    });
-});
 
 
 module.exports = router;
