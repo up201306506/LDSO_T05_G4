@@ -101,6 +101,14 @@ module.exports = {
                 // Process the edit
                 callback();
             });
+    },
+
+    removeCommunity : function ( db, name, callback) {
+        var community = db.collection('community');
+        community.deleteOne({name: name}, function (err) {
+            assert.equal(err, null);
+            callback();
+        });
     }
 }
 
