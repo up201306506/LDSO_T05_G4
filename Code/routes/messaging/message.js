@@ -2,55 +2,16 @@ var express = require('express'),
     router = express.Router(),
     configDB = require('./../../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
+    userPrivileges = require('./../../config/userPrivileges'),
     messagingController = require("./../../controllers/MessageController.js");
-//
-//Incomplete URL Redirections
-//
-router.get('/', function(req, res) {
-    res.redirect('/message/inbox');
-});
-router.get('/id/', function(req, res) {
-    //!!!! Needs warning about unknown message ID
-    res.redirect('/');
-});
-
-//
-//Finished Webpage Templates - To be replaced with functional pages
-//
-router.get('/inbox', function(req, res) {
-    res.render('messaging/inbox', { title: 'Message Inbox' });
-});
-router.get('/message', function(req, res) {
-    var fetched_type = "offer", message_type, tooltip;
-
-    if(fetched_type == "conversation"){
-        message_type = "user";
-        tooltip = "Conversation";
-    } else if(fetched_type == "offer") {
-        message_type = "leaf"
-        tooltip = "Offer Related";
-    } else {
-        message_type = "warning-sign"
-        tooltip = "Unknown Message Type";
-    }
-
-    res.render('messaging/message', {
-        title: 'A TEMPLATE FOR VIEWING MESSAGES',
-        sender: "SenderUser",
-        message_type: message_type,
-        tooltip: tooltip,
-        message_subject: "TEST SUBJECT TEST SUBJECT",
-        message_content: "YOU ARE VIEWING A TEMPLATE. HEAD OVER TO /message/test/(id) TO VIEW DATABASE MESSAGES",
-        sender_image: "/images/placeholder.jpg"
-    });
-});
-
 
 //
 //Finished Webpages
 //
-
-router.post('/new', function(req, res) {
+router.get('/', userPrivileges.ensureAuthenticated, function(req, res) {
+    res.redirect('/message/inbox');
+});
+router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
     // Verifies if the form is completed
     req.checkBody('receiver', 'Por Favor indique um remetente para a mensagem').notEmpty();
     req.checkBody('subject', 'Por Favor indique um tema para a mensagem').notEmpty();
@@ -65,8 +26,8 @@ router.post('/new', function(req, res) {
     }
 
     /*
-        TODO:
-            Verificar se existe o utilizador remetente
+     TODO:
+     Verificar se existe o utilizador remetente
 
      */
 
@@ -98,12 +59,20 @@ router.post('/new', function(req, res) {
     }
 });
 
-//
-// TESTS and half done implementations - I will delete as soon as they find their proper place
-//
+    //TODO: Needs warning about unknown or non permitted message ID
+router.get('/id/', userPrivileges.ensureAuthenticated, function(req, res) {
+    res.redirect('/inbox');s
+});
 
-    //Should become /id/:id and replace the /message template completely
-router.get('/test/:id', function(req, res) {
+
+
+//
+// Very incomplete implementations that still need a lot of work done
+//
+    //TODO: User Images
+    //TODO: Navigation buttons? "Back", "Next and Previous Messages"
+    //TODO: Several modal forms - finish the inbox one properly first
+router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
     // Get id from url
     var id = req.params.id;
 
@@ -149,20 +118,59 @@ router.get('/test/:id', function(req, res) {
         });
     });
 });
-    //Should replace /inbox later
-router.get('/test_inbox', function (req, res) {
-    res.render('messaging/inbox', { title: 'Message Inbox' });
+
+    //TODO: Message preview should show escaped text, no format tags
+    //TODO: Make message deleting button work.
+    //TODO: Make message starring button work.
+    //TODO: Mark as Read button
+    //TODO: Refresh Button
+    //TODO: Convert dates to something nice to look at.
+router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
+    mongo.connect(configDB.url, function (err, db) {
+        messagingController.getMessagesByUser(db, req.user, function(userMessages){
+            db.close();
+            console.log(userMessages);
+
+            for(var i = 0; i < userMessages.length; i++){
+                if(userMessages[i].type == "conversation"){
+                    userMessages[i].type = "user";
+                    userMessages[i].typePopup = "Conversation";
+                }
+                else if(userMessages[i].type.type == "offer"){
+                    userMessages[i].type = "leaf";
+                    userMessages[i].typePopup = "Offer Related";
+                }
+                else{
+                    userMessages[i].type = "warning-sign";
+                    userMessages[i].typePopup = "System Notification";
+                }
+
+
+            }
+
+            res.render('messaging/inbox',
+                {
+                    title: 'Message Inbox',
+                    userMessages: userMessages
+                }
+            );
+        });
+    });
+
 });
 
-router.get('/test_create', function(req, res){
-    mongo.connect(configDB.url, function (err, db) {
-        messagingController.insertMessage(db, "xxxxxxxx", "zzzzzzzz", "TestSubject", "OLA!!!", "2016-05-26T05:00:00.000Z", "TestType", function(success){
-            db.close();
-            console.log(success.ops);
-            res.render("test", {title: "test_create", content1: success.ops })
-        } );
-    });
-});
+    //TODO: Missing pages
+        //TODO: Request page for "reading", "deleting" and "starring" a message
+        //TODO: The other inbox tabs, as separate pages - literally the same as regular inbox except with different fetch result save for the sent mail one with the message links (see below)
+        //TODO: Page for "sent" mail, shows contents but doesn't let you delete or redirect it, and has Receiver opposed to Sender
+
+    // TODO: Styling - Make this look like the rest of the site
+
+
+//
+// TESTS
+//
+
 router.get('/test_get_name', function(req, res){
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, "zzzzzzzz", function(success_fetch){

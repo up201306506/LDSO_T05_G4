@@ -49,7 +49,7 @@ module.exports = {
 
         var messages = db.collection('messages');
 
-        messages.find( { receiver:username} ).toArray(function(err,result){
+        messages.find( { receiver:username} ).sort({ date:-1}).toArray(function(err,result){
             assert.equal(err, null);
             callback(result);
         });

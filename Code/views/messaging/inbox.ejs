@@ -43,7 +43,7 @@
                 <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Refresh">
                     &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;&nbsp;</button>
                 <!-- Title -->
-                <h2>Name's Inbox</h2>
+                <h2><%= user %>'s Inbox</h2>
                 <hr>
             </div>
 
@@ -51,8 +51,41 @@
             <!-- Contents -->
             <ul class="list-group" id="Inbox_Contents">
 
-                <!-- Example Message -->
-                <li class="list-group-item message_item active">
+                <% for(var i = 0; i < userMessages.length; i++) { %>
+                <li class="list-group-item message_item <%if(!userMessages[i].read){%>active<%}%>">
+                    <!-- Star -->
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    <!-- Other User's Name -->
+                    <a href="./id/<%= userMessages[i]._id %>">
+                        <div class="message_sender_username">
+                            <span class="message_sender_username_text"><%= userMessages[i].sender %></span>
+                        </div>
+                        <div class="message_preview">
+                            <!-- Message Subject -->
+                            <span class="message_subject"><%= userMessages[i].subject %> - </span>
+                            <!-- Message Preview -->
+                            <span class="message_preview_text"><%= userMessages[i].content %></span>
+                        </div>
+                    </a>
+
+                    <div class="pull-right">
+                        <!-- Type -->
+                        <span class="glyphicon glyphicon-<%= userMessages[i].type %>"
+                              data-toggle="tooltip" data-placement="left" title="<%= userMessages[i].typePopup %>"></span>
+                        <!-- Receive Date -->
+                        <span class="badge">25/12/1970</span>
+                        <!-- Trash Can -->
+                        <a href="#"><span class="glyphicon glyphicon-trash"
+                                          data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
+                    </div>
+                </li>
+                <% } %>
+
+
+
+                <!-- Example Messages -->
+                <% if(false) {%>
+                <li class="list-group-item message_item">
                     <!-- Star -->
                     <span class="glyphicon glyphicon-star-empty"></span>
                     <!-- Other User's Name -->
@@ -79,8 +112,6 @@
                                           data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
                     </div>
                 </li>
-
-                <!-- Example Message 2 -->
                 <li class="list-group-item message_item active">
                     <!-- Star -->
                     <span class="glyphicon glyphicon-star-empty"></span>
@@ -110,42 +141,7 @@
                                           data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
                     </div>
                 </li>
-
-
-                <!-- Example  -->
-
-                <% for(var i = 0; i < 8; i++) {i %>
-                <li class="list-group-item message_item ">
-                    <!-- Star -->
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <!-- Other User's Name -->
-                    <a href="./message">
-                        <div class="message_sender_username">
-                            <span class="message_sender_username_text">Example</span>
-                        </div>
-                        <div class="message_preview">
-                            <!-- Message Subject -->
-                            <span class="message_subject">Subject - </span>
-                            <!-- Message Preview -->
-                            <span class="message_preview_text">Example</span>
-                        </div>
-                    </a>
-
-                    <div class="pull-right">
-                        <!-- Type -->
-                        <span class="glyphicon glyphicon glyphicon-leaf"
-                              data-toggle="tooltip" data-placement="left" title="Offer Related"></span>
-                        <!-- Receive Date -->
-                        <span class="badge">00:00 AM</span>
-                        <!-- Trash Can -->
-                        <a href="#"><span class="glyphicon glyphicon glyphicon glyphicon glyphicon-trash"
-                                          data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
-                    </div>
-                </li>
-                <% } %>
-
-                <!-- Example  -->
-
+                <%}%>
 
 
             </ul>
