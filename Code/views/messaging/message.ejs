@@ -69,24 +69,24 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="compose_recipient">To:</label>
+                        <label class="control-label col-sm-2" for="reply_recipient">To:</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="reply_recipient" value="<%= sender %>" disabled="true">
                             <input  name="receiver" type="text" value="<%= sender %>" hidden>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="compose_subject">Subject:</label>
+                        <label class="control-label col-sm-2" for="reply_subject">Subject:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="reply_recipient" value="<%= message_subject %>" disabled="true">
+                            <input type="text" class="form-control" id="reply_subject" value="<%= message_subject %>" disabled="true">
                             <input  name="subject" type="text" value="Re: <%= message_subject %>" hidden>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="compose_type">Type:</label>
+                        <label class="control-label col-sm-2" for="reply_type">Type:</label>
                         <div class="col-sm-10">
-                            <select class="form-control" disabled="true">
+                            <select id="reply_type" class="form-control" disabled="true">
                                 <% if(message_type=="user") { %>
                                 <option value="Conversation" selected>Conversation</option>
                                 <% } else if (message_type=="leaf"){ %>
@@ -141,56 +141,70 @@
 <div id="redirect_modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4><span class="glyphicon glyphicon-envelope"></span> Redirect Message</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="compose_recipient">To:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="compose_recipient" placeholder="The username field needs a typeahead implementation">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="compose_subject">Subject:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="compose_subject" placeholder="Enter Subject">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="compose_type">Type:</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" disabled="true">
-                                <option value="Conversation" selected>Conversation</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="compose_subject">Message:</label>
-                        <div class="col-sm-10">
-                            <div class="">
-                                <div id="editor_redirect" contenteditable="true">
-                                    <blockquote>
-                                        From: <%= sender %>
-                                        <br>
-                                        <%- message_content%>
-                                    </blockquote>
-                                    <br>
-                                    <p></p>
-                                </div>
+            <form id="redirect_form" action="/message/new" method="post" class="form-horizontal" role="form">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4><span class="glyphicon glyphicon-envelope"></span> Redirect Message</h4>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="redirect_recipient">To:</label>
+                            <div class="col-sm-10">
+                                <input name="receiver" type="text" class="form-control" id="redirect_recipient" placeholder="The username field needs a typeahead implementation">
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-default">Send</button>
-            </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="redirect_subject">Subject:</label>
+                            <div class="col-sm-10">
+                                <input name="subject"  type="text" class="form-control" id="redirect_subject" placeholder="Enter Subject">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="redirect_type">Type:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" disabled="true">
+                                    <option value="Conversation" selected>Conversation</option>
+                                    <input name="type" value="conversation" hidden>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="redirect_subject">Message:</label>
+                            <div class="col-sm-10">
+                                <div class="btn-toolbar" id="toolbar_reply" data-role="editor-toolbar" data-target="#editor_redirect">
+                                    <div class="btn-group" id="editor-buttons">
+                                        <a class="btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><strong>B</strong></a>
+                                        <a class="btn" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><em>I</em></a>
+                                        <a class="btn" data-edit="strikethrough" title="" data-original-title="Strikethrough"><s>S</s></a>
+                                        <a class="btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><u>U</u></a>
+                                    </div>
+                                    <div class="btn-group">
+                                        <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)">Undo</a>
+                                        <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)">Redo</a>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div id="editor_redirect" contenteditable="true">
+                                        <blockquote>
+                                            From: <%= sender %>
+                                            <br>
+                                            <%- message_content%>
+                                        </blockquote><br></div>
+                                </div>
+                                <input id="redirect_content_input" name="content" value="" hidden>
+                            </div>
+                        </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" onclick="sendRedirect()">Send</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -207,11 +221,16 @@
 
         //Textarea Initializer
         $("#editor").wysiwyg();
+        $("#editor_redirect").wysiwyg();
         $('#launch').click();
     });
     function sendReply(){
         $('#reply_content_input').attr('value', $('#editor').html());
         $('#reply_form').submit();
+    }
+    function sendRedirect(){
+        $('#redirect_content_input').attr('value', $('#editor_redirect').html());
+        $('#redirect_form').submit();
     }
     function trashCanButton(element){
         window.location.href = "/message/delete/"+$(element).attr('delete_id');

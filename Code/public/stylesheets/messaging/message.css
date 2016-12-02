@@ -83,6 +83,11 @@ a, a:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+#editor_redirect {
+    overflow: auto; max-height:700px; height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
 
 /*If you want to see the page's grid*/
