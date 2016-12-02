@@ -98,8 +98,53 @@ router.get('/delete/:id', userPrivileges.ensureAuthenticated, function (req, res
         });
     });
 });
-router.get('/star/:id', userPrivileges.ensureAuthenticated, function (req, res) {
-    res.redirect('/message/inbox');
+router.get('/star/:id', userPrivileges.ensureAuthenticated, function (req, res) {// Get id from url
+    var id = req.params.id;
+
+    mongo.connect(configDB.url, function (err, db){
+        messagingController.getMessageByID(db, id, function(data){
+
+            //Redirection Checks
+            if(data == null){
+                //TODO: Needs warning about unknown message ID
+                res.sendStatus(400);
+                return;
+            }
+            if(req.user != data.receiver) {
+                res.sendStatus(403);
+                return;
+            }
+
+            messagingController.toggleMessageStarred(db,id,true,function(result){
+                db.close();
+                res.sendStatus(206);
+            });
+        });
+    });
+});
+router.get('/unstar/:id', userPrivileges.ensureAuthenticated, function (req, res) {// Get id from url
+    var id = req.params.id;
+
+    mongo.connect(configDB.url, function (err, db){
+        messagingController.getMessageByID(db, id, function(data){
+
+            //Redirection Checks
+            if(data == null){
+                //TODO: Needs warning about unknown message ID
+                res.sendStatus(400);
+                return;
+            }
+            if(req.user != data.receiver) {
+                res.sendStatus(403);
+                return;
+            }
+
+            messagingController.toggleMessageStarred(db,id,false,function(result){
+                db.close();
+                res.sendStatus(206);
+            });
+        });
+    });
 });
 
 
@@ -169,7 +214,6 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, req.user, function(userMessages){
             db.close();
-            console.log(userMessages);
 
             for(var i = 0; i < userMessages.length; i++){
                 if(userMessages[i].type == "conversation"){

@@ -55,7 +55,7 @@
                 <% if(!userMessages[i].deleted){%>
                     <li class="list-group-item message_item <%if(!userMessages[i].read){%>active<%}%>">
                         <!-- Star -->
-                        <a href="#"><span class="glyphicon glyphicon-star<%= userMessages[i].starred ? "" : "-empty" %>" delete_id="<%= userMessages[i]._id %>" onclick="toggleStar(this)"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-star<%= userMessages[i].starred ? "" : "-empty" %>" star_id="<%= userMessages[i]._id %>" onclick="toggleStar(this)"></span></a>
                         <!-- Other User's Name -->
                         <a href="./id/<%= userMessages[i]._id %>">
                             <div class="message_sender_username">
@@ -252,10 +252,14 @@
         $(element).toggleClass("glyphicon-star glyphicon-star-empty");
         if($(element).hasClass("glyphicon-star"))
         {
-            console.log("Starred");
+            $.get("/message/star/"+$(element).attr('star_id'), function(data, status){
+                console.log("Mark message as important request. Result: "+ status)
+            });
         }else
         {
-            console.log("Unstarred");
+            $.get("/message/unstar/"+$(element).attr('star_id'), function(data, status){
+                console.log("Remove mark message as important request. Result: "+ status)
+            });
         }
     }
 

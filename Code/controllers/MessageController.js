@@ -120,13 +120,13 @@ module.exports = {
     },
 
     //Switch a message's star status
-    setMessageAsStarred : function(db, id, callback){
+    toggleMessageStarred : function(db, id, status, callback){
         var messages = db.collection('messages');
 
         if(ObjectID.isValid(id)) {
             messages.updateOne(
                 {_id: ObjectID(id)},
-                {$set: {starred: true}},
+                {$set: {starred: status}},
                 function (err)
                 {
                     assert.equal(err, null);
