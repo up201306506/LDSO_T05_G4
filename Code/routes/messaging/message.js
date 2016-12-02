@@ -5,9 +5,6 @@ var express = require('express'),
     userPrivileges = require('./../../config/userPrivileges'),
     messagingController = require("./../../controllers/MessageController.js");
 
-//
-//Finished and Nearly Feature Complete Webpages
-//
 router.get('/', userPrivileges.ensureAuthenticated, function(req, res) {
     res.redirect('/message/inbox');
 });
@@ -175,7 +172,7 @@ router.get('/unstar/:id', userPrivileges.ensureAuthenticated, function (req, res
 
 
 //TODO: User Images
-//TODO: Navigation buttons? "Back", "Next and Previous Messages"
+//TODO: A "Back to Inbox" button
 router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
     // Get id from url
     var id = req.params.id;
@@ -316,19 +313,14 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
         });
     });
 });
-
-//
-// Very incomplete implementations that still need a lot of work done
-//
-
 router.get('/offers', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUserByType(db, req.user, "offer", function(userMessages){
             db.close();
 
             for(var i = 0; i < userMessages.length; i++){
-                    userMessages[i].type = "leaf";
-                    userMessages[i].typePopup = "Offer Related";
+                userMessages[i].type = "leaf";
+                userMessages[i].typePopup = "Offer Related";
             }
 
             res.render('messaging/inbox',
@@ -376,7 +368,7 @@ router.get('/sent', userPrivileges.ensureAuthenticated, function (req, res) {
         messagingController.getSentByUser(db, req.user, function(userMessages){
             db.close();
 
-                for(var i = 0; i < userMessages.length; i++){
+            for(var i = 0; i < userMessages.length; i++){
                 if(userMessages[i].type == "conversation"){
                     userMessages[i].type = "user";
                     userMessages[i].typePopup = "Conversation";
@@ -433,11 +425,7 @@ router.get('/deleted', userPrivileges.ensureAuthenticated, function (req, res) {
 });
 
 
-    //TODO: Missing pages
-        //TODO: The other inbox tabs, as separate pages - literally the same as regular inbox except with different fetch result save for the sent mail one with the message links (see below)
-        //TODO: Page for "sent" mail, shows contents but doesn't let you delete or redirect it, and has Receiver opposed to Sender
-
-    // TODO: Styling - Make this look like the rest of the site
+    // TODO: Styling - Make these pages look like the rest of the site
 
 
 module.exports = router;
