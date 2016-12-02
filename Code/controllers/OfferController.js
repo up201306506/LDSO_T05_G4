@@ -42,15 +42,16 @@ module.exports = {
     },
 
     // Gets all offers from a community
-    getCommunityOffers: function (db, communityName, callback) {
+    getCommunityOffers: function (db, communityName, range, callback) {
         // Get offer collection
         var offer = db.collection('offer');
 
-        // Get a list of offers of community communityName
-        offer.find({communityName: communityName}).toArray(function (err, offers) {
-            assert.equal(err, null);
-
-            callback(offers);
+        offer.count(function (e, totalOffersCount) {
+            // Get a list of offers of community communityName
+            offer.find({communityName: communityName}).skip(range.from).limit(range.size).toArray(function (err, offers) {
+                assert.equal(err, null);
+                callback(offers, totalOffersCount);
+            });
         });
     },
 
