@@ -35,9 +35,11 @@
 
     <div class="container" id="interactive_pane">
         <div class="btn-group pull-right" role="group" aria-label="Basic example">
+            <%if(!deleted){%>
             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete_modal">Delete</button>
             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#reply_modal" >Reply</button>
             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#redirect_modal" >Redirect</button>
+            <%}%>
         </div>
     </div>
 </div>

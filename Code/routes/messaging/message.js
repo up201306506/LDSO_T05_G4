@@ -194,6 +194,7 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
                     tooltip: tooltip,
                     message_subject: data.subject,
                     message_content: data.content,
+                    deleted: data.deleted,
                     sender_image: "/images/placeholder.jpg"
                 });
 
