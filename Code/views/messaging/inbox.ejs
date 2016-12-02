@@ -21,11 +21,11 @@
             <hr>
             <!-- Bottom Buttons -->
             <ul class="nav nav-pills nav-stacked">
-                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href="#"><span class="badge pull-right">New</span> Inbox </a></li>
-                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href="#">Offers</a></li>
-                <li <%if(inboxType=="Star"){%> class="active" <%}%> ><a href="#">Star</a></li>
-                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href="#">Sent Mail</a></li>
-                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href="#">Deleted</a></li>
+                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href=" <%= inboxType=="Inbox" ? "#" : "./inbox"%> "><span class="badge pull-right">New</span> Inbox </a></li>
+                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href=" <%= inboxType=="Offers" ? "#" : "./offers"%> ">Offers</a></li>
+                <li <%if(inboxType=="Important"){%> class="active" <%}%> ><a href=" <%= inboxType=="Important" ? "#" : "./starred"%> ">Star</a></li>
+                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href=" <%= inboxType=="Sent" ? "#" : "./sent"%> ">Sent Mail</a></li>
+                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href=" <%= inboxType=="Deleted" ? "#" : "./deleted"%> ">Deleted</a></li>
             </ul>
         </div>
 
@@ -48,7 +48,6 @@
             <ul class="list-group" id="Inbox_Contents">
 
                 <% for(var i = 0; i < userMessages.length; i++) { %>
-                <% if(!userMessages[i].deleted){%>
                     <li class="list-group-item message_item <%if(!userMessages[i].read){%>active<%}%>">
                         <!-- Star -->
                         <a href="#"><span class="glyphicon glyphicon-star<%= userMessages[i].starred ? "" : "-empty" %>" star_id="<%= userMessages[i]._id %>" onclick="toggleStar(this)"></span></a>
@@ -76,7 +75,6 @@
                                               data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
                         </div>
                     </li>
-                <% } %>
                 <% } %>
 
 
