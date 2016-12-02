@@ -134,8 +134,6 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
     //TODO: Message preview should show escaped text, no format tags
     //TODO: Make message deleting button work.
     //TODO: Make message starring button work.
-    //TODO: Mark as Read button
-    //TODO: Refresh Button
     //TODO: Convert dates to something nice to look at.
 router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
@@ -156,14 +154,13 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
                     userMessages[i].type = "warning-sign";
                     userMessages[i].typePopup = "System Notification";
                 }
-
-
             }
 
             res.render('messaging/inbox',
                 {
                     title: 'Message Inbox',
-                    userMessages: userMessages
+                    userMessages: userMessages,
+                    inboxType: 'Inbox'
                 }
             );
         });

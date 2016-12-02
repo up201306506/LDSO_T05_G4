@@ -25,11 +25,11 @@
             <hr>
             <!-- Bottom Buttons -->
             <ul class="nav nav-pills nav-stacked">
-                <li class="active"><a href="#"><span class="badge pull-right">New</span> Inbox </a></li>
-                <li><a href="#">Offers</a></li>
-                <li><a href="#">Important</a></li>
-                <li><a href="#">Sent Mail</a></li>
-                <li><a href="#">Deleted</a></li>
+                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href="#"><span class="badge pull-right">New</span> Inbox </a></li>
+                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href="#">Offers</a></li>
+                <li <%if(inboxType=="Star"){%> class="active" <%}%> ><a href="#">Star</a></li>
+                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href="#">Sent Mail</a></li>
+                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href="#">Deleted</a></li>
             </ul>
         </div>
 
