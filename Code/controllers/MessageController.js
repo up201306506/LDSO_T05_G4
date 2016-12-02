@@ -55,7 +55,6 @@ module.exports = {
 
     },
 
-
     //Get messages to user with star
     getStarredUserMessages : function(){
     },
@@ -98,8 +97,21 @@ module.exports = {
     },
 
     //Set message as deleted - It should have a TTL afterwards
-    setMessageAsDeleted : function(){
+    setMessageAsDeleted : function(db, id, callback){
+        var messages = db.collection('messages');
 
+        if(ObjectID.isValid(id)) {
+            messages.updateOne(
+                {_id: ObjectID(id)},
+                {$set: {deleted: true}},
+                function (err)
+                {
+                    assert.equal(err, null);
+                    callback(true);
+                });
+        } else {
+            callback(false);
+        }
     },
 
     //Undelete message - It should have TTL removed
@@ -108,8 +120,21 @@ module.exports = {
     },
 
     //Switch a message's star status
-    setMessageAsStarred : function(){
+    setMessageAsStarred : function(db, id, callback){
+        var messages = db.collection('messages');
 
+        if(ObjectID.isValid(id)) {
+            messages.updateOne(
+                {_id: ObjectID(id)},
+                {$set: {starred: true}},
+                function (err)
+                {
+                    assert.equal(err, null);
+                    callback(true);
+                });
+        } else {
+            callback(false);
+        }
     },
 
     //Remove Message
