@@ -21,11 +21,11 @@
             <hr>
             <!-- Bottom Buttons -->
             <ul class="nav nav-pills nav-stacked">
-                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href="#"><span class="badge pull-right">New</span> Inbox </a></li>
-                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href="#">Offers</a></li>
-                <li <%if(inboxType=="Star"){%> class="active" <%}%> ><a href="#">Star</a></li>
-                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href="#">Sent Mail</a></li>
-                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href="#">Deleted</a></li>
+                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href=" <%= inboxType=="Inbox" ? "#" : "./inbox"%> "><span class="badge pull-right">New</span> Inbox </a></li>
+                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href=" <%= inboxType=="Offers" ? "#" : "./offers"%> ">Offers</a></li>
+                <li <%if(inboxType=="Important"){%> class="active" <%}%> ><a href=" <%= inboxType=="Important" ? "#" : "./starred"%> ">Important</a></li>
+                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href=" <%= inboxType=="Sent" ? "#" : "./sent"%> ">Sent Mail</a></li>
+                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href=" <%= inboxType=="Deleted" ? "#" : "./deleted"%> ">Deleted</a></li>
             </ul>
         </div>
 
@@ -48,14 +48,17 @@
             <ul class="list-group" id="Inbox_Contents">
 
                 <% for(var i = 0; i < userMessages.length; i++) { %>
-                <% if(!userMessages[i].deleted){%>
                     <li class="list-group-item message_item <%if(!userMessages[i].read){%>active<%}%>">
                         <!-- Star -->
                         <a href="#"><span class="glyphicon glyphicon-star<%= userMessages[i].starred ? "" : "-empty" %>" star_id="<%= userMessages[i]._id %>" onclick="toggleStar(this)"></span></a>
                         <!-- Other User's Name -->
-                        <a href="./id/<%= userMessages[i]._id %>">
+                        <a href="./<%= inboxType=="Sent" ? "sent" : "id" %>/<%=  userMessages[i]._id %>">
                             <div class="message_sender_username">
+                                <%if(inboxType == "Sent") {%>
+                                <span class="message_sender_username_text"><%= userMessages[i].receiver %></span>
+                                <%} else {%>
                                 <span class="message_sender_username_text"><%= userMessages[i].sender %></span>
+                                <% } %>
                             </div>
                             <div class="message_preview">
                                 <!-- Message Subject -->
@@ -72,75 +75,16 @@
                             <!-- Receive Date -->
                             <span class="badge">25/12/1970</span>
                             <!-- Trash Can -->
+                            <% if(inboxType == 'Deleted'){ %>
+                            <a href="#"><span class="glyphicon glyphicon-share-alt" onclick="recycleButton(this)" delete_id="<%= userMessages[i]._id %>"
+                                              data-toggle="tooltip" data-placement="left" title="Restore Message"></span></a>
+                            <%} else {%>
                             <a href="#"><span class="glyphicon glyphicon-trash" onclick="trashCanButton(this)" delete_id="<%= userMessages[i]._id %>"
                                               data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
+                            <% } %>
                         </div>
                     </li>
                 <% } %>
-                <% } %>
-
-
-
-                <!-- Example Messages -->
-                <% if(false) {%>
-                <li class="list-group-item message_item">
-                    <!-- Star -->
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <!-- Other User's Name -->
-                    <a href="./message"><div class="message_sender_username">
-                        <span class="message_sender_username_text">A User</span>
-                        </div>
-                        <!-- Message Subject -->
-                        <span class="message_subject">Subject - </span>
-                        <!-- Message Preview -->
-                        <div class="message_preview">
-                            <span class="message_preview_text">A small preview of the message contents.</span>
-                        </div>
-                    </a>
-
-
-                    <div class="pull-right">
-                        <!-- Type -->
-                        <span class="glyphicon glyphicon glyphicon-leaf"
-                              data-toggle="tooltip" data-placement="left" title="Offer Related"></span>
-                        <!-- Receive Date -->
-                        <span class="badge">12:00 PM</span>
-                        <!-- Trash Can -->
-                        <a href="#"><span class="glyphicon glyphicon glyphicon glyphicon glyphicon-trash"
-                                          data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
-                    </div>
-                </li>
-                <li class="list-group-item message_item active">
-                    <!-- Star -->
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <!-- Other User's Name -->
-                    <a href="./message">
-                        <div class="message_sender_username">
-                        <span class="message_sender_username_text">A User WITH A LONG NAAAAAAAAAAAAAAAAAAAAAAAAAME</span>
-                        </div>
-
-                        <div class="message_preview">
-                            <!-- Message Subject -->
-                            <span class="message_subject">Subject - </span>
-                            <!-- Message Preview -->
-                            <span class="message_preview_text">A small preview of the message contents. I wish this text would disappear on smaller displays.</span>
-                        </div>
-                    </a>
-
-
-                    <div class="pull-right">
-                        <!-- Type -->
-                        <span class="glyphicon glyphicon glyphicon-user"
-                              data-toggle="tooltip" data-placement="left" title="Conversation"></span>
-                        <!-- Receive Date -->
-                        <span class="badge">12:00 PM</span>
-                        <!-- Trash Can -->
-                        <a href="#"><span class="glyphicon glyphicon glyphicon glyphicon glyphicon-trash"
-                                          data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
-                    </div>
-                </li>
-                <%}%>
-
 
             </ul>
         </div>
@@ -270,6 +214,17 @@
             $(element).css("color","red");
         } else {
             window.location.href = "/message/delete/"+$(element).attr('delete_id');
+        }
+    }
+    function recycleButton(element){
+        //console.log($(element).attr('delete_id'));
+
+        var green = $(element).attr('green');
+        if (!(typeof green !== typeof undefined && green !== false)) {
+            $(element).attr('green', true);
+            $(element).css("color","lightgreen");
+        } else {
+            window.location.href = "/message/undelete/"+$(element).attr('delete_id');
         }
     }
 </script>

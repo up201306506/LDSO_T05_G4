@@ -5,9 +5,6 @@ var express = require('express'),
     userPrivileges = require('./../../config/userPrivileges'),
     messagingController = require("./../../controllers/MessageController.js");
 
-//
-//Finished Webpages
-//
 router.get('/', userPrivileges.ensureAuthenticated, function(req, res) {
     res.redirect('/message/inbox');
 });
@@ -59,7 +56,7 @@ router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
     }
 });
 
-    //TODO: Needs warning about unknown or non permitted message ID
+//TODO: Needs warning about unknown or non permitted message ID
 router.get('/id/', userPrivileges.ensureAuthenticated, function(req, res) {
     res.redirect('/inbox');s
 });
@@ -92,6 +89,32 @@ router.get('/delete/:id', userPrivileges.ensureAuthenticated, function (req, res
             }
 
             messagingController.setMessageAsDeleted(db,id, function(result){
+                db.close();
+                res.redirect('/message/inbox');
+            });
+        });
+    });
+});
+router.get('/undelete/:id', userPrivileges.ensureAuthenticated, function (req, res) {
+    // Get id from url
+    var id = req.params.id;
+
+    mongo.connect(configDB.url, function (err, db){
+        messagingController.getMessageByID(db, id, function(data){
+
+            //Redirection Checks
+            if(data == null){
+                //TODO: Needs warning about unknown message ID
+                res.redirect('/message/inbox');
+                return;
+            }
+            if(req.user != data.receiver) {
+                console.log("ACESS: redirecting " + req.user + " for attempting to undelete message belonging to "+ data.receiver)
+                res.redirect('/message/inbox');
+                return;
+            }
+
+            messagingController.setMessageAsUndeleted(db,id, function(result){
                 db.close();
                 res.redirect('/message/inbox');
             });
@@ -148,12 +171,8 @@ router.get('/unstar/:id', userPrivileges.ensureAuthenticated, function (req, res
 });
 
 
-//
-// Very incomplete implementations that still need a lot of work done
-//
-    //TODO: User Images
-    //TODO: Navigation buttons? "Back", "Next and Previous Messages"
-    //TODO: Several modal forms - finish the inbox one properly first
+//TODO: User Images
+//TODO: A "Back to Inbox" button
 router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
     // Get id from url
     var id = req.params.id;
@@ -194,10 +213,13 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
                     title: 'Personal Message',
                     message_id: id,
                     sender: data.sender,
+                    receiver: data.receiver,
+                    messageReceiver: true,
                     message_type: message_type,
                     tooltip: tooltip,
                     message_subject: data.subject,
                     message_content: data.content,
+                    deleted: data.deleted,
                     sender_image: "/images/placeholder.jpg"
                 });
 
@@ -205,12 +227,62 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
         });
     });
 });
+router.get('/sent/:id', userPrivileges.ensureAuthenticated, function(req, res) {
+    // Get id from url
+    var id = req.params.id;
 
-    //TODO: Message preview should show escaped text, no format tags
-    //TODO: Make message starring button work.
-    //TODO: Convert dates to something nice to look at.
-    //TODO: New Message Badge appearing only when there's unread messages
-    //TODO: Pagination - Remind, this should replace the message fetching function with one that ignores "deleted" ones
+    mongo.connect(configDB.url, function (err, db) {
+        messagingController.getMessageByID(db, id, function(data){
+            db.close();
+
+            //Redirection Checks
+            if(data == null){
+                //TODO: warning about unknown message ID
+                res.redirect('/message/inbox');
+                return;
+            }
+            if(req.user != data.sender) {
+                console.log("ACESS: redirecting " + req.user + " for attempting to see message belonging to "+ data.sender)
+                res.redirect('/message/inbox');
+                return;
+            }
+
+            //console.log(data);
+            var message_type, tooltip;
+
+            if(data.type == "conversation"){
+                message_type = "user";
+                tooltip = "Conversation";
+            } else if(data.type == "offer") {
+                message_type = "leaf"
+                tooltip = "Offer Related";
+            } else {
+                message_type = "warning-sign"
+                tooltip = "Unknown Message Type";
+            }
+
+            res.render('messaging/message', {
+                title: 'Personal Message',
+                message_id: id,
+                sender: data.sender,
+                receiver: data.receiver,
+                messageReceiver: false,
+                message_type: message_type,
+                tooltip: tooltip,
+                message_subject: data.subject,
+                message_content: data.content,
+                deleted: data.deleted,
+                sender_image: "/images/placeholder.jpg"
+            });
+
+        });
+    });
+});
+
+//TODO: Message preview should show escaped text, no format tags
+//TODO: Convert dates to something nice to look at.
+//TODO: New Message Badge appearing only when there's unread messages
+//TODO: Pagination - Remind, this should replace the message fetching function with one that ignores "deleted" ones
 router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, req.user, function(userMessages){
@@ -240,15 +312,120 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
             );
         });
     });
+});
+router.get('/offers', userPrivileges.ensureAuthenticated, function (req, res) {
+    mongo.connect(configDB.url, function (err, db) {
+        messagingController.getMessagesByUserByType(db, req.user, "offer", function(userMessages){
+            db.close();
 
+            for(var i = 0; i < userMessages.length; i++){
+                userMessages[i].type = "leaf";
+                userMessages[i].typePopup = "Offer Related";
+            }
+
+            res.render('messaging/inbox',
+                {
+                    title: 'Message Inbox',
+                    userMessages: userMessages,
+                    inboxType: 'Offers'
+                }
+            );
+        });
+    });
+});
+router.get('/starred', userPrivileges.ensureAuthenticated, function (req, res) {
+    mongo.connect(configDB.url, function (err, db) {
+        messagingController.getStarredUserMessages(db, req.user, function(userMessages){
+            db.close();
+
+            for(var i = 0; i < userMessages.length; i++){
+                if(userMessages[i].type == "conversation"){
+                    userMessages[i].type = "user";
+                    userMessages[i].typePopup = "Conversation";
+                }
+                else if(userMessages[i].type.type == "offer"){
+                    userMessages[i].type = "leaf";
+                    userMessages[i].typePopup = "Offer Related";
+                }
+                else{
+                    userMessages[i].type = "warning-sign";
+                    userMessages[i].typePopup = "System Notification";
+                }
+            }
+
+            res.render('messaging/inbox',
+                {
+                    title: 'Message Inbox',
+                    userMessages: userMessages,
+                    inboxType: 'Important'
+                }
+            );
+        });
+    });
+});
+router.get('/sent', userPrivileges.ensureAuthenticated, function (req, res) {
+    mongo.connect(configDB.url, function (err, db) {
+        messagingController.getSentByUser(db, req.user, function(userMessages){
+            db.close();
+
+            for(var i = 0; i < userMessages.length; i++){
+                if(userMessages[i].type == "conversation"){
+                    userMessages[i].type = "user";
+                    userMessages[i].typePopup = "Conversation";
+                }
+                else if(userMessages[i].type.type == "offer"){
+                    userMessages[i].type = "leaf";
+                    userMessages[i].typePopup = "Offer Related";
+                }
+                else{
+                    userMessages[i].type = "warning-sign";
+                    userMessages[i].typePopup = "System Notification";
+                }
+            }
+
+            res.render('messaging/inbox',
+                {
+                    title: 'Message Inbox',
+                    userMessages: userMessages,
+                    inboxType: 'Sent'
+                }
+            );
+        });
+    });
+});
+router.get('/deleted', userPrivileges.ensureAuthenticated, function (req, res) {
+    mongo.connect(configDB.url, function (err, db) {
+        messagingController.getMessagesByUserDeleted(db, req.user, function(userMessages){
+            db.close();
+
+            for(var i = 0; i < userMessages.length; i++){
+                if(userMessages[i].type == "conversation"){
+                    userMessages[i].type = "user";
+                    userMessages[i].typePopup = "Conversation";
+                }
+                else if(userMessages[i].type.type == "offer"){
+                    userMessages[i].type = "leaf";
+                    userMessages[i].typePopup = "Offer Related";
+                }
+                else{
+                    userMessages[i].type = "warning-sign";
+                    userMessages[i].typePopup = "System Notification";
+                }
+            }
+
+            res.render('messaging/inbox',
+                {
+                    title: 'Message Inbox',
+                    userMessages: userMessages,
+                    inboxType: 'Deleted'
+                }
+            );
+        });
+    });
 });
 
-    //TODO: Missing pages
-        //TODO: Request page for "reading", "deleting" and "starring" a message
-        //TODO: The other inbox tabs, as separate pages - literally the same as regular inbox except with different fetch result save for the sent mail one with the message links (see below)
-        //TODO: Page for "sent" mail, shows contents but doesn't let you delete or redirect it, and has Receiver opposed to Sender
 
-    // TODO: Styling - Make this look like the rest of the site
+    // TODO: Styling - Make these pages look like the rest of the site
 
 
 module.exports = router;

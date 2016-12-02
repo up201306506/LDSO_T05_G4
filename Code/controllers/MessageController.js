@@ -48,7 +48,18 @@ module.exports = {
     getMessagesByUser : function(db, username, callback) {
         var messages = db.collection('messages');
 
-        messages.find( { receiver:username} ).sort({ date:-1}).toArray(function(err,result){
+        messages.find( { receiver:username, deleted:false} ).sort({ date:-1}).toArray(function(err,result){
+            assert.equal(err, null);
+            callback(result);
+        });
+
+    },
+
+    //Get messages sent to user
+    getSentByUser : function(db, username, callback) {
+        var messages = db.collection('messages');
+
+        messages.find( { sender:username } ).sort({ date:-1}).toArray(function(err,result){
             assert.equal(err, null);
             callback(result);
         });
@@ -56,15 +67,33 @@ module.exports = {
     },
 
     //Get messages to user with star
-    getStarredUserMessages : function(){
+    getStarredUserMessages : function(db, username, callback){
+        var messages = db.collection('messages');
+
+        messages.find( { receiver:username, deleted:false, starred: true} ).sort({ date:-1}).toArray(function(err,result){
+            assert.equal(err, null);
+            callback(result);
+        });
     },
 
     //Get messages of a specific type
-    getMessagesByUserByType : function(){
+    getMessagesByUserByType : function(db, username, messageType, callback){
+        var messages = db.collection('messages');
+
+        messages.find( { receiver:username, deleted:false, type:messageType} ).sort({ date:-1}).toArray(function(err,result){
+            assert.equal(err, null);
+            callback(result);
+        });
     },
 
     //Get messages with the flag "deleted"
-    getMessagesByUserDeleted : function(){
+    getMessagesByUserDeleted : function(db, username, callback){
+        var messages = db.collection('messages');
+
+        messages.find( { receiver:username, deleted:true} ).sort({ date:-1}).toArray(function(err,result){
+            assert.equal(err, null);
+            callback(result);
+        });
     },
 
     //Set message as read - Call this in the getMessageByID() callback
@@ -115,8 +144,21 @@ module.exports = {
     },
 
     //Undelete message - It should have TTL removed
-    setMessageAsUndeleted : function(){
+    setMessageAsUndeleted : function(db, id , callback){
+        var messages = db.collection('messages');
 
+        if(ObjectID.isValid(id)) {
+            messages.updateOne(
+                {_id: ObjectID(id)},
+                {$set: {deleted: false}},
+                function (err)
+                {
+                    assert.equal(err, null);
+                    callback(true);
+                });
+        } else {
+            callback(false);
+        }
     },
 
     //Switch a message's star status
