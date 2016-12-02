@@ -51,7 +51,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">No <span class="glyphicon glyphicon-trash"></span></button>
-                    <button type="button" class="btn btn-success">Yes <span class="glyphicon glyphicon-trash"></span></button>
+                    <button type="button" class="btn btn-success" onclick="trashCanButton(this)" delete_id="<%= message_id %>" >Yes <span class="glyphicon glyphicon-trash"></span></button>
                 </div>
             </div>
         </div>
@@ -175,6 +175,10 @@
             //Tooltip function initializer
             $('[data-toggle="tooltip"]').tooltip();
         });
+
+        function trashCanButton(element){
+            window.location.href = "/message/delete/"+$(element).attr('delete_id');
+        }
     </script>
 
 </body>

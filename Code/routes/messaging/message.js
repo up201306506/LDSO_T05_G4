@@ -192,6 +192,7 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
 
                 res.render('messaging/message', {
                     title: 'Personal Message',
+                    message_id: id,
                     sender: data.sender,
                     message_type: message_type,
                     tooltip: tooltip,
