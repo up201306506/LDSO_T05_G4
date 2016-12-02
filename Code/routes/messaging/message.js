@@ -78,20 +78,23 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
 
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessageByID(db, id, function(data){
-            db.close();
-            //console.log(data);
 
+            //Redirection Checks
             if(data == null){
                 //!!!! Needs warning about unknown message ID
                 res.redirect('/message/inbox');
-            }
-            else if(req.user != data.receiver) {
-                console.log("ACESS: redirecting " + req.user + " for attempting to see message belonging to "+ data.receiver)
-                res.redirect('/message/inbox');
-
                 return;
             }
-            else {
+            if(req.user != data.receiver) {
+                console.log("ACESS: redirecting " + req.user + " for attempting to see message belonging to "+ data.receiver)
+                res.redirect('/message/inbox');
+                return;
+            }
+
+            messagingController.setMessageAsRead(db,id, function(result){
+                db.close();
+
+                //console.log(data);
                 var message_type, tooltip;
 
                 if(data.type == "conversation"){
@@ -114,7 +117,8 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
                     message_content: data.content,
                     sender_image: "/images/placeholder.jpg"
                 });
-            }
+
+            });
         });
     });
 });

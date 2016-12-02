@@ -46,7 +46,6 @@ module.exports = {
 
     //Get messages sent to user
     getMessagesByUser : function(db, username, callback) {
-
         var messages = db.collection('messages');
 
         messages.find( { receiver:username} ).sort({ date:-1}).toArray(function(err,result){
@@ -71,8 +70,24 @@ module.exports = {
 
     },
 
-    //Set message as read
-    setMessageAsRead : function(){
+    //Set message as read - Call this in the getMessageByID() callback
+    setMessageAsRead : function(db, id, callback){
+        var messages = db.collection('messages');
+
+        if(ObjectID.isValid(id)) {
+            messages.updateOne(
+                {_id: ObjectID(id)},
+                {$set: {read: true}},
+                function (err)
+                {
+                    assert.equal(err, null);
+                    callback(true);
+                });
+        } else {
+            callback(false)
+        }
+
+
 
     },
 
