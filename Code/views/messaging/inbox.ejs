@@ -54,7 +54,11 @@
                         <!-- Other User's Name -->
                         <a href="./id/<%= userMessages[i]._id %>">
                             <div class="message_sender_username">
+                                <%if(inboxType == "Sent") {%>
+                                <span class="message_sender_username_text"><%= userMessages[i].receiver %></span>
+                                <%} else {%>
                                 <span class="message_sender_username_text"><%= userMessages[i].sender %></span>
+                                <% } %>
                             </div>
                             <div class="message_preview">
                                 <!-- Message Subject -->
