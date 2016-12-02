@@ -21,11 +21,11 @@
             <span class="glyphicon glyphicon glyphicon-<%= message_type %>"data-toggle="tooltip" data-placement="right" title="<%= tooltip %>"></span>
         </h2>
         <%if(messageReceiver) {%>
-        <p>Sender: <strong><a href="#" id=""><%= sender %></a></strong></p>
+        <p>Sender: <strong><a href="/profile/<%= sender %>" id=""><%= sender %></a></strong></p>
         <%} else {%>
-        <p>Receiver: <strong><a href="#" id=""><%= receiver %></a></strong></p>
+        <p>Receiver: <strong><a href="/profile/<%= receiver %>" id=""><%= receiver %></a></strong></p>
         <%}%>
-        <p>Subject: <strong><a href="#" id=""><%= message_subject %></a></strong></p>
+        <p>Subject: <strong><%= message_subject %></strong></p>
     </div>
 
     <!-- -->

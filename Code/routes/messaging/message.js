@@ -216,6 +216,7 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
                     title: 'Personal Message',
                     message_id: id,
                     sender: data.sender,
+                    receiver: data.receiver,
                     messageReceiver: true,
                     message_type: message_type,
                     tooltip: tooltip,
