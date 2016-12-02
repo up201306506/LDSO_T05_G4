@@ -117,7 +117,7 @@ router.get('/star/:id', userPrivileges.ensureAuthenticated, function (req, res) 
 
             messagingController.toggleMessageStarred(db,id,true,function(result){
                 db.close();
-                res.sendStatus(206);
+                res.sendStatus(200);
             });
         });
     });
@@ -141,7 +141,7 @@ router.get('/unstar/:id', userPrivileges.ensureAuthenticated, function (req, res
 
             messagingController.toggleMessageStarred(db,id,false,function(result){
                 db.close();
-                res.sendStatus(206);
+                res.sendStatus(200);
             });
         });
     });
