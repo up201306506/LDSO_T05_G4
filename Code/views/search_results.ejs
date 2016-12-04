@@ -28,10 +28,11 @@
                 </tr>
                 </thead>
                 <tbody>
+                <% for(var index = 0; index < communities.length; index++){ %>
                 <tr>
-                    <td><a href="#">Community1</a></td>
-                    <td>We love apples!</td>
-                    <td>Gardenning</td>
+                    <td><a href="#"><%= communities[index].name %></a></td>
+                    <td><%= communities[index].description %></td>
+                    <td><%= communities[index].category %></td>
                     <td>
                         <span class="glyphicon glyphicon-star"></span>
                         <span class="glyphicon glyphicon-star"></span>
@@ -40,55 +41,7 @@
                         <span class="glyphicon glyphicon-star-empty"></span>
                     </td>
                 </tr>
-                <tr>
-                    <td><a href="#">Community2</a></td>
-                    <td>Apples are great!</td>
-                    <td>Gardenning</td>
-                    <td>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td><a href="#">Community3</a></td>
-                    <td>We dont like apples that much</td>
-                    <td>Politics</td>
-                    <td>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><a href="#">Community4</a></td>
-                    <td>We like pears and games</td>
-                    <td>Gaming</td>
-                    <td>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><a href="#">Community5</a></td>
-                    <td>PC is love, PC is life</td>
-                    <td>Informatics</td>
-                    <td>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
-                    </td>
-                </tr>
+                <% } %>
                 </tbody>
             </table>
         </div>

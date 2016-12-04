@@ -1,15 +1,40 @@
 var express = require('express'),
-    router = express.Router();/*,
-    mongo = require('mongodb').MongoClient,
-    assert = require('assert'),
+    router = express.Router(),
     configDB = require('./../config/dbURL.js'),
-    passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
-    user = require('../models/user');*/
+    mongo = require('mongodb').MongoClient,
+    userController = require('./../controllers/UserController'),
+    communityController = require('./../controllers/CommunityController'),
+    userPrivileges = require('./../config/userPrivileges');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-    res.render('search_results', { title: 'Local Exchange - Search_Results' });
+router.post('/search', userPrivileges.ensureAuthenticated, function (req, res) {
+
+    mongo.connect(configDB.url, function (err, db) {
+
+        req.checkBody('search','Nada para procurar').notEmpty();
+
+        var errors = req.validationErrors();
+        console.log(req.body.search);
+        if(!errors)
+        {
+            communityController.getPublicAndPrivateCommunity(db, req.body.search, function (communities) {
+                console.log(communities);
+                db.close();
+                if (communities == null) {
+                    res.redirect('/');
+                } else {
+                    res.render('search_results',
+                        {
+                            title: 'Local Exchange - Search_Results',
+                            communities: communities
+                        });
+                }
+            });
+        }
+    });
+
+
+
+    //res.render('search_results', { title: 'Local Exchange - Search_Results' });
 });
 
     /*mongo.connect(configDB.url, function (err, db) {

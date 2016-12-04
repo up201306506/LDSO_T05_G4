@@ -109,6 +109,17 @@ module.exports = {
             assert.equal(err, null);
             callback();
         });
+    },
+
+    getPublicAndPrivateCommunity : function (db, name, callback) {
+        var community = db.collection('community');
+        var regexValue = '\.*'+name+'\.';
+        community.find({name: new RegExp(regexValue,'i')}).toArray(function (err, communities) {
+            assert.equal(err, null);
+
+            // Process the list of communities
+            callback(communities);
+        });
     }
 }
 
