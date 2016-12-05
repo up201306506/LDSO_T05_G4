@@ -17,17 +17,20 @@ router.post('/search', userPrivileges.ensureAuthenticated, function (req, res) {
         if(!errors)
         {
             communityController.getPublicAndPrivateCommunity(db, req.body.search, function (communities) {
-                console.log(communities);
-                db.close();
-                if (communities == null) {
-                    res.redirect('/');
-                } else {
-                    res.render('search_results',
-                        {
-                            title: 'Local Exchange - Search_Results',
-                            communities: communities
-                        });
-                }
+                userController.getAllUsers(db,req.body.search, function (users) {
+                    db.close();
+                    if (communities == null) {
+                        res.redirect('/');
+                    } else {
+                        res.render('search_results',
+                            {
+                                title: 'Local Exchange - Search_Results',
+                                communities: communities,
+                                users: users
+                            });
+                    }
+                });
+
             });
         }
     });

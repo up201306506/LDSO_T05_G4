@@ -54,26 +54,12 @@
                 </tr>
                 </thead>
                 <tbody>
+                <% for(var index = 0; index < users.length; index++){ %>
                 <tr>
-                    <td><a href="#">User1</a></td>
-                    <td>example1@gmail.com</td>
+                    <td><a href="#"><%= users[index].username %></a></td>
+                    <td><%= users[index].email %></td>
                 </tr>
-                <tr>
-                    <td><a href="#">User2</a></td>
-                    <td>example2@gmail.com</td>
-                </tr>
-                <tr>
-                    <td><a href="#">User3</a></td>
-                    <td>example3@gmail.com</td>
-                </tr>
-                <tr>
-                    <td><a href="#">User4</a></td>
-                    <td>example4@gmail.com</td>
-                </tr>
-                <tr>
-                    <td><a href="#">User5</a></td>
-                    <td>example5@gmail.com</td>
-                </tr>
+                <% } %>
                 </tbody>
             </table>
         </div>
