@@ -38,6 +38,11 @@ router.post('/register', function (req, res) {
     } else {
         // If no error was found the new user will be inserted in the db
         mongo.connect(configDB.url, function (err, db) {
+            if(err){
+                console.log(err);
+                res.redirect('/maintenance');
+                return;
+            }
             userController.insertUser(db, req.body.username, req.body.password, "", req.body.email, "", "", function (error) {
                 db.close();
 
@@ -65,6 +70,11 @@ passport.deserializeUser(function (user, done) {
 passport.use(new LocalStrategy(
     function (username, password, done) {
         mongo.connect(configDB.url, function (err, db) {
+            if(err){
+                console.log(err);
+                return done(null, false, {message: 'Base de dados inacessivel'});
+            }
+
             userController.logIn(db, username, password, function (err, user) {
                 db.close();
 
