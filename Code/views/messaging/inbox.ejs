@@ -73,6 +73,7 @@
                             <span class="glyphicon glyphicon-<%= userMessages[i].type %>"
                                   data-toggle="tooltip" data-placement="left" title="<%= userMessages[i].typePopup %>"></span>
                             <!-- Receive Date -->
+                            <span class="badge" title="<%= userMessages[i].date.toUTCString() %>"><%= userMessages[i].date.getDate() + "/" + userMessages[i].date.getMonth() + "/" + userMessages[i].date.getFullYear() %></span>
                             <!-- Trash Can -->
                             <% if(inboxType == 'Deleted'){ %>
                             <a href="#"><span class="glyphicon glyphicon-share-alt" onclick="recycleButton(this)" delete_id="<%= userMessages[i]._id %>"
