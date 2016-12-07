@@ -280,7 +280,6 @@ router.get('/sent/:id', userPrivileges.ensureAuthenticated, function(req, res) {
 });
 
 //TODO: Message preview should show escaped text, no format tags
-//TODO: Convert dates to something nice to look at.
 //TODO: New Message Badge appearing only when there's unread messages
 //TODO: Pagination - Remind, this should replace the message fetching function with one that ignores "deleted" ones
 router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
@@ -288,6 +287,7 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
         messagingController.getMessagesByUser(db, req.user, function(userMessages){
             db.close();
 
+            var newMessages = false;
             for(var i = 0; i < userMessages.length; i++){
                 if(userMessages[i].type == "conversation"){
                     userMessages[i].type = "user";
@@ -301,13 +301,19 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
                     userMessages[i].type = "warning-sign";
                     userMessages[i].typePopup = "System Notification";
                 }
+
+                if(!userMessages[i].read){
+                    newMessages =true;
+                }
+
             }
 
             res.render('messaging/inbox',
                 {
                     title: 'Message Inbox',
                     userMessages: userMessages,
-                    inboxType: 'Inbox'
+                    inboxType: 'Inbox',
+                    newMessages : newMessages
                 }
             );
         });
@@ -315,59 +321,88 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
 });
 router.get('/offers', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
-        messagingController.getMessagesByUserByType(db, req.user, "offer", function(userMessages){
-            db.close();
+        messagingController.getMessagesByUser(db, req.user, function(data){
 
-            for(var i = 0; i < userMessages.length; i++){
-                userMessages[i].type = "leaf";
-                userMessages[i].typePopup = "Offer Related";
+            var newMessages = false;
+            for(var i = 0; i < data.length; i++){
+
+                if(!data[i].read){
+                    newMessages =true;
+                }
             }
 
-            res.render('messaging/inbox',
-                {
-                    title: 'Message Inbox',
-                    userMessages: userMessages,
-                    inboxType: 'Offers'
+            messagingController.getMessagesByUserByType(db, req.user, "offer", function(userMessages){
+                db.close();
+
+                for(var i = 0; i < userMessages.length; i++){
+                    userMessages[i].type = "leaf";
+                    userMessages[i].typePopup = "Offer Related";
                 }
-            );
+
+                res.render('messaging/inbox',
+                    {
+                        title: 'Message Inbox',
+                        userMessages: userMessages,
+                        inboxType: 'Offers',
+                        newMessages : newMessages
+                    }
+                );
+            });
         });
     });
 });
 router.get('/starred', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
-        messagingController.getStarredUserMessages(db, req.user, function(userMessages){
-            db.close();
+        messagingController.getMessagesByUser(db, req.user, function(data){
+            var newMessages = false;
+            for(var i = 0; i < data.length; i++) {
 
-            for(var i = 0; i < userMessages.length; i++){
-                if(userMessages[i].type == "conversation"){
-                    userMessages[i].type = "user";
-                    userMessages[i].typePopup = "Conversation";
-                }
-                else if(userMessages[i].type.type == "offer"){
-                    userMessages[i].type = "leaf";
-                    userMessages[i].typePopup = "Offer Related";
-                }
-                else{
-                    userMessages[i].type = "warning-sign";
-                    userMessages[i].typePopup = "System Notification";
+                if (!data[i].read) {
+                    newMessages = true;
                 }
             }
 
-            res.render('messaging/inbox',
-                {
-                    title: 'Message Inbox',
-                    userMessages: userMessages,
-                    inboxType: 'Important'
+            messagingController.getStarredUserMessages(db, req.user, function(userMessages){
+                db.close();
+                for(var i = 0; i < userMessages.length; i++){
+                    if(userMessages[i].type == "conversation"){
+                        userMessages[i].type = "user";
+                        userMessages[i].typePopup = "Conversation";
+                    }
+                    else if(userMessages[i].type.type == "offer"){
+                        userMessages[i].type = "leaf";
+                        userMessages[i].typePopup = "Offer Related";
+                    }
+                    else{
+                        userMessages[i].type = "warning-sign";
+                        userMessages[i].typePopup = "System Notification";
+                    }
                 }
-            );
+
+                res.render('messaging/inbox',
+                    {
+                        title: 'Message Inbox',
+                        userMessages: userMessages,
+                        inboxType: 'Important',
+                        newMessages : newMessages
+                    }
+                );
+            });
         });
     });
 });
 router.get('/sent', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
-        messagingController.getSentByUser(db, req.user, function(userMessages){
-            db.close();
+        messagingController.getMessagesByUser(db, req.user, function(data){
+            var newMessages = false;
+            for(var i = 0; i < data.length; i++) {
 
+                if (!data[i].read) {
+                    newMessages = true;
+                }
+            }
+            messagingController.getSentByUser(db, req.user, function(userMessages){
+            db.close();
             for(var i = 0; i < userMessages.length; i++){
                 if(userMessages[i].type == "conversation"){
                     userMessages[i].type = "user";
@@ -387,39 +422,50 @@ router.get('/sent', userPrivileges.ensureAuthenticated, function (req, res) {
                 {
                     title: 'Message Inbox',
                     userMessages: userMessages,
-                    inboxType: 'Sent'
-                }
-            );
+                    inboxType: 'Sent',
+                    newMessages : newMessages
+                });
+            });
         });
     });
 });
 router.get('/deleted', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
-        messagingController.getMessagesByUserDeleted(db, req.user, function(userMessages){
-            db.close();
+        messagingController.getMessagesByUser(db, req.user, function(data){
+            var newMessages = false;
+            for(var i = 0; i < data.length; i++) {
 
-            for(var i = 0; i < userMessages.length; i++){
-                if(userMessages[i].type == "conversation"){
-                    userMessages[i].type = "user";
-                    userMessages[i].typePopup = "Conversation";
-                }
-                else if(userMessages[i].type.type == "offer"){
-                    userMessages[i].type = "leaf";
-                    userMessages[i].typePopup = "Offer Related";
-                }
-                else{
-                    userMessages[i].type = "warning-sign";
-                    userMessages[i].typePopup = "System Notification";
+                if (!data[i].read) {
+                    newMessages = true;
                 }
             }
+            messagingController.getMessagesByUserDeleted(db, req.user, function(userMessages){
+                db.close();
 
-            res.render('messaging/inbox',
-                {
-                    title: 'Message Inbox',
-                    userMessages: userMessages,
-                    inboxType: 'Deleted'
+                for(var i = 0; i < userMessages.length; i++){
+                    if(userMessages[i].type == "conversation"){
+                        userMessages[i].type = "user";
+                        userMessages[i].typePopup = "Conversation";
+                    }
+                    else if(userMessages[i].type.type == "offer"){
+                        userMessages[i].type = "leaf";
+                        userMessages[i].typePopup = "Offer Related";
+                    }
+                    else{
+                        userMessages[i].type = "warning-sign";
+                        userMessages[i].typePopup = "System Notification";
+                    }
                 }
-            );
+
+                res.render('messaging/inbox',
+                    {
+                        title: 'Message Inbox',
+                        userMessages: userMessages,
+                        inboxType: 'Deleted',
+                        newMessages : newMessages
+                    }
+                );
+            });
         });
     });
 });

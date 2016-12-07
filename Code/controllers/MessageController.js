@@ -44,7 +44,7 @@ module.exports = {
         }
     },
 
-    //Get messages sent to user
+    //Get messages sent TO user
     getMessagesByUser : function(db, username, callback) {
         var messages = db.collection('messages');
 
@@ -55,7 +55,7 @@ module.exports = {
 
     },
 
-    //Get messages sent to user
+    //Get messages sent BY user
     getSentByUser : function(db, username, callback) {
         var messages = db.collection('messages');
 
