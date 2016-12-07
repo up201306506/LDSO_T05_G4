@@ -16,7 +16,7 @@
             <div id="side-panel" class="text-center">
                 <h3 id="side-title"><%= communityName %></h3>
                 <a id="edit-button" class="btn btn-primary" href="/edit_community/<%= communityName %>">Editar Comunidade</a>
-                <a id="edit-button" class="btn btn-primary" href="/delete_community/<%= communityName %>">Apagar Comunidade</a>
+                <a id="delete-button" class="btn btn-primary" href="/delete_community/<%= communityName %>">Apagar Comunidade</a>
                 <a class="btn btn-primary" href="/">Voltar</a>
             </div>
 
@@ -31,7 +31,7 @@
             <% for(var index = 0; index < offerArr.length; index++){ %>
             <div class="well">
                 <div class="offer-head">
-                    <h4 class="offer-title"><%= offerArr[index].title %></h4>
+                    <h4 class="offer-title"><a href="/view_offer/<%= offerArr[index]._id %>"><%= offerArr[index].title %></a></h4>
                     <span>Criado por: <a href="/profile/<%= offerArr[index].username %>"><%= offerArr[index].username %></a></span>
 
                     <h6 class="pull-right"><%= (new Date(offerArr[index].date).toLocaleString()) %></h6>

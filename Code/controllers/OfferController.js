@@ -56,20 +56,19 @@ module.exports = {
     },
 
     // Gets all offers from a list of communities
-    getCommunityListOffers: function (db, communityList, callback) {
-        // Get offer collection
+    getCommunityListOffers: function (db, communityList, range, callback) {
+
+        var communityListName = [];
+        communityList.forEach(function (community) {
+            communityListName.push(community.name);
+        });
+
         var offer = db.collection('offer');
-
-
-
-
-
-
-        // Get a list of offers of community communityName
-        offer.find({userName: userName}).toArray(function (err, offers) {
-            assert.equal(err, null);
-
-            callback(offers);
+        offer.count(function (e, totalOffersCount) {
+            offer.find({communityName: {$in: communityListName}, isExpired: false }).skip(range.from).limit(range.size).toArray(function (err, offers) {
+                assert.equal(err, null);
+                callback(offers, totalOffersCount);
+            });
         });
     },
 
