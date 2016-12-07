@@ -43,4 +43,11 @@ router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
     });
 });
 
+router.get('/maintenance', function (req, res) {
+    res.render('maintenance', {
+        title: 'Site is under maintenance',
+        error_msg: "The database is undergoing maintenance"
+    });
+});
+
 module.exports = router;
