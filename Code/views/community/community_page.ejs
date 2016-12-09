@@ -15,44 +15,61 @@
         <div class="col-md-2">
             <div id="side-panel" class="text-center">
                 <h3 id="side-title"><%= communityName %></h3>
+                <% if(enrolled == 1 && admin==true){ %>
                 <a id="edit-button" class="btn btn-primary" href="/edit_community/<%= communityName %>">Editar Comunidade</a>
-                <a class="btn btn-primary" href="/">Voltar</a>
-            </div>
+                <% } %>
 
+                <!--Informação a enviar para o post-->
+                <% if(privacy == "Privada" && enrolled == 0 && pedido == 0) { %>
+                <a type="submit" class="btn btn-primary" style="margin-top:20px" href="/community/<%= communityName %>/join_community">Pedir adesão</a>
+                <% } else if (privacy == "Privada" && enrolled == 0 && pedido == 1) { %>
+                <a class="btn btn-primary disabled" style="margin-top:20px" >Pedido enviado</a>
+                <% } else if (privacy == "Pública" && enrolled == 0) { %>
+                <a type="submit" class="btn btn-primary" style="margin-top:20px" href="/community/<%= communityName %>/join_community">Aderir à comunidade</a>
+                <% } else if (privacy == "Privada" && enrolled == 1 && admin==true) { %>
+                <a type="submit" class="btn btn-primary" style="margin-top:20px" href="/accept_requests/<%= communityName %>">Aceitar Pedidos</a>
+                <% } %>
+
+                <a class="btn btn-primary" href="/" style="margin-top:20px">Voltar</a>
+            </div>
+            <% if(enrolled == 1){ %>
             <ul class="list-group">
                 <li class="list-group-item text-center">
                     <a href="#">Criar Oferta</a>
                 </li>
             </ul>
+            <% } %>
         </div>
 
         <div class="col-md-10">
-            <% for(var index = 0; index < offerArr.length; index++){ %>
-            <div class="well">
-                <div class="offer-head">
-                    <span>Criado por: <a>Nome do user</a></span>
-                </div>
-
-                <div class="row offer-content">
-                    <div class="col-sm-4">
-                        <img class="img-responsive visible-md visible-lg" src="http://placehold.it/420x320"/>
+            <% if(enrolled == 1){ %>
+                <% for(var index = 0; index < offerArr.length; index++){ %>
+                <div class="well">
+                    <div class="offer-head">
+                        <span>Criado por: <a>Nome do user</a></span>
                     </div>
 
-                    <div class="col-sm-8">
-                        <p class="lead">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non
-                            auctor
-                            magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie.
-                            Pellentesque
-                            habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                        </p>
+                    <div class="row offer-content">
+                        <div class="col-sm-4">
+                            <img class="img-responsive visible-md visible-lg" src="http://placehold.it/420x320"/>
+                        </div>
+
+                        <div class="col-sm-8">
+                            <p class="lead">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non
+                                auctor
+                                magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie.
+                                Pellentesque
+                                habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row offer-footer">
+                        <a class="btn btn-default pull-right" href="#">Abrir</a>
                     </div>
                 </div>
-
-                <div class="row offer-footer">
-                    <a class="btn btn-default pull-right" href="#">Abrir</a>
-                </div>
-            </div>
+                <% } %>
             <% } %>
         </div>
     </div>

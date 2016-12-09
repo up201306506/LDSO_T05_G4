@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Local Exchange - <%= communityName %></title>
+
+    <% include ./../templates/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/community/accept_requests.css">
+</head>
+<body>
+<% include ./../templates/navbar.ejs %>
+<% include ../templates/alert_messages.ejs %>
+
+<div class="container">
+
+    <div class="tab-content" id="community">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(var index = 0; index < requests.length; index++){ %>
+                <tr>
+                    <td> <a><%= requests[index] %></a> </td>
+                    <td>
+                        <a type="submit" class="glyphicon glyphicon-ok" data-*="<%= requests[index] %>" style="margin-top:20px" href="/community/<%= communityName %>/acceptrequest"></a>
+                        <a type="submit" class="glyphicon glyphicon-remove" data-*="<%= requests[index] %>" style="margin-top:20px" href="/community/<%= communityName %>/acceptrequest"></a>
+                    </td>
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+        <a class="btn btn-primary" href="/community/<%= communityName %>/" style="margin-top:20px">Voltar</a>
+    </div>
+
+</div>

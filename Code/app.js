@@ -81,6 +81,7 @@ var webpage_communitypage = require('./routes/community/community_page');
 var webpage_createCommunity = require('./routes/community/create_community');
 var webpage_editCommunity = require('./routes/community/edit_community');
 var webpage_communityUserList = require('./routes/community/community_user_list');
+var webpage_accept_requests = require('./routes/community/accept_requests');
 
 // test page
 var webpage_communityHomepage = require('./routes/community/homepage');
@@ -106,6 +107,7 @@ app.use('/community', webpage_communitypage);
 app.use('/create_community', webpage_createCommunity);
 app.use('/edit_community', webpage_editCommunity);
 app.use('/community_users', webpage_communityUserList);
+app.use('/accept_requests', webpage_accept_requests);
 // test page
 app.use('/test_community', webpage_communityHomepage);
 // offer
