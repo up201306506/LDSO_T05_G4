@@ -1,10 +1,9 @@
 {
-  "name": "Code",
+  "name": "local_exchange",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node Code/bin/www",
-	"preinstall": "cd Code"
+    "start": "node bin/www"
   },
   "dependencies": {
     "bcryptjs": "^2.3.0",
