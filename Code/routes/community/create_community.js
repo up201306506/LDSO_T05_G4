@@ -22,9 +22,17 @@ router.post('/create', userPrivileges.ensureAuthenticated, function (req, res) {
     req.checkBody('category', 'É necessário escolher uma categoria').notEmpty();
     req.checkBody('privacy', 'É necessário escolher o tipo de privacidade').notEmpty();
 
-    // If an error is found an error message will be displayed
     var errors = req.validationErrors();
-    console.log(errors);
+
+    if(dropdownList.categoryList.indexOf(req.body.category) == -1){
+        if(errors.constructor != Array) errors = [];
+        errors.push({msg:'Categoria não válida'} );
+    }
+    if(dropdownList.privacyList.indexOf(req.body.privacy) == -1){
+        if(errors.constructor != Array) errors = [];
+        errors.push({msg:'Tipo de visualização não válida'} );
+    }
+
     if (errors) {
         res.render('community/create_community', {
             title: 'New Community',

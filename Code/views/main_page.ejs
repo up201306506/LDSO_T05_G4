@@ -31,8 +31,8 @@
             <% for(var index = 0; index < offerArr.length; index++) { %>
             <div class="well">
                 <div class="offer-head">
-                    <h4 class="offer-title"><a><%= offerArr[index].communityName %></a></h4>
-                    <span>Criado por: <a>Nome do user</a></span>
+                    <h4 class="offer-title"><a href="/community/<%= offerArr[index].communityName %>"><%= offerArr[index].communityName %></a></h4>
+                    <span>Criado por: <a href="/profile/<%= offerArr[index].username %>"><%= offerArr[index].username %></a></span>
                 </div>
 
                 <div class="row offer-content">
@@ -42,20 +42,24 @@
 
                     <div class="col-sm-8">
                         <p class="lead">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non
-                            auctor
-                            magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie.
-                            Pellentesque
-                            habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                            <a href="/view_offer/<%= offerArr[index]._id %>"><%= offerArr[index].title %></a>
                         </p>
+                        <%= offerArr[index].description %>
                     </div>
                 </div>
 
                 <div class="row offer-footer">
-                    <a class="btn btn-default pull-right" href="#">Ver detalhes</a>
+                    <a class="btn btn-default pull-right" href="/view_offer/<%= offerArr[index]._id %>">Ver detalhes</a>
+                    <h6 class="pull-right" style="margin-right: 20px;">Preço: <%= offerArr[index].price %><span class="glyphicon glyphicon-gift" style="margin-left: 5px;"></span></h6>
                 </div>
             </div>
             <% } %>
+
+            <ul class="pagination">
+                <% for(var pageNmr = 1; pageNmr <= nPages; pageNmr++){ %>
+                <li <% if(pageNmr==thisPage){ %> class="active" <% } %> ><a href="/?page=<%= pageNmr %>"><%= pageNmr %></a></li>
+                <% } %>
+            </ul>
         </div>
     </div>
 </div>

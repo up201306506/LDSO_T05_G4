@@ -2,8 +2,8 @@ var express = require('express'),
     router = express.Router(),
     configDB = require('./../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
-    userController = require('./../controllers/UserController'),
     communityController = require('./../controllers/CommunityController'),
+    offerController = require('./../controllers/OfferController'),
     userPrivileges = require('./../config/userPrivileges');
 
 router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
@@ -23,21 +23,38 @@ router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
     ];
 
     mongo.connect(configDB.url, function (err, db, next) {
+        //Verifica em que página está
+        var page = req.query.page;
+        if(!page){
+            page = 1;
+        }
+
+        //Range
+        var pageSize = 10;
+        var range = {from:(pageSize*(page-1)), size:pageSize};
+
         // Get this user enrolled communities from the db
         communityController.getUserEnrolledCommunities(db, req.user, true, function (communities) {
-            db.close();
-
-            // TODO Get all offers visible to this user
-
-            // TODO Eventually this following block of code will be contained by the block above to be done
-
-            res.render('main_page',
-                {
-                    title: 'Local Exchange - Main page',
-                    communityArr: communities,
-                    offerArr: tempOfferArr
-                });
+            //console.log(communities);
+            offerController.getCommunityListOffers(db, communities, range, function (offers, totalOffersCount) {
+                db.close();
+                res.render('main_page',
+                    {
+                        title: 'Local Exchange - Main page',
+                        communityArr: communities,
+                        offerArr: offers,
+                        nPages: Math.ceil(totalOffersCount/pageSize),
+                        thisPage: page
+                    });
+            });
         });
+    });
+});
+
+router.get('/maintenance', function (req, res) {
+    res.render('maintenance', {
+        title: 'Site is under maintenance',
+        error_msg: "The database is undergoing maintenance"
     });
 });
 

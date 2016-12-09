@@ -69,21 +69,42 @@ router.post('/edit/:username', userPrivileges.ensureAuthenticated, function (req
     // GET username from url
     var username = String(req.params.username);
 
-    // Connects to the db
-    mongo.connect(configDB.url, function (err, db) {
-        // Edit the user information
-        userController.editUser(db, username, req.body.password, req.body.name, req.body.email, req.body.phone, req.body.gender, function (wasEdited) {
-            db.close();
+    // Verifies the form
+    req.checkBody('password', 'Password é necessária').notEmpty();
+    req.checkBody('password', 'Password deve ter entre 6 a 20 caracteres').len(6, 20);
+    req.checkBody('passwordre', 'Passwords não coincidem').equals(req.body.password);
+    req.checkBody('email', 'Email é necessário').notEmpty();
+    req.checkBody('email', 'Email inválido').isEmail();
+    req.checkBody('emailre', 'Emails não coincidem').equals(req.body.email);
+    var errors = req.validationErrors();
 
-            // If user was edited
-            if (wasEdited) {
-                // TODO req.flash, mensagens de erro
-                res.redirect('/profile/' + username);
-            } else {
-                res.redirect('/profile/edit/' + username);
-            }
+    if(req.body.gender != '' && dropdownList.genderList.indexOf(req.body.gender) == -1){
+        if(errors.constructor != Array) errors = [];
+        errors.push({msg:'Género inválido'} );
+    }
+
+    if (errors) {
+        req.flash('errors', errors);
+        // If an error was found an error message will appear
+        res.redirect('/profile/edit/' + username);
+    } else {
+        // Connects to the db
+        mongo.connect(configDB.url, function (err, db) {
+            // Edit the user information
+            userController.editUser(db, username, req.body.password, req.body.name, req.body.email, req.body.phone, req.body.gender, function (wasEdited) {
+                db.close();
+
+                // If user was edited
+                if (wasEdited) {
+                    req.flash('success_msg', 'Perfil atualizado');
+                    res.redirect('/profile/' + username);
+                } else {
+                    req.flash('error_msg', 'Ocorreu um erro ao atualizar o perfil');
+                    res.redirect('/profile/edit/' + username);
+                }
+            });
         });
-    });
+    }
 });
 
 module.exports = router;

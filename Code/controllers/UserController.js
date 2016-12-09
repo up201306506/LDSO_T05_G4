@@ -72,6 +72,18 @@ module.exports = {
         });
     },
 
+    getAllUsers: function (db,username,callback) {
+        // Get User collection
+        var user = db.collection('user');
+        var regexValue = '\.*'+username+'\.';
+        // Find the users in the db
+        user.find({username: new RegExp(regexValue,'i')}).toArray(function (err, users) {
+            assert.equal(err, null);
+            // Process the search
+            callback(users);
+        });
+    },
+
     // Edit all informatio about an user
     editUser: function (db, username, password, name, email, phone, gender, callback) {
         // Get Community collection

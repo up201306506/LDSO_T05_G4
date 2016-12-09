@@ -1,1 +1,31 @@
-<h1><%= error %></h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error</title>
+
+    <% include templates/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/error.css">
+</head>
+<body>
+<% include templates/login_navbar.ejs %>
+
+<div class="container">
+    <div class="row">
+        <div class="error-template">
+            <h1>Oops!</h1>
+            <h2><%= error %></h2>
+            <div class="error-details">
+
+            </div>
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary">
+                    <i class="icon-home icon-white"></i> Voltar ao início </a>
+                <a href="mailto:email@email.com" class="btn btn-default">
+                    <i class="icon-envelope"></i> Contacte-nos </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -192,6 +192,28 @@ module.exports = {
             });
     },
 
+    removeCommunity : function ( db, name, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+        community.deleteOne({name: name}, function (err) {
+            assert.equal(err, null);
+            callback();
+        });
+    },
+
+    getPublicAndPrivateCommunity : function (db, name, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+        var regexValue = '\.*'+name+'\.';
+        // Search for the community in the db
+        community.find({name: new RegExp(regexValue,'i'), $or:[{privacy: "Pública"},{privacy: "Privada"}]}).toArray(function (err, communities) {
+            assert.equal(err, null);
+
+            // Process the list of communitiesz
+            callback(communities);
+        });
+    },
+
     listAllCommunities: function (db, callback) {
         var community = db.collection('community');
         community.find().toArray(function (err, docs) {

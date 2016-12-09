@@ -61,7 +61,7 @@ app.use(flash());
 app.use(function (req, res, next) {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
+    res.locals.errors = req.flash('errors');
     res.locals.user = req.user || null;
     next();
 });
@@ -82,17 +82,13 @@ var webpage_createCommunity = require('./routes/community/create_community');
 var webpage_editCommunity = require('./routes/community/edit_community');
 var webpage_communityUserList = require('./routes/community/community_user_list');
 var webpage_accept_requests = require('./routes/community/accept_requests');
-
-// test page
-var webpage_communityHomepage = require('./routes/community/homepage');
-
+var webpage_deleteCommunity = require('./routes/community/remove_community');
 // offer
-var webpage_newoffer = require('./routes/offer/new_offer');
+var webpage_createOffer = require('./routes/offer/create_offer');
 var webpage_viewoffer = require('./routes/offer/viewoffer');
 var webpage_editoffer = require('./routes/offer/editoffer');
 // messaging
-var webpage_messageinbox = require('./routes/messaging/inbox');
-var webpage_message = require('./routes/messaging/message');
+var controller_message = require('./routes/messaging/message');
 
 // pages url's
 // unspecified
@@ -108,15 +104,13 @@ app.use('/create_community', webpage_createCommunity);
 app.use('/edit_community', webpage_editCommunity);
 app.use('/community_users', webpage_communityUserList);
 app.use('/accept_requests', webpage_accept_requests);
-// test page
-app.use('/test_community', webpage_communityHomepage);
+app.use('/delete_community', webpage_deleteCommunity);
 // offer
-app.use('/newoffer', webpage_newoffer);
-app.use('/viewoffer', webpage_viewoffer);
+app.use('/create_offer', webpage_createOffer);
+app.use('/view_offer', webpage_viewoffer);
 app.use('/editoffer', webpage_editoffer);
 // messaging
-app.use('/message/inbox', webpage_messageinbox);
-app.use('/message/message', webpage_message);
+app.use('/message/', controller_message);
 
 //---------------------------------------------------------------------
 

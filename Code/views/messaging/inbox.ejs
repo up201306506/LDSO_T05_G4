@@ -6,13 +6,10 @@
     <% include ../templates/header.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/messaging/inbox.css">
 
-    <!-- Text-area editor with buttons -->
-    <script type="text/javascript" src="https://rawgithub.com/mindmup/bootstrap-wysiwyg/master/bootstrap-wysiwyg.js"></script>
-    <script src="https://rawgithub.com/mindmup/bootstrap-wysiwyg/master/external/jquery.hotkeys.js"></script>
-
 </head>
 <body>
 <% include ../templates/navbar.ejs %>
+<% include ../templates/alert_messages.ejs %>
 
 <div class="container"id="main_body">
     <div class=row">
@@ -24,11 +21,11 @@
             <hr>
             <!-- Bottom Buttons -->
             <ul class="nav nav-pills nav-stacked">
-                <li class="active"><a href="#"><span class="badge pull-right">New</span> Inbox </a></li>
-                <li><a href="#">Offers</a></li>
-                <li><a href="#">Important</a></li>
-                <li><a href="#">Sent Mail</a></li>
-                <li><a href="#">Deleted</a></li>
+                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href=" <%= inboxType=="Inbox" ? "#" : "./inbox"%> "><%- newMessages ? '<span class="badge pull-right">New</span>' : '' %>Inbox </a></li>
+                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href=" <%= inboxType=="Offers" ? "#" : "./offers"%> ">Offers</a></li>
+                <li <%if(inboxType=="Important"){%> class="active" <%}%> ><a href=" <%= inboxType=="Important" ? "#" : "./starred"%> ">Important</a></li>
+                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href=" <%= inboxType=="Sent" ? "#" : "./sent"%> ">Sent Mail</a></li>
+                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href=" <%= inboxType=="Deleted" ? "#" : "./deleted"%> ">Deleted</a></li>
             </ul>
         </div>
 
@@ -37,12 +34,12 @@
             <!-- Header -->
             <div id=Inbox_Header">
                 <!-- Mark Read Button -->
-                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Mark all as Read">Mark all as Read</button>
+                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Mark all as Read" onclick="location.href = './inbox/markAllRead';">Mark all as Read</button>
                 <!-- Refresh Button -->
-                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Refresh">
+                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Refresh" onclick="location.reload();">
                     &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;&nbsp;</button>
                 <!-- Title -->
-                <h2>Name's Inbox</h2>
+                <h2><%= user %>'s Inbox</h2>
                 <hr>
             </div>
 
@@ -50,102 +47,44 @@
             <!-- Contents -->
             <ul class="list-group" id="Inbox_Contents">
 
-                <!-- Example Message -->
-                <li class="list-group-item message_item active">
-                    <!-- Star -->
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <!-- Other User's Name -->
-                    <a href="./message"><div class="message_sender_username">
-                        <span class="message_sender_username_text">A User</span>
+                <% for(var i = 0; i < userMessages.length; i++) { %>
+                    <li class="list-group-item message_item <%if(!userMessages[i].read){%>active<%}%>">
+                        <!-- Star -->
+                        <a href="#"><span class="glyphicon glyphicon-star<%= userMessages[i].starred ? "" : "-empty" %>" star_id="<%= userMessages[i]._id %>" onclick="toggleStar(this)"></span></a>
+                        <!-- Other User's Name -->
+                        <a href="./<%= inboxType=="Sent" ? "sent" : "id" %>/<%=  userMessages[i]._id %>">
+                            <div class="message_sender_username">
+                                <%if(inboxType == "Sent") {%>
+                                <span class="message_sender_username_text"><%= userMessages[i].receiver %></span>
+                                <%} else {%>
+                                <span class="message_sender_username_text"><%= userMessages[i].sender %></span>
+                                <% } %>
+                            </div>
+                            <div class="message_preview">
+                                <!-- Message Subject -->
+                                <span class="message_subject"><%= userMessages[i].subject %></span>
+                                <!-- Message Preview -->
+                                <span class="message_preview_text hidden-xs hidden-sm"> - <%= userMessages[i].content %></span>
+                            </div>
+                        </a>
+
+                        <div class="pull-right">
+                            <!-- Type -->
+                            <span class="glyphicon glyphicon-<%= userMessages[i].type %>"
+                                  data-toggle="tooltip" data-placement="left" title="<%= userMessages[i].typePopup %>"></span>
+                            <!-- Receive Date -->
+                            <span class="badge" title="<%= userMessages[i].date.toUTCString() %>"><%= userMessages[i].date.getDate() + "/" + userMessages[i].date.getMonth() + "/" + userMessages[i].date.getFullYear() %></span>
+                            <!-- Trash Can -->
+                            <% if(inboxType == 'Deleted'){ %>
+                            <a href="#"><span class="glyphicon glyphicon-share-alt" onclick="recycleButton(this)" delete_id="<%= userMessages[i]._id %>"
+                                              data-toggle="tooltip" data-placement="left" title="Restore Message"></span></a>
+                            <%} else {%>
+                            <a href="#"><span class="glyphicon glyphicon-trash" onclick="trashCanButton(this)" delete_id="<%= userMessages[i]._id %>"
+                                              data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
+                            <% } %>
                         </div>
-                        <!-- Message Subject -->
-                        <span class="message_subject">Subject - </span>
-                        <!-- Message Preview -->
-                        <div class="message_preview">
-                            <span class="message_preview_text">A small preview of the message contents.</span>
-                        </div>
-                    </a>
-
-
-                    <div class="pull-right">
-                        <!-- Type -->
-                        <span class="glyphicon glyphicon glyphicon-leaf"
-                              data-toggle="tooltip" data-placement="left" title="Offer Related"></span>
-                        <!-- Receive Date -->
-                        <span class="badge">12:00 PM</span>
-                        <!-- Trash Can -->
-                        <a href="#"><span class="glyphicon glyphicon glyphicon glyphicon glyphicon-trash"
-                                          data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
-                    </div>
-                </li>
-
-                <!-- Example Message 2 -->
-                <li class="list-group-item message_item active">
-                    <!-- Star -->
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <!-- Other User's Name -->
-                    <a href="./message">
-                        <div class="message_sender_username">
-                        <span class="message_sender_username_text">A User WITH A LONG NAAAAAAAAAAAAAAAAAAAAAAAAAME</span>
-                        </div>
-
-                        <div class="message_preview">
-                            <!-- Message Subject -->
-                            <span class="message_subject">Subject - </span>
-                            <!-- Message Preview -->
-                            <span class="message_preview_text">A small preview of the message contents. I wish this text would disappear on smaller displays.</span>
-                        </div>
-                    </a>
-
-
-                    <div class="pull-right">
-                        <!-- Type -->
-                        <span class="glyphicon glyphicon glyphicon-user"
-                              data-toggle="tooltip" data-placement="left" title="Conversation"></span>
-                        <!-- Receive Date -->
-                        <span class="badge">12:00 PM</span>
-                        <!-- Trash Can -->
-                        <a href="#"><span class="glyphicon glyphicon glyphicon glyphicon glyphicon-trash"
-                                          data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
-                    </div>
-                </li>
-
-
-                <!-- Example  -->
-
-                <% for(var i = 0; i < 8; i++) {i %>
-                <li class="list-group-item message_item ">
-                    <!-- Star -->
-                    <span class="glyphicon glyphicon-star-empty"></span>
-                    <!-- Other User's Name -->
-                    <a href="./message">
-                        <div class="message_sender_username">
-                            <span class="message_sender_username_text">Example</span>
-                        </div>
-                        <div class="message_preview">
-                            <!-- Message Subject -->
-                            <span class="message_subject">Subject - </span>
-                            <!-- Message Preview -->
-                            <span class="message_preview_text">Example</span>
-                        </div>
-                    </a>
-
-                    <div class="pull-right">
-                        <!-- Type -->
-                        <span class="glyphicon glyphicon glyphicon-leaf"
-                              data-toggle="tooltip" data-placement="left" title="Offer Related"></span>
-                        <!-- Receive Date -->
-                        <span class="badge">00:00 AM</span>
-                        <!-- Trash Can -->
-                        <a href="#"><span class="glyphicon glyphicon glyphicon glyphicon glyphicon-trash"
-                                          data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
-                    </div>
-                </li>
+                    </li>
                 <% } %>
-
-                <!-- Example  -->
-
-
 
             </ul>
         </div>
@@ -167,22 +106,22 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
+            <form id="New_Message_Form" class="form-horizontal" role="form" action="/message/new" method="post">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4><span class="glyphicon glyphicon-envelope"></span> Send a New Message</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form">
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="compose_recipient">To:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="compose_recipient" placeholder="The username field needs a typeahead implementation">
+                            <input name="receiver" type="text" class="form-control" id="compose_recipient" placeholder="The username field needs a typeahead implementation">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="compose_subject">Subject:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="compose_subject" placeholder="Enter Subject">
+                            <input name="subject" type="text" class="form-control" id="compose_subject" placeholder="Enter Subject">
                         </div>
                     </div>
 
@@ -193,9 +132,9 @@
                                 <option value="Conversation" selected>Conversation</option>
                                 <option value="Offer">Offer</option>
                             </select>
+                            <input name="type" value="conversation" hidden>
                         </div>
                     </div>
-
 
 
                     <!-- TextArea Input. If you're reading this, go HERE: http://mindmup.github.io/bootstrap-wysiwyg/ -->
@@ -216,21 +155,25 @@
                                 </div>
                             </div>
                             <div class="">
-                                <div id="editor" contenteditable="true">
-                                </div>
+                                <div id="editor" contenteditable="true"></div>
                             </div>
+                            <input id="content_input" name="content" value="" hidden>
                         </div>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-default">Send</button>
+                <button type="button" class="btn btn-default" onclick="sendMessage()">Send</button>
             </div>
+            </form>
         </div>
 
     </div>
 </div>
+
+<!-- Text-area editor with buttons -->
+<script type="text/javascript" src="https://rawgithub.com/mindmup/bootstrap-wysiwyg/master/bootstrap-wysiwyg.js"></script>
+<script src="https://rawgithub.com/mindmup/bootstrap-wysiwyg/master/external/jquery.hotkeys.js"></script>
 
 <script>
     $(document).ready(function(){
@@ -240,7 +183,50 @@
         //Textarea Initializer
         $('#editor').wysiwyg();
         $('#launch').click();
+
     });
+    function sendMessage(){
+        $('#content_input').attr('value', $('#editor').html());
+        $('#New_Message_Form').submit();
+    }
+    function toggleStar(element){
+        //console.log($(element).attr('star_id'));
+        $(element).toggleClass("glyphicon-star glyphicon-star-empty");
+        if($(element).hasClass("glyphicon-star"))
+        {
+            $.get("/message/star/"+$(element).attr('star_id'), function(data, status){
+                console.log("Mark message as important request. Result: "+ status)
+
+            });
+        }else
+        {
+            $.get("/message/unstar/"+$(element).attr('star_id'), function(data, status){
+                console.log("Remove mark message as important request. Result: "+ status)
+            });
+        }
+    }
+    function trashCanButton(element){
+        //console.log($(element).attr('delete_id'));
+
+        var red = $(element).attr('red');
+        if (!(typeof red !== typeof undefined && red !== false)) {
+            $(element).attr('red', true);
+            $(element).css("color","red");
+        } else {
+            window.location.href = "/message/delete/"+$(element).attr('delete_id');
+        }
+    }
+    function recycleButton(element){
+        //console.log($(element).attr('delete_id'));
+
+        var green = $(element).attr('green');
+        if (!(typeof green !== typeof undefined && green !== false)) {
+            $(element).attr('green', true);
+            $(element).css("color","lightgreen");
+        } else {
+            window.location.href = "/message/undelete/"+$(element).attr('delete_id');
+        }
+    }
 </script>
 
 

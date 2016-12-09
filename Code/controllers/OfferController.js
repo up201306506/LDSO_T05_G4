@@ -1,31 +1,83 @@
-var MongoClient = require('mongodb').MongoClient, assert = require('assert');
-var configDB = require('./../config/dbURL.js');
-var url = configDB.url;
+var assert = require('assert');
 
 module.exports = {
-    insertOffer: function (db, type, user, description, is_expired, date, price, title, image, callback) {
-        var offer = db.collection('offer');
-        var id = require("crypto").randomBytes(20).toString('hex');
-        offer.insertOne({
-                _id: id,
-                type: type,
-                user: user,
-                title: title,
-                description: description,
-                is_expired: is_expired,
-                date: date,
-                price: price,
-                image: image
-            },
-            function (err, result) {
-                assert.equal(err, null);
-                assert.equal(1, result.result.n);
-                assert.equal(1, result.ops.length);
-                //console.log('Inserted 1 document into the db');
-                callback(result, id);
-            });
 
+    // Insert a new offer in the db
+    insertOffer: function (db, username, communityName, title, description, price, type, imageDir, isExpired, date, callback) {
+        // Get Offer collection
+        var offer = db.collection('offer');
+
+        // Search for offers dups in the db
+        offer.findOne({
+            username: username,
+            communityName: communityName,
+            title: title
+        }, function (err, offerData) {
+            assert.equal(err, null);
+
+            // Verifies if there is another offer's dup
+            if (offerData != null) {
+                callback(false);
+            } else {
+                // Inserts the new offer
+                offer.insertOne({
+                    username: username,
+                    communityName: communityName,
+                    title: title,
+                    description: description,
+                    price: price,
+                    type: type,
+                    imageDir: imageDir,
+                    isExpired: isExpired,
+                    date: date
+                }, function (err, result) {
+                    assert.equal(err, null);
+                    assert.equal(1, result.result.n);
+                    assert.equal(1, result.ops.length);
+
+                    callback(true);
+                });
+            }
+        });
     },
+
+    // Gets all offers from a community
+    getCommunityOffers: function (db, communityName, range, callback) {
+        // Get offer collection
+        var offer = db.collection('offer');
+
+        offer.count(function (e, totalOffersCount) {
+            // Get a list of offers of community communityName
+            offer.find({communityName: communityName}).skip(range.from).limit(range.size).toArray(function (err, offers) {
+                assert.equal(err, null);
+                callback(offers, totalOffersCount);
+            });
+        });
+    },
+
+    // Gets all offers from a list of communities
+    getCommunityListOffers: function (db, communityList, range, callback) {
+
+        var communityListName = [];
+        communityList.forEach(function (community) {
+            communityListName.push(community.name);
+        });
+
+        var offer = db.collection('offer');
+        offer.count(function (e, totalOffersCount) {
+            offer.find({communityName: {$in: communityListName}, isExpired: false }).skip(range.from).limit(range.size).toArray(function (err, offers) {
+                assert.equal(err, null);
+                callback(offers, totalOffersCount);
+            });
+        });
+    },
+
+
+
+
+
+
+
 
     deleteOffer: function (db, id, callback) {
         var offer = db.collection('offer');

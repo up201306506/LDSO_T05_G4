@@ -1,4 +1,5 @@
-<% if(hasOwnProperty("errors")){  %>
+<!-- Alert Messages -->
+<% if(hasOwnProperty("errors") && errors.length > 0){  %>
 <div class="alert alert-danger">
     <ul>
         <% errors.forEach(function(error) { %>

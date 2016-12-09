@@ -29,48 +29,54 @@
                 <% } else if (privacy == "Privada" && enrolled == 1 && admin==true) { %>
                 <a type="submit" class="btn btn-primary" style="margin-top:20px" href="/accept_requests/<%= communityName %>">Aceitar Pedidos</a>
                 <% } %>
+                <a id="delete-button" class="btn btn-primary" href="/delete_community/<%= communityName %>">Apagar Comunidade</a>
+                <a class="btn btn-primary" href="/">Voltar</a>
+            </div>
 
                 <a class="btn btn-primary" href="/" style="margin-top:20px">Voltar</a>
             </div>
             <% if(enrolled == 1){ %>
             <ul class="list-group">
                 <li class="list-group-item text-center">
-                    <a href="#">Criar Oferta</a>
+                    <a href="/create_offer/<%= communityName %>">Criar Oferta</a>
                 </li>
             </ul>
             <% } %>
         </div>
 
         <div class="col-md-10">
-            <% if(enrolled == 1){ %>
-                <% for(var index = 0; index < offerArr.length; index++){ %>
-                <div class="well">
-                    <div class="offer-head">
-                        <span>Criado por: <a>Nome do user</a></span>
-                    </div>
+            <% for(var index = 0; index < offerArr.length; index++){ %>
+            <div class="well">
+                <div class="offer-head">
+                    <h4 class="offer-title"><a href="/view_offer/<%= offerArr[index]._id %>"><%= offerArr[index].title %></a></h4>
+                    <span>Criado por: <a href="/profile/<%= offerArr[index].username %>"><%= offerArr[index].username %></a></span>
 
-                    <div class="row offer-content">
-                        <div class="col-sm-4">
-                            <img class="img-responsive visible-md visible-lg" src="http://placehold.it/420x320"/>
-                        </div>
-
-                        <div class="col-sm-8">
-                            <p class="lead">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nisl lacus, non
-                                auctor
-                                magna cursus sed. Etiam quis quam mi. Vivamus tincidunt sapien in fermentum molestie.
-                                Pellentesque
-                                habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="row offer-footer">
-                        <a class="btn btn-default pull-right" href="#">Abrir</a>
-                    </div>
+                    <h6 class="pull-right"><%= (new Date(offerArr[index].date).toLocaleString()) %></h6>
                 </div>
-                <% } %>
+
+                <div class="row offer-content">
+                    <div class="col-sm-4">
+                        <img class="img-responsive visible-md visible-lg" src="http://placehold.it/420x320"/>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <p class="lead">
+                            <%= offerArr[index].description %>
+                        </p>
+                    </div>
+
+                <div class="row offer-footer">
+                    <a class="btn btn-default pull-right" href="/view_offer/<%= offerArr[index]._id %>">Abrir</a>
+                    <h6 class="pull-right" style="margin-right: 20px;">Preço: <%= offerArr[index].price %><span class="glyphicon glyphicon-gift" style="margin-left: 5px;"></span></h6>
+                </div>
+
             <% } %>
+
+            <ul class="pagination">
+                <% for(var pageNmr = 1; pageNmr <= nPages; pageNmr++){ %>
+                    <li <% if(pageNmr==thisPage){ %> class="active" <% } %> ><a href="/community/<%= communityName %>?page=<%= pageNmr %>"><%= pageNmr %></a></li>
+                <% } %>
+            </ul>
         </div>
     </div>
 </div>

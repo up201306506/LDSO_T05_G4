@@ -2,30 +2,27 @@ var express = require('express'),
     router = express.Router(),
     configDB = require('./../../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
-    userController = require('./../../controllers/UserController'),
     communityController = require('./../../controllers/CommunityController'),
+    offerController = require('./../../controllers/OfferController'),
     userPrivileges = require('./../../config/userPrivileges');
 
 router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req, res, next) {
     // GET community name from url
     var communityName = String(req.params.communityName);
 
-    // TEMP
-    var tempOfferArr = [
-        {
-            communityName: 'Comunidade',
-            offerName: 'Oferta',
-            offerDescription: 'BLAH BLAH BLAH blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'
-        },
-        {
-            communityName: 'Comunidade',
-            offerName: 'Oferta',
-            offerDescription: 'BLAH BLAH BLAH blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'
-        }
-    ];
-
     // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
+
+        //Verifica em que página está
+        var page = req.query.page;
+        if(!page){
+            page = 1;
+        }
+
+        //Range
+        var pageSize = 10;
+        var range = {from:(pageSize*(page-1)), size:pageSize};
+
         // Verifies if this user is enrolled in this community
         communityController.isUserEnrolledInCommunity(db, req.user, communityName, function (community) {
             // Gets the info from the community
@@ -36,44 +33,67 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                     communityController.getCommunityPrivacy(db, communityName, function (privacy) {
                         //Verifies if user is admin
                         communityController.isAdmin(db, communityName, req.user, function (admin) {
-                            db.close();
+                            // Get this community offers
+                            offerController.getCommunityOffers(db, communityName, range, function (offers, totalOffersCount) {
+                                db.close();
 
-                            // If user is not enrolled in the community and had already requested to join
-                            if (community == false && requestdone == true) {
-                                res.render('community/community_page',
-                                    {
-                                        communityName: communityName,
-                                        privacy: privacy,
-                                        enrolled: 0,
-                                        pedido: 1,
-                                        admin: admin
-                                    });
-                            // If user is not enrolled in the community and still hasn't requested to join
-                            } else if (community == false && requestdone == false) {
-                                res.render('community/community_page',
-                                    {
-                                        communityName: communityName,
-                                        privacy: privacy,
-                                        enrolled: 0,
-                                        pedido: 0,
-                                        admin: admin
-                                    });
-                            // If user is enrolled in the community
-                            } else {
-                                res.render('community/community_page',
-                                    {
-                                        communityName: communityName,
-                                        offerArr: tempOfferArr,
-                                        privacy: privacy,
-                                        enrolled: 1,
-                                        pedido: 2,
-                                        admin: admin
-                                    });
-                            }
+                                // If user is not enrolled in the community and had already requested to join
+                                if (community == false && requestdone == true) {
+                                    res.render('community/community_page',
+                                        {
+                                            communityName: communityName,
+                                            privacy: privacy,
+                                            enrolled: 0,
+                                            pedido: 1,
+                                            admin: admin
+                                        });
+                                // If user is not enrolled in the community and still hasn't requested to join
+                                } else if (community == false && requestdone == false) {
+                                    res.render('community/community_page',
+                                        {
+                                            communityName: communityName,
+                                            privacy: privacy,
+                                            enrolled: 0,
+                                            pedido: 0,
+                                            admin: admin
+                                        });
+                                // If user is enrolled in the community
+                                } else {
+                                    res.render('community/community_page',
+                                        {
+                                            communityName: communityName,
+                                            offerArr: offers,
+                                            privacy: privacy,
+                                            enrolled: 1,
+                                            pedido: 2,
+                                            admin: admin,
+                                            nPages: Math.ceil(totalOffersCount/2),
+                                            thisPage: page
+                                        });
+                                }
+                            });
                         });
                     });
                 });
             });
+
+            // Get this community offers
+            /*offerController.getCommunityOffers(db, communityName, range, function (offers, totalOffersCount) {
+                db.close();
+
+                // If user is not enrolled in the community, no community should have been returned
+                if (community == null) {
+                    res.redirect('/');
+                } else {
+                    res.render('community/community_page',
+                        {
+                            communityName: communityName,
+                            offerArr: offers,
+                            nPages: Math.ceil(totalOffersCount/2),
+                            thisPage: page
+                        });
+                }
+            });*/
 
         });
 
