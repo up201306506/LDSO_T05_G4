@@ -6,7 +6,7 @@ var express = require('express'),
     userPrivileges = require('./../../config/userPrivileges');
 
 var multer  = require('multer');
-var upload = multer({ dest: 'temp/images/offer/' });
+var upload = multer({ dest: 'public/images/offers/' });
 
 router.get('/:communityName', userPrivileges.ensureAuthenticated, function(req, res, next) {
     // GET community name from url

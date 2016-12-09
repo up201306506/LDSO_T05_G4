@@ -57,7 +57,7 @@
 
                 <div class="row offer-content">
                     <div class="col-sm-4">
-                        <img class="img-responsive visible-md visible-lg" src="http://placehold.it/420x320"/>
+                        <img class="img-responsive visible-md visible-lg" src="<% if(offerArr[index].imageDir != null && offerArr[index].imageDir != ''){ %>/images/offers/<%= offerArr[index].imageDir %><% }else{ %>http://placehold.it/420x320<% } %>"/>
                     </div>
 
                     <div class="col-sm-8">

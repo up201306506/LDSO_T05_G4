@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-offset-2 col-sm-8">
-            <h1>Criar Oferta em <%= communityName %></h1>
+            <h1>Criar Oferta em <i><%= communityName %></i></h1>
 
             <form role="form" action="/create_offer/<%= communityName %>/create" method="post" enctype="multipart/form-data">
                 <div class="form-group">
@@ -53,8 +53,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="control-label" for="offerImage">Imagem</label>
-                            <input type="file" name="offerImage" class="form-control" id="offerImage">
+                            <label class="control-label" for="offer_image">Imagem</label>
+                            <input type="file" name="offer_image" class="form-control" id="offer_image">
                         </div>
                     </div>
                 </div>
