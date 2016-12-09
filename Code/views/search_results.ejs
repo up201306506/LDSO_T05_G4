@@ -30,7 +30,7 @@
                 <tbody>
                 <% for(var index = 0; index < communities.length; index++){ %>
                 <tr>
-                    <td><a href="#"><%= communities[index].name %></a></td>
+                    <td><a href="/community/<%= communities[index].name  %>"><%= communities[index].name %></a></td>
                     <td><%= communities[index].description %></td>
                     <td><%= communities[index].category %></td>
                     <td>
@@ -56,7 +56,7 @@
                 <tbody>
                 <% for(var index = 0; index < users.length; index++){ %>
                 <tr>
-                    <td><a href="#"><%= users[index].username %></a></td>
+                    <td><a href="/profile/<%= users[index].username %>"><%= users[index].username %></a></td>
                     <td><%= users[index].email %></td>
                 </tr>
                 <% } %>

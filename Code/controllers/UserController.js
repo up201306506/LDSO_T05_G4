@@ -75,7 +75,7 @@ module.exports = {
     getAllUsers: function (db,username,callback) {
         // Get User collection
         var user = db.collection('user');
-        var regexValue = '\.*'+username+'\.';
+        var regexValue = '\.*'+username+'\.*';
         // Find the users in the db
         user.find({username: new RegExp(regexValue,'i')}).toArray(function (err, users) {
             assert.equal(err, null);
