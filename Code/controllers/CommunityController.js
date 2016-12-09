@@ -115,7 +115,7 @@ module.exports = {
     getPublicAndPrivateCommunity : function (db, name, callback) {
         // Get Community collection
         var community = db.collection('community');
-        var regexValue = '\.*'+name+'\.';
+        var regexValue = '\.*'+name+'\.*';
         // Search for the community in the db
         community.find({name: new RegExp(regexValue,'i'), $or:[{privacy: "Pública"},{privacy: "Privada"}]}).toArray(function (err, communities) {
             assert.equal(err, null);
