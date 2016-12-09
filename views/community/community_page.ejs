@@ -30,18 +30,19 @@
                 <a type="submit" class="btn btn-primary" style="margin-top:20px" href="/accept_requests/<%= communityName %>">Aceitar Pedidos</a>
                 <% } %>
                 <a id="delete-button" class="btn btn-primary" href="/delete_community/<%= communityName %>">Apagar Comunidade</a>
-                <a class="btn btn-primary" href="/">Voltar</a>
-            </div>
 
                 <a class="btn btn-primary" href="/" style="margin-top:20px">Voltar</a>
+
+                <% if(enrolled == 1){ %>
+                <ul class="list-group">
+                    <li class="list-group-item text-center">
+                        <a href="/create_offer/<%= communityName %>">Criar Oferta</a>
+                    </li>
+                </ul>
+                <% } %>
+
             </div>
-            <% if(enrolled == 1){ %>
-            <ul class="list-group">
-                <li class="list-group-item text-center">
-                    <a href="/create_offer/<%= communityName %>">Criar Oferta</a>
-                </li>
-            </ul>
-            <% } %>
+
         </div>
 
         <div class="col-md-10">
@@ -64,10 +65,11 @@
                             <%= offerArr[index].description %>
                         </p>
                     </div>
-
+                </div>
                 <div class="row offer-footer">
                     <a class="btn btn-default pull-right" href="/view_offer/<%= offerArr[index]._id %>">Abrir</a>
                     <h6 class="pull-right" style="margin-right: 20px;">Preço: <%= offerArr[index].price %><span class="glyphicon glyphicon-gift" style="margin-left: 5px;"></span></h6>
+                </div>
                 </div>
 
             <% } %>
