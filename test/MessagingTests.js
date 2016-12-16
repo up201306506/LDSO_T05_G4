@@ -1,18 +1,9 @@
 var assert = require('assert');
-var configDB = require('./../config/dbURL.js');
 var mongo = require('mongodb').MongoClient;
 var messagingController = require("./../controllers/MessageController.js");
 
-describe("DB URL variable", function() {
-	it("seriously, don't commit local variables over the remote one", function() {
-		//Guarantee that no one sent the wrong db link.
-		assert.equal('mongodb://LDSO:ldso123456@ds155747.mlab.com:55747/heroku_gdqp38z3', configDB.url);
-	});
-});
-
-describe('Database', function() {
+describe('Messaging', function() {
 	DBurl = 'mongodb://localhost:27017/test';
-	
 	
     // runs before all tests in this block	
 	before('there must be a local test database and it must be reachable', function(done) {
@@ -23,30 +14,20 @@ describe('Database', function() {
 		});
 	});
 
-	
-	
-	it("It doesn't matter whay I put here", function() {			
+	//Empty the database before running every test
+	beforeEach(function() {
+		
 	});
+				
+		
+	it('Inserting and checking a message was inserted', function(done) {
+		done();
+	});		
 	
-	
-	
-	/*
-	describe('Messaging', function() {
-		it('Inserting and checking a message was inserted', function(done) {
-			
-			done();
-		});
-	});
-	*/
 });
 
 
-/*	
-if(err){
-	console.log("welp");
-} else {
-	console.log("YYYYY");
-}
+/*
 
 
 //-------------
