@@ -1,10 +1,14 @@
 var assert = require('assert');
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', function() {
-      assert.equal(-1, [1,2,3].indexOf(4));
-    });
-  });
-});
+var configDB = require('./../config/dbURL.js');
+console.log(configDB.url);
+
+
+assert.equal('mongodb://LDSO:ldso123456@ds155747.mlab.com:55747/heroku_gdqp38z', configDB.url);
+
+
+
+
+
+
 
 
