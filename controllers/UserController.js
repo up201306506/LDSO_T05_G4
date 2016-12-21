@@ -1,7 +1,6 @@
 var assert = require('assert');
 
 module.exports = {
-
     // Inserts a new user
     insertUser: function (db, username, password, name, email, phone, gender, callback) {
         // Get User collection

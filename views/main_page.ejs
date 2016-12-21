@@ -68,11 +68,13 @@
             </div>
             <% } %>
 
-            <ul class="pagination">
-                <% for(var pageNmr = 1; pageNmr <= nPages; pageNmr++){ %>
-                <li <% if(pageNmr==thisPage){ %> class="active" <% } %> ><a href="/?page=<%= pageNmr %>"><%= pageNmr %></a></li>
-                <% } %>
-            </ul>
+            <div class="text-center">
+                <ul class="pagination">
+                    <% for(var pageNmr = 1; pageNmr <= nPages; pageNmr++){ %>
+                    <li <% if(pageNmr==thisPage){ %> class="active" <% } %> ><a href="/?page=<%= pageNmr %>"><%= pageNmr %></a></li>
+                    <% } %>
+                </ul>
+            </div>
         </div>
 
         <div class="col-md-2">

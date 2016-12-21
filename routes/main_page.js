@@ -8,23 +8,9 @@ var express = require('express'),
     messageController = require('./../controllers/MessageController');
 
 router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
-
-    // TEMP
-    var tempOfferArr = [
-        {
-            communityName: 'Comunidade',
-            offerName: 'Oferta',
-            offerDescription: 'BLAH BLAH BLAH blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'
-        },
-        {
-            communityName: 'Comunidade',
-            offerName: 'Oferta',
-            offerDescription: 'BLAH BLAH BLAH blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'
-        }
-    ];
-
+    // Connects to the db
     mongo.connect(configDB.url, function (err, db, next) {
-        //Verifica em que página está
+        // Verifies in which page the user is
         var page = req.query.page;
         if(!page){
             page = 1;
@@ -36,7 +22,7 @@ router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
 
         // Get this user enrolled communities from the db
         communityController.getUserEnrolledCommunities(db, req.user, true, function (communities) {
-            //console.log(communities);
+            // ESTE OFFER VAI SER INUTIL COM A DASHBOARD
             offerController.getCommunityListOffers(db, communities, range, function (offers, totalOffersCount) {
                 messageController.getMessagesByUser(db,req.user,function (received) {
                     messageController.getSentByUser(db,req.user,function (sent) {
