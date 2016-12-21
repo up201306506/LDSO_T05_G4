@@ -4,6 +4,7 @@ var express = require('express'),
     mongo = require('mongodb').MongoClient,
     userController = require('./../../controllers/UserController'),
     communityController = require('./../../controllers/CommunityController'),
+    offerController = require('./../../controllers/OfferController'),
     userPrivileges = require('./../../config/userPrivileges'),
     dropdownList = require('./../../config/dropdownLists');
 
@@ -20,20 +21,24 @@ router.get('/:username', userPrivileges.ensureAuthenticated, function (req, res)
         userController.getUser(db, username, function (userData) {
             // Gets user enrolled communities
             communityController.getUserEnrolledCommunities(db, username, isOwnProfile, function (communitiesArr) {
-                db.close();
+                offerController.getOfferHistory(db, req.user, function(offers){
+                // Gets offers in inrolled communities
+                    db.close();
 
-                res.render('profile/view',
-                    {
-                        title: 'Local Exchange - View Profile',
-                        username: username,
-                        isOwnProfile: isOwnProfile,
-                        password: userData.password,
-                        name: userData.name,
-                        phone: userData.phone,
-                        gender: userData.gender,
-                        email: userData.email,
-                        communityArr: communitiesArr
-                    });
+                    res.render('profile/view',
+                        {
+                            title: 'Local Exchange - View Profile',
+                            username: username,
+                            isOwnProfile: isOwnProfile,
+                            password: userData.password,
+                            name: userData.name,
+                            offerArr: offers,
+                            phone: userData.phone,
+                            gender: userData.gender,
+                            email: userData.email,
+                            communityArr: communitiesArr
+                        });
+                });
             });
         });
     });

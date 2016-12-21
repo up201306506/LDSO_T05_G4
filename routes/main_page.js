@@ -26,17 +26,17 @@ router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
             offerController.getCommunityListOffers(db, communities, range, function (offers, totalOffersCount) {
                 messageController.getMessagesByUser(db,req.user,function (received) {
                     messageController.getSentByUser(db,req.user,function (sent) {
-                        db.close();
-                        res.render('main_page',
-                            {
-                                title: 'Local Exchange - Main page',
-                                communityArr: communities,
-                                offerArr: offers,
-                                nPages: Math.ceil(totalOffersCount/pageSize),
-                                thisPage: page,
-                                sentArray: sent,
-                                receivedArray: received
-                            });
+                            db.close();
+                            res.render('main_page',
+                                {
+                                    title: 'Local Exchange - Main page',
+                                    communityArr: communities,
+                                    offerArr: offers,
+                                    nPages: Math.ceil(totalOffersCount/pageSize),
+                                    thisPage: page,
+                                    sentArray: sent,
+                                    receivedArray: received
+                                });
                     });
                 });
 

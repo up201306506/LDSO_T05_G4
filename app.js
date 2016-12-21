@@ -87,6 +87,8 @@ var webpage_deleteCommunity = require('./routes/community/remove_community');
 var webpage_createOffer = require('./routes/offer/create_offer');
 var webpage_viewoffer = require('./routes/offer/viewoffer');
 var webpage_editoffer = require('./routes/offer/editoffer');
+var webpage_deleteoffer = require('./routes/offer/deleteoffer');
+var webpage_acceptoffer = require('./routes/offer/acceptoffer');
 // messaging
 var controller_message = require('./routes/messaging/message');
 
@@ -109,6 +111,8 @@ app.use('/delete_community', webpage_deleteCommunity);
 app.use('/create_offer', webpage_createOffer);
 app.use('/view_offer', webpage_viewoffer);
 app.use('/editoffer', webpage_editoffer);
+app.use('/delete_offer', webpage_deleteoffer);
+app.use('/accept_offer', webpage_acceptoffer);
 // messaging
 app.use('/message/', controller_message);
 

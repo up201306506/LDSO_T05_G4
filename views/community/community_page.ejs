@@ -67,6 +67,11 @@
                     </div>
                 </div>
                 <div class="row offer-footer">
+                    <% if(user ==  offerArr[index].username) { %>
+                            <a class="btn btn-default pull-right" href="/delete_offer/<%= offerArr[index]._id %>">Eliminar</a>
+                    <% } else { %>
+                            <a class="btn btn-default pull-right" href="/accept_offer/<%= offerArr[index]._id %>">Aceitar</a>
+                    <% } %>
                     <a class="btn btn-default pull-right" href="/view_offer/<%= offerArr[index]._id %>">Abrir</a>
                     <h6 class="pull-right" style="margin-right: 20px;">Preço: <%= offerArr[index].price %><span class="glyphicon glyphicon-gift" style="margin-left: 5px;"></span></h6>
                 </div>
