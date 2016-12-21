@@ -4,7 +4,8 @@ var express = require('express'),
     mongo = require('mongodb').MongoClient,
     communityController = require('./../controllers/CommunityController'),
     offerController = require('./../controllers/OfferController'),
-    userPrivileges = require('./../config/userPrivileges');
+    userPrivileges = require('./../config/userPrivileges'),
+    messageController = require('./../controllers/MessageController');
 
 router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
 
@@ -37,15 +38,22 @@ router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
         communityController.getUserEnrolledCommunities(db, req.user, true, function (communities) {
             //console.log(communities);
             offerController.getCommunityListOffers(db, communities, range, function (offers, totalOffersCount) {
-                db.close();
-                res.render('main_page',
-                    {
-                        title: 'Local Exchange - Main page',
-                        communityArr: communities,
-                        offerArr: offers,
-                        nPages: Math.ceil(totalOffersCount/pageSize),
-                        thisPage: page
+                messageController.getMessagesByUser(db,req.user,function (received) {
+                    messageController.getSentByUser(db,req.user,function (sent) {
+                        db.close();
+                        res.render('main_page',
+                            {
+                                title: 'Local Exchange - Main page',
+                                communityArr: communities,
+                                offerArr: offers,
+                                nPages: Math.ceil(totalOffersCount/pageSize),
+                                thisPage: page,
+                                sentArray: sent,
+                                receivedArray: received
+                            });
                     });
+                });
+
             });
         });
     });
