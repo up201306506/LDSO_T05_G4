@@ -1,4 +1,5 @@
 var assert = require('assert');
+var ObjectId = require('mongodb').ObjectID;
 
 module.exports = {
 
@@ -22,6 +23,7 @@ module.exports = {
                 // Inserts the new offer
                 offer.insertOne({
                     username: username,
+                    receiver: null,
                     communityName: communityName,
                     title: title,
                     description: description,
@@ -55,6 +57,20 @@ module.exports = {
         });
     },
 
+    // Gets all active offers from a community
+    getActiveOffers: function(db, communityName, range, callback){
+        //Get offer collection
+        var offer = db.collection('offer');
+
+        offer.count(function (e, totalOffersCount) {
+            // Get a list of offers of community communityName
+            offer.find({communityName: communityName, isExpired: false}).skip(range.from).limit(range.size).toArray(function (err, offers) {
+                assert.equal(err, null);
+                callback(offers, totalOffersCount);
+            });
+        });
+    },
+
     // Gets all offers from a list of communities
     getCommunityListOffers: function (db, communityList, range, callback) {
 
@@ -72,23 +88,11 @@ module.exports = {
         });
     },
 
-
-
-
-
-
-
-
     deleteOffer: function (db, id, callback) {
         var offer = db.collection('offer');
-        offer.deleteOne({_id: id}, function (err, results) {
-            if (err) {
-                console.log("failed");
-                throw err;
-            }
-            assert.equal(1, results.result.n);
-            console.log("success");
-            callback(results);
+        offer.deleteOne({_id: ObjectId(id)}, function (err) {
+            assert.equal(err, null);
+            callback();
         });
     },
 
@@ -102,7 +106,6 @@ module.exports = {
         });
     },
 
-
     updateOfferDescription: function (db, oldDescription, newDescription, callback) {
         var offer = db.collection('offer');
         offer.updateOne({description: oldDescription}, {$set: {description: newDescription}},
@@ -113,9 +116,9 @@ module.exports = {
             });
     },
 
-    updateOfferStatus: function (db, id, is_expired, callback) {
+    updateOfferStatus: function (db, id, receiver, is_expired, callback) {
         var offer = db.collection('offer');
-        offer.updateOne({_id: id}, {$set: {is_expired: is_expired}},
+        offer.updateOne({_id: ObjectId(id)}, {$set: {isExpired: is_expired, receiver: receiver}},
             function (err, result) {
                 assert.equal(err, null);
                 console.log("Status updated.");

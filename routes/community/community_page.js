@@ -34,7 +34,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                         //Verifies if user is admin
                         communityController.isAdmin(db, communityName, req.user, function (admin) {
                             // Get this community offers
-                            offerController.getCommunityOffers(db, communityName, range, function (offers, totalOffersCount) {
+                            offerController.getActiveOffers(db, communityName, range, function (offers, totalOffersCount) {
                                 db.close();
 
                                 // If user is not enrolled in the community and had already requested to join
@@ -45,7 +45,8 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                             privacy: privacy,
                                             enrolled: 0,
                                             pedido: 1,
-                                            admin: admin
+                                            admin: admin,
+                                            user: req.user
                                         });
                                 // If user is not enrolled in the community and still hasn't requested to join
                                 } else if (community == false && requestdone == false) {
@@ -55,7 +56,8 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                             privacy: privacy,
                                             enrolled: 0,
                                             pedido: 0,
-                                            admin: admin
+                                            admin: admin,
+                                            user: req.user
                                         });
                                 // If user is enrolled in the community
                                 } else {
@@ -68,7 +70,8 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                             pedido: 2,
                                             admin: admin,
                                             nPages: Math.ceil(totalOffersCount/2),
-                                            thisPage: page
+                                            thisPage: page,
+                                            user: req.user
                                         });
                                 }
                             });
