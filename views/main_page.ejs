@@ -14,27 +14,33 @@
     <div class="row">
         <div class="col-md-2">
             <div id="side-panel">
-                <h3 id="side-title">Conta Utilizador</h3>
-                <h5><b>Username:</b><%= user %></h5>
+                <h3 id="side-title">Utilizador</h3>
+                <h5><b style="margin-right: 15px;">Username:</b><%= user %></h5>
                 <br>
-                <h3 id="side-title">Status de Atividades</h3>
-                <h5><b>E-mails Enviados:</b><%= sentArray.length %></h5>
-                <h5><b>E-mails Recebidos:</b><%= receivedArray.length %></h5>
-                <h5><b>Ofertas:</b> <%= offerArr.length %></h5>
-                <h5><b>Comunidades:</b> <%= communityArr.length %></h5>
+                <h3 id="side-title">Estatísticas</h3>
+                <h5><b style="margin-right: 15px;">Mensagens Enviadas:</b><%= sentArray.length %></h5>
+                <h5><b style="margin-right: 15px;">Mensagens Recebidas:</b><%= receivedArray.length %></h5>
+                <h5><b style="margin-right: 15px;">Ofertas criadas:</b> <%= offerArr.length %></h5>
+                <h5><b style="margin-right: 15px;">Comunidades:</b> <%= communityArr.length %></h5>
             </div>
         </div>
 
         <div class="col-md-8">
-            <h3 id="side-title">Minhas Comunidades</h3>
+            <h3 id="side-title">Comunidades</h3>
             <% for(var index = 0; index < communityArr.length; index++) { %>
             <div class="well">
-                <div class="row offer-content">
-                    <div class="col-sm-8">
-                        <p class="lead">
-                            <a href="/community/<%= communityArr[index].name %>"><%= communityArr[index].name %></a>
-                        </p>
-                        <span>Fundada por: <a href="/profile/<%= communityArr[index].founder %>"><%= communityArr[index].founder %></a></span>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="lead" href="/community/<%= communityArr[index].name %>"><%= communityArr[index].name %></a>
+                        <p><%= communityArr[index].description %></p>
+                        <h6 class="offer-footer">
+                            Comunidade <%= communityArr[index].privacy %>,
+                            <% if(communityArr[index].useCoin) { %>
+                            com uso de moeda de troca - <b style="font-size: 16px;"><%= communityArr[index].coinName %></b>
+                            <% } else { %>
+                            sem uso de moeda de troca
+                            <% } %>
+                        </h6>
                     </div>
                 </div>
             </div>
@@ -67,22 +73,15 @@
                 </div>
             </div>
             <% } %>
-
-            <div class="text-center">
-                <ul class="pagination">
-                    <% for(var pageNmr = 1; pageNmr <= nPages; pageNmr++){ %>
-                    <li <% if(pageNmr==thisPage){ %> class="active" <% } %> ><a href="/?page=<%= pageNmr %>"><%= pageNmr %></a></li>
-                    <% } %>
-                </ul>
-            </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-2 text-center">
             <h3 id="side-title">Atalhos</h3>
+            <a class="btn btn-primary btn-block" href="/profile/<%= user %>">Meu Perfil</a>
+            <a class="btn btn-primary btn-block" href="/message/inbox">Minhas Mensagens</a>
             <a class="btn btn-primary btn-block" href="/create_community">Criar Comunidade</a>
-            <a class="btn btn-primary btn-block" href="/profile/<%= user %>">Perfil Utilizador</a>
-            <a class="btn btn-primary btn-block" href="/message/inbox">Webmail</a>
-            <a class="btn btn-primary btn-block" href="/faq">FAQ</a>
+            <a class="btn btn-primary btn-block" href="/my_communities">Minhas Comunidades</a>
+            <a class="btn btn-default btn-block" href="/faq">FAQ</a>
         </div>
     </div>
 </div>

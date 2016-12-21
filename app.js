@@ -74,6 +74,7 @@ var webpage_login = require('./routes/login');
 var webpage_faq = require('./routes/faq');
 var webpage_mainpage = require('./routes/main_page');
 var webpage_searchresults = require('./routes/search_results');
+var webpage_mycommunities = require('./routes/community/my_communities');
 // profile
 var webpage_profile = require('./routes/profile/profile');
 // community
@@ -96,6 +97,7 @@ app.use('/login', webpage_login);
 app.use('/faq', webpage_faq);
 app.use('/', webpage_mainpage);
 app.use('/search_results', webpage_searchresults);
+app.use('/my_communities', webpage_mycommunities);
 // profile
 app.use('/profile', webpage_profile);
 // community

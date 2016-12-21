@@ -45,7 +45,10 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                             privacy: privacy,
                                             enrolled: 0,
                                             pedido: 1,
-                                            admin: admin
+                                            admin: admin,
+                                            nPages: Math.ceil(totalOffersCount/2),
+                                            thisPage: page,
+                                            user: req.user
                                         });
                                 // If user is not enrolled in the community and still hasn't requested to join
                                 } else if (community == false && requestdone == false) {
@@ -56,7 +59,10 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                             privacy: privacy,
                                             enrolled: 0,
                                             pedido: 0,
-                                            admin: admin
+                                            admin: admin,
+                                            nPages: Math.ceil(totalOffersCount/2),
+                                            thisPage: page,
+                                            user: req.user
                                         });
                                 // If user is enrolled in the community
                                 } else {
@@ -69,7 +75,10 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                             pedido: 2,
                                             admin: admin,
                                             nPages: Math.ceil(totalOffersCount/2),
-                                            thisPage: page
+                                            thisPage: page,
+                                            nPages: Math.ceil(totalOffersCount/2),
+                                            thisPage: page,
+                                            user: req.user
                                         });
                                 }
                             });
