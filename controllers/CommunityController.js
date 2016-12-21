@@ -2,35 +2,8 @@ var assert = require('assert'),
     dropdownList = require('./../config/dropdownLists');
 
 module.exports = {
-
-    // Get the enrolled communities by an user
-    getUserEnrolledCommunities: function (db, username, doNotShowSecretCommunities, callback) {
-        // Get Community collection
-        var community = db.collection('community');
-
-        if (doNotShowSecretCommunities) {
-            // Get a list of communities that this user is member of
-            community.find({members: username}).toArray(function (err, communities) {
-                assert.equal(err, null);
-
-                // Process the list of communities
-                callback(communities);
-            });
-        } else {
-            // Get a list of communities that this user is member of
-            community.find({members: username,
-                $or: [{privacy: dropdownList.privacyList[0]}, {privacy: dropdownList.privacyList[1]}]
-            }).toArray(function (err, communities) {
-                assert.equal(err, null);
-
-                // Process the list of communities
-                callback(communities);
-            });
-        }
-    },
-
     // Insert a new community in the db
-    insertCommunity: function (db, communityName, headOffice, category, founder, description, privacy, members, admins, callback) {
+    insertCommunity: function (db, communityName, headOffice, description, useCoin, coinName, privacy, rules, founder, admins, members, callback) {
         // Get Community collection
         var community = db.collection('community');
 
@@ -44,8 +17,8 @@ module.exports = {
             } else {
                 // Inserts the new community
                 community.insertOne({
-                        name: communityName, office: headOffice, category: category, description: description,
-                        founder: founder, privacy: privacy, members: members, requests: [], admins: founder
+                        name: communityName, office: headOffice, description: description, useCoin: useCoin, coinName: coinName,
+                        privacy: privacy, ruleDescription: rules, founder: founder, admins: admins, members: members, requests: []
                     },
                     function (err, result) {
                         assert.equal(err, null);
@@ -57,6 +30,77 @@ module.exports = {
             }
         });
     },
+
+    // Retrieves all communities data
+    getAllCommunities: function (db, communityName, showSecretCommunities, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+        // Create search querry
+        var regexValue = '\.*'+ communityName +'\.*';
+
+        // Show secret communities
+        if (showSecretCommunities) {
+            // Get a list of communities
+            community.find({name: new RegExp(regexValue,'i')}).toArray(function (err, communities) {
+                assert.equal(err, null);
+
+                // Process the list of communities
+                callback(communities);
+            });
+        } else {
+            // Get a list of public and private communities that this user is member of
+            community.find({name: new RegExp(regexValue,'i'), $or:[{privacy: dropdownList.privacyList[0]}, {privacy: dropdownList.privacyList[1]}]}).toArray(function (err, communities) {
+                assert.equal(err, null);
+
+                // Process the list of communities
+                callback(communities);
+            });
+        }
+    },
+
+    // Get the enrolled communities by an user
+    getUserEnrolledCommunities: function (db, username, showSecretCommunities, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Shows secret communities
+        if (showSecretCommunities) {
+            // Get a list of communities that this user is member of
+            community.find({members: {$elemMatch: {name: username}}}).toArray(function (err, communities) {
+                assert.equal(err, null);
+
+                // Process the list of communities
+                callback(communities);
+            });
+        } else {
+            // Get a list of public and private communities that this user is member of
+            community.find({members: {$elemMatch: {name: username}},
+                $or: [{privacy: dropdownList.privacyList[0]}, {privacy: dropdownList.privacyList[1]}]
+            }).toArray(function (err, communities) {
+                assert.equal(err, null);
+
+                // Process the list of communities
+                callback(communities);
+            });
+        }
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Verifies if an user is enrolled in a community
     isUserEnrolledInCommunity: function (db, username, communityName, callback) {
@@ -198,29 +242,6 @@ module.exports = {
         community.deleteOne({name: name}, function (err) {
             assert.equal(err, null);
             callback();
-        });
-    },
-
-    getPublicAndPrivateCommunity : function (db, name, callback) {
-        // Get Community collection
-        var community = db.collection('community');
-        var regexValue = '\.*'+name+'\.*';
-        // Search for the community in the db
-        community.find({name: new RegExp(regexValue,'i'), $or:[{privacy: "Pública"},{privacy: "Privada"}]}).toArray(function (err, communities) {
-            assert.equal(err, null);
-
-            // Process the list of communitiesz
-            callback(communities);
-        });
-    },
-
-    listAllCommunities: function (db, callback) {
-        var community = db.collection('community');
-        community.find().toArray(function (err, docs) {
-            assert.equal(err, null);
-            console.log('Found ' + docs.length + " documents");
-            console.log(docs);
-            callback(docs);
         });
     },
 
