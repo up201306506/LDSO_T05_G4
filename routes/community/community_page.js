@@ -12,8 +12,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
 
     // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
-
-        //Verifica em que página está
+        // Verifies the page the user is in
         var page = req.query.page;
         if(!page){
             page = 1;
@@ -42,6 +41,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                     res.render('community/community_page',
                                         {
                                             communityName: communityName,
+                                            offerArr: [],
                                             privacy: privacy,
                                             enrolled: 0,
                                             pedido: 1,
@@ -53,6 +53,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                     res.render('community/community_page',
                                         {
                                             communityName: communityName,
+                                            offerArr: [],
                                             privacy: privacy,
                                             enrolled: 0,
                                             pedido: 0,
@@ -79,28 +80,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                     });
                 });
             });
-
-            // Get this community offers
-            /*offerController.getCommunityOffers(db, communityName, range, function (offers, totalOffersCount) {
-                db.close();
-
-                // If user is not enrolled in the community, no community should have been returned
-                if (community == null) {
-                    res.redirect('/');
-                } else {
-                    res.render('community/community_page',
-                        {
-                            communityName: communityName,
-                            offerArr: offers,
-                            nPages: Math.ceil(totalOffersCount/2),
-                            thisPage: page
-                        });
-                }
-            });*/
-
         });
-
-
     });
 });
 

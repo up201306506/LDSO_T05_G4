@@ -8,26 +8,26 @@ var express = require('express'),
 
 router.get('/', userPrivileges.ensureAuthenticated, function (req, res) {
     res.render('community/create_community', {
-        title: 'New Community',
-        categoryList: dropdownList.categoryList,
+        title: 'Local Exchange - Nova Comunidade',
         privacyList: dropdownList.privacyList
     });
 });
 
 router.post('/create', userPrivileges.ensureAuthenticated, function (req, res) {
+    var useCoin = false;
+    if(req.body.useCoin === 'on')
+        useCoin = true;
+
     // Verifies if the form is completed
     req.checkBody('communityName', 'Nome da comunidade necessário').notEmpty();
     req.checkBody('headQuarter', 'Sede da comunidade necessária').notEmpty();
     req.checkBody('description', 'Descricao da comunidade necessária').notEmpty();
-    req.checkBody('category', 'É necessário escolher uma categoria').notEmpty();
+    if(useCoin)
+        req.checkBody('coinName', 'Nome da moeda da comunidade necessária').notEmpty();
     req.checkBody('privacy', 'É necessário escolher o tipo de privacidade').notEmpty();
 
     var errors = req.validationErrors();
 
-    if(dropdownList.categoryList.indexOf(req.body.category) == -1){
-        if(errors.constructor != Array) errors = [];
-        errors.push({msg:'Categoria não válida'} );
-    }
     if(dropdownList.privacyList.indexOf(req.body.privacy) == -1){
         if(errors.constructor != Array) errors = [];
         errors.push({msg:'Tipo de visualização não válida'} );
@@ -35,8 +35,7 @@ router.post('/create', userPrivileges.ensureAuthenticated, function (req, res) {
 
     if (errors) {
         res.render('community/create_community', {
-            title: 'New Community',
-            categoryList: dropdownList.categoryList,
+            title: 'Local Exchange - Nova Comunidade',
             privacyList: dropdownList.privacyList,
             errors: errors
         });
@@ -44,8 +43,8 @@ router.post('/create', userPrivileges.ensureAuthenticated, function (req, res) {
         // If no error is found a new community will be created
         mongo.connect(configDB.url, function (err, db, next) {
             // Insert a new community in the db
-            communityController.insertCommunity(db, req.body.communityName, req.body.headQuarter, req.body.category,
-                req.user, req.body.description, req.body.privacy, [req.user], [req.user] ,function (wasCreated) {
+            communityController.insertCommunity(db, req.body.communityName, req.body.headQuarter, req.body.description,
+                useCoin, req.body.coinName, req.body.privacy, req.body.rules, req.user, [req.user], [{name: req.user, coins: 0}] ,function (wasCreated) {
                     db.close();
 
                     // The main page will be rendered
