@@ -46,6 +46,9 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                             enrolled: 0,
                                             pedido: 1,
                                             admin: admin,
+                                            user: req.user,
+                                            nPages: Math.ceil(totalOffersCount/2),
+                                            thisPage: page,
                                             user: req.user
                                         });
                                 // If user is not enrolled in the community and still hasn't requested to join
@@ -58,6 +61,9 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                             enrolled: 0,
                                             pedido: 0,
                                             admin: admin,
+                                            user: req.user,
+                                            nPages: Math.ceil(totalOffersCount/2),
+                                            thisPage: page,
                                             user: req.user
                                         });
                                 // If user is enrolled in the community

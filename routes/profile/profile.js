@@ -21,6 +21,7 @@ router.get('/:username', userPrivileges.ensureAuthenticated, function (req, res)
         userController.getUser(db, username, function (userData) {
             // Gets user enrolled communities
             communityController.getUserEnrolledCommunities(db, username, isOwnProfile, function (communitiesArr) {
+                offerController.getOfferHistory(db, req.user, function(offers){
                 // Gets offers in inrolled communities
                     db.close();
 
@@ -31,11 +32,13 @@ router.get('/:username', userPrivileges.ensureAuthenticated, function (req, res)
                             isOwnProfile: isOwnProfile,
                             password: userData.password,
                             name: userData.name,
+                            offerArr: offers,
                             phone: userData.phone,
                             gender: userData.gender,
                             email: userData.email,
                             communityArr: communitiesArr
                         });
+                });
             });
         });
     });

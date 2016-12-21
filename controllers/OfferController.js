@@ -71,6 +71,15 @@ module.exports = {
         });
     },
 
+    // Gets history of user offers
+    getOfferHistory: function(db, username, callback) {
+        var offer = db.collection('offer');
+        offer.find({$or: [{username: username}, {receiver: username}]}).toArray(function (err, offers) {
+            assert.equal(err, null);
+            callback(offers);
+        });
+    },
+
     // Gets all offers from a list of communities
     getCommunityListOffers: function (db, communityList, range, callback) {
 
