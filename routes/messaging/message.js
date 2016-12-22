@@ -221,6 +221,7 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
                     messageReceiver: true,
                     message_type: message_type,
                     tooltip: tooltip,
+                    date: data.date,
                     message_subject: data.subject,
                     message_content: data.content,
                     deleted: data.deleted,

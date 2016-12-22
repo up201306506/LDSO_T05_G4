@@ -1,81 +1,10 @@
-body { margin-top: 75px;font: 14px Geneva, Helvetica, Arial, sans-serif;  background-color: lightsteelblue;}
-
-#main_body{
-    background-color: white;
-    border: solid #9a9595;
-    border-radius: 5px;
-    padding: 0px;
-}
-a, a:hover {
-    color: inherit;
-    text-decoration: none;
+button {
+    width: 9em;
 }
 
-#header {
-    max-height: 35%;
-    vertical-align: top;
-    display: block;
-    width: 100%;
-    color: white;
-    background-color: #9a9595;
-    padding-bottom: 25px;
-    padding-top: 5px;
-}
-.img-responsive{
-    margin-right: 25px;
-    float: left;
-    min-width: 140px;
-    max-width: 200px;
-    width: 20%;
-    border-radius: 50%;
-}
-
-.messageContent {
-    border: solid 1px black;
-    position:relative;
-
-    display: block;
-    min-height: 115px;
-    word-wrap: break-word;
-}
-
-#messageMeta{
-    width: 100%;
-    text-align: right;
-    position: absolute;
-    bottom: 0;
-    right: 15px;
-}
-#interactive_pane{
-    display: block;
-    width: 100%;
-    color: white;
-    background-color: #9a9595;
-    padding-top: 2px;
-    padding-right: 25px;
-    padding-bottom: 20px;
-}
-
-.tooltip{
-    background-color: transparent;
-    color:green;
-}
-
-.modal-header, h4, .close {
-    background-color: #9a9595;
-    color:white;
+.modal-header, .close {
     text-align: center;
-    font-size: 30px;
-}
-.modal-body{
-    background-color: white;
-}
-.modal-footer {
-    background-color: #9a9595;
-}
-
-#delete_modal > .modal-dialog > .modal-content > .modal-footer{
-    background-color: white;
+    font-size: 20px;
 }
 
 #editor {
@@ -83,16 +12,9 @@ a, a:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 #editor_redirect {
     overflow: auto; max-height:700px; height: 300px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-
-
-/*If you want to see the page's grid*/
-/*
-#main_body {
-    border: dotted 2px crimson;
-}
-*/
