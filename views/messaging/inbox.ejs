@@ -190,6 +190,7 @@
     function trashCanButton(element){
         //console.log($(element).attr('delete_id'));
 
+        /*
         var red = $(element).attr('red');
         if (!(typeof red !== typeof undefined && red !== false)) {
             $(element).attr('red', true);
@@ -197,10 +198,13 @@
         } else {
             window.location.href = "/message/delete/"+$(element).attr('delete_id');
         }
+        */
+        window.location.href = "/message/delete/"+$(element).attr('delete_id');
     }
     function recycleButton(element){
         //console.log($(element).attr('delete_id'));
 
+        /*
         var green = $(element).attr('green');
         if (!(typeof green !== typeof undefined && green !== false)) {
             $(element).attr('green', true);
@@ -208,6 +212,8 @@
         } else {
             window.location.href = "/message/undelete/"+$(element).attr('delete_id');
         }
+        */
+        window.location.href = "/message/undelete/"+$(element).attr('delete_id');
     }
 </script>
 

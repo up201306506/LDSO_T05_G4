@@ -286,7 +286,6 @@ router.get('/sent/:id', userPrivileges.ensureAuthenticated, function(req, res) {
 });
 
 //TODO: Message preview should show escaped text, no format tags
-//TODO: New Message Badge appearing only when there's unread messages
 //TODO: Pagination - Remind, this should replace the message fetching function with one that ignores "deleted" ones
 router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
