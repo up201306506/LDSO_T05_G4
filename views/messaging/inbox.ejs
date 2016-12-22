@@ -19,11 +19,11 @@
             <a href="#" class="btn btn-danger btn-sm btn-block" role="button" data-toggle="modal" data-target="#myModal" id="btn_New_Message">Nova Mensagem</a>
             <hr>
             <ul class="nav nav-pills nav-stacked" style="margin-top: 15px;">
-                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href=" <%= inboxType=="Inbox" ? "#" : "./inbox"%> "><%- newMessages ? '<span class="glyphicon glyphicon-exclamation-sign pull-right" style="margin-left: 5px;"></span>' : '' %>Mensagens</a></li>
-                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href=" <%= inboxType=="Offers" ? "#" : "./offers"%> ">Ofertas</a></li>
-                <li <%if(inboxType=="Important"){%> class="active" <%}%> ><a href=" <%= inboxType=="Important" ? "#" : "./starred"%> ">Importantes</a></li>
-                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href=" <%= inboxType=="Sent" ? "#" : "./sent"%> ">Enviadas</a></li>
-                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href=" <%= inboxType=="Deleted" ? "#" : "./deleted"%> ">Removidas</a></li>
+                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href=" <%= inboxType=="Inbox" ? "#" : "./inbox?pagina=1"%> "><%- newMessages ? '<span class="glyphicon glyphicon-exclamation-sign pull-right" style="margin-left: 5px;"></span>' : '' %>Mensagens</a></li>
+                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href=" <%= inboxType=="Offers" ? "#" : "./offers?pagina=1"%> ">Ofertas</a></li>
+                <li <%if(inboxType=="Important"){%> class="active" <%}%> ><a href=" <%= inboxType=="Important" ? "#" : "./starred?pagina=1"%> ">Importantes</a></li>
+                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href=" <%= inboxType=="Sent" ? "#" : "./sent?pagina=1"%> ">Enviadas</a></li>
+                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href=" <%= inboxType=="Deleted" ? "#" : "./deleted?pagina=1"%> ">Removidas</a></li>
             </ul>
         </div>
 
@@ -77,10 +77,10 @@
         </div>
 
         <div class="pull-right" id="Inbox_Navigation">
-            <span id="navigation_text">Page: <muted><b>1</b> of <b>5</b></muted> </span>
+            <span id="navigation_text">Página: <muted><b><%= page %></b> of <b><%= maxPage %></b></muted> </span>
             <div class="btn-group">
-                <button type="button" class="btn btn-default"><</button>
-                <button type="button" class="btn btn-default">></button>
+                <button type="button" class="btn btn-default" onclick="location.href = location.href.replace(location.search, '') + '?pagina=<%= page == 1 ? 1 : page-1 %>';"><</button>
+                <button type="button" class="btn btn-default" onclick="location.href = location.href.replace(location.search, '') + '?pagina=<%= page == maxPage ? maxPage : Number(page)+1 %>';">></button>
             </div>
         </div>
 

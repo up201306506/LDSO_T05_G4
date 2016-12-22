@@ -23,11 +23,7 @@ router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
         errors.push({msg:'Houve um problema em encontrar o teu ID de utilizador'} );
     }
 
-    /*
-     TODO:
-     Verificar se existe o utilizador remetente
-
-     */
+    //TODO:Verificar se existe o utilizador remetente
 
 
     if (errors) {
@@ -57,9 +53,9 @@ router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
     }
 });
 
-//TODO: Needs warning about unknown or non permitted message ID
+//TODO: Needs a flash warning about unknown or non permitted message ID
 router.get('/id/', userPrivileges.ensureAuthenticated, function(req, res) {
-    res.redirect('/inbox');s
+    res.redirect('/inbox');
 });
 
 router.get('/inbox/markAllRead', userPrivileges.ensureAuthenticated, function (req, res) {
@@ -286,11 +282,21 @@ router.get('/sent/:id', userPrivileges.ensureAuthenticated, function(req, res) {
 });
 
 //TODO: Message preview should show escaped text, no format tags
-//TODO: Pagination - Remind, this should replace the message fetching function with one that ignores "deleted" ones
 router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, req.user, function(userMessages){
             db.close();
+
+            var messages_per_page = 10;
+
+            var page = 1;
+            if(!isNaN(parseFloat(req.query.pagina)) && isFinite(req.query.pagina))
+                page = req.query.pagina;
+            var maxPage = Math.ceil( userMessages.length/messages_per_page );
+
+            if(maxPage < 1) maxPage = 1;
+            if(page < 1) page = 1;
+            if(page > maxPage) page = maxPage;
 
             var newMessages = false;
             for(var i = 0; i < userMessages.length; i++){
@@ -310,15 +316,22 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
                 if(!userMessages[i].read){
                     newMessages =true;
                 }
-
             }
+
+            if(page == maxPage)
+                userMessages = userMessages.slice((page-1)*messages_per_page, userMessages.length);
+            else
+                userMessages = userMessages.slice((page-1)*messages_per_page,(page-1)*messages_per_page + messages_per_page);
 
             res.render('messaging/inbox',
                 {
                     title: 'Message Inbox',
                     userMessages: userMessages,
                     inboxType: 'Inbox',
-                    newMessages : newMessages
+                    newMessages : newMessages,
+                    page: page,
+                    maxPage: maxPage
+
                 }
             );
         });
@@ -336,21 +349,38 @@ router.get('/offers', userPrivileges.ensureAuthenticated, function (req, res) {
                     newMessages =true;
                 }
             }
-
             messagingController.getMessagesByUserByType(db, req.user, "offer", function(userMessages){
                 db.close();
+                var messages_per_page = 10;
+
+                var page = 1;
+                if(!isNaN(parseFloat(req.query.pagina)) && isFinite(req.query.pagina))
+                    page = req.query.pagina;
+                var maxPage = Math.ceil( userMessages.length/messages_per_page );
+
+                if(maxPage < 1) maxPage = 1;
+                if(page < 1) page = 1;
+                if(page > maxPage) page = maxPage;
+
 
                 for(var i = 0; i < userMessages.length; i++){
                     userMessages[i].type = "leaf";
                     userMessages[i].typePopup = "Offer Related";
                 }
 
+                if(page == maxPage)
+                    userMessages = userMessages.slice((page-1)*messages_per_page, userMessages.length);
+                else
+                    userMessages = userMessages.slice((page-1)*messages_per_page,(page-1)*messages_per_page + messages_per_page);
+
                 res.render('messaging/inbox',
                     {
                         title: 'Message Inbox',
                         userMessages: userMessages,
                         inboxType: 'Offers',
-                        newMessages : newMessages
+                        newMessages : newMessages,
+                        page: page,
+                        maxPage: maxPage
                     }
                 );
             });
@@ -371,6 +401,17 @@ router.get('/starred', userPrivileges.ensureAuthenticated, function (req, res) {
 
             messagingController.getStarredUserMessages(db, req.user, function(userMessages){
                 db.close();
+                var messages_per_page = 10;
+
+                var page = 1;
+                if(!isNaN(parseFloat(req.query.pagina)) && isFinite(req.query.pagina))
+                    page = req.query.pagina;
+                var maxPage = Math.ceil( userMessages.length/messages_per_page );
+
+                if(maxPage < 1) maxPage = 1;
+                if(page < 1) page = 1;
+                if(page > maxPage) page = maxPage;
+
                 for(var i = 0; i < userMessages.length; i++){
                     if(userMessages[i].type == "conversation"){
                         userMessages[i].type = "user";
@@ -386,12 +427,19 @@ router.get('/starred', userPrivileges.ensureAuthenticated, function (req, res) {
                     }
                 }
 
+                if(page == maxPage)
+                    userMessages = userMessages.slice((page-1)*messages_per_page, userMessages.length);
+                else
+                    userMessages = userMessages.slice((page-1)*messages_per_page,(page-1)*messages_per_page + messages_per_page);
+
                 res.render('messaging/inbox',
                     {
                         title: 'Message Inbox',
                         userMessages: userMessages,
                         inboxType: 'Important',
-                        newMessages : newMessages
+                        newMessages : newMessages,
+                        page: page,
+                        maxPage: maxPage
                     }
                 );
             });
@@ -410,29 +458,48 @@ router.get('/sent', userPrivileges.ensureAuthenticated, function (req, res) {
                 }
             }
             messagingController.getSentByUser(db, req.user, function(userMessages){
-            db.close();
-            for(var i = 0; i < userMessages.length; i++){
-                if(userMessages[i].type == "conversation"){
-                    userMessages[i].type = "user";
-                    userMessages[i].typePopup = "Conversation";
-                }
-                else if(userMessages[i].type.type == "offer"){
-                    userMessages[i].type = "leaf";
-                    userMessages[i].typePopup = "Offer Related";
-                }
-                else{
-                    userMessages[i].type = "warning-sign";
-                    userMessages[i].typePopup = "System Notification";
-                }
-            }
 
-            res.render('messaging/inbox',
-                {
-                    title: 'Message Inbox',
-                    userMessages: userMessages,
-                    inboxType: 'Sent',
-                    newMessages : newMessages
-                });
+                var messages_per_page = 10;
+
+                var page = 1;
+                if(!isNaN(parseFloat(req.query.pagina)) && isFinite(req.query.pagina))
+                    page = req.query.pagina;
+                var maxPage = Math.ceil( userMessages.length/messages_per_page );
+
+                if(maxPage < 1) maxPage = 1;
+                if(page < 1) page = 1;
+                if(page > maxPage) page = maxPage;
+
+                db.close();
+                for(var i = 0; i < userMessages.length; i++){
+                    if(userMessages[i].type == "conversation"){
+                        userMessages[i].type = "user";
+                        userMessages[i].typePopup = "Conversation";
+                    }
+                    else if(userMessages[i].type.type == "offer"){
+                        userMessages[i].type = "leaf";
+                        userMessages[i].typePopup = "Offer Related";
+                    }
+                    else{
+                        userMessages[i].type = "warning-sign";
+                        userMessages[i].typePopup = "System Notification";
+                    }
+                }
+
+                if(page == maxPage)
+                    userMessages = userMessages.slice((page-1)*messages_per_page, userMessages.length);
+                else
+                    userMessages = userMessages.slice((page-1)*messages_per_page,(page-1)*messages_per_page + messages_per_page);
+
+                res.render('messaging/inbox',
+                    {
+                        title: 'Message Inbox',
+                        userMessages: userMessages,
+                        inboxType: 'Sent',
+                        newMessages : newMessages,
+                        page: page,
+                        maxPage: maxPage
+                    });
             });
         });
     });
@@ -451,6 +518,18 @@ router.get('/deleted', userPrivileges.ensureAuthenticated, function (req, res) {
             messagingController.getMessagesByUserDeleted(db, req.user, function(userMessages){
                 db.close();
 
+                var messages_per_page = 10;
+
+                var page = 1;
+                if(!isNaN(parseFloat(req.query.pagina)) && isFinite(req.query.pagina))
+                    page = req.query.pagina;
+                var maxPage = Math.ceil( userMessages.length/messages_per_page );
+
+                if(maxPage < 1) maxPage = 1;
+                if(page < 1) page = 1;
+                if(page > maxPage) page = maxPage;
+
+
                 for(var i = 0; i < userMessages.length; i++){
                     if(userMessages[i].type == "conversation"){
                         userMessages[i].type = "user";
@@ -466,21 +545,25 @@ router.get('/deleted', userPrivileges.ensureAuthenticated, function (req, res) {
                     }
                 }
 
+                if(page == maxPage)
+                    userMessages = userMessages.slice((page-1)*messages_per_page, userMessages.length);
+                else
+                    userMessages = userMessages.slice((page-1)*messages_per_page,(page-1)*messages_per_page + messages_per_page);
+
                 res.render('messaging/inbox',
                     {
                         title: 'Message Inbox',
                         userMessages: userMessages,
                         inboxType: 'Deleted',
-                        newMessages : newMessages
+                        newMessages : newMessages,
+                        page: page,
+                        maxPage: maxPage
                     }
                 );
             });
         });
     });
 });
-
-
-    // TODO: Styling - Make these pages look like the rest of the site
 
 
 module.exports = router;
