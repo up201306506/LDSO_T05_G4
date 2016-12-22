@@ -8,6 +8,7 @@ var express = require('express'),
 router.get('/', userPrivileges.ensureAuthenticated, function(req, res) {
     res.redirect('/message/inbox');
 });
+
 router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
     // Verifies if the form is completed
     req.checkBody('receiver', 'Por Favor indique um remetente para a mensagem').notEmpty();
@@ -60,6 +61,7 @@ router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
 router.get('/id/', userPrivileges.ensureAuthenticated, function(req, res) {
     res.redirect('/inbox');s
 });
+
 router.get('/inbox/markAllRead', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db){
         messagingController.setAllMessageAsRead(db, req.user, function(result) {
@@ -95,6 +97,7 @@ router.get('/delete/:id', userPrivileges.ensureAuthenticated, function (req, res
         });
     });
 });
+
 router.get('/undelete/:id', userPrivileges.ensureAuthenticated, function (req, res) {
     // Get id from url
     var id = req.params.id;
@@ -121,6 +124,7 @@ router.get('/undelete/:id', userPrivileges.ensureAuthenticated, function (req, r
         });
     });
 });
+
 router.get('/star/:id', userPrivileges.ensureAuthenticated, function (req, res) {// Get id from url
     var id = req.params.id;
 
@@ -145,6 +149,7 @@ router.get('/star/:id', userPrivileges.ensureAuthenticated, function (req, res) 
         });
     });
 });
+
 router.get('/unstar/:id', userPrivileges.ensureAuthenticated, function (req, res) {// Get id from url
     var id = req.params.id;
 
@@ -169,7 +174,6 @@ router.get('/unstar/:id', userPrivileges.ensureAuthenticated, function (req, res
         });
     });
 });
-
 
 //TODO: User Images
 //TODO: A "Back to Inbox" button
@@ -227,6 +231,7 @@ router.get('/id/:id', userPrivileges.ensureAuthenticated, function(req, res) {
         });
     });
 });
+
 router.get('/sent/:id', userPrivileges.ensureAuthenticated, function(req, res) {
     // Get id from url
     var id = req.params.id;
@@ -319,6 +324,7 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
         });
     });
 });
+
 router.get('/offers', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, req.user, function(data){
@@ -351,6 +357,7 @@ router.get('/offers', userPrivileges.ensureAuthenticated, function (req, res) {
         });
     });
 });
+
 router.get('/starred', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, req.user, function(data){
@@ -391,6 +398,7 @@ router.get('/starred', userPrivileges.ensureAuthenticated, function (req, res) {
         });
     });
 });
+
 router.get('/sent', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, req.user, function(data){
@@ -429,6 +437,7 @@ router.get('/sent', userPrivileges.ensureAuthenticated, function (req, res) {
         });
     });
 });
+
 router.get('/deleted', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, req.user, function(data){

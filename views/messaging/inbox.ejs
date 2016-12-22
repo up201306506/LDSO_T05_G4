@@ -5,76 +5,63 @@
 
     <% include ../templates/header.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/messaging/inbox.css">
-
 </head>
 <body>
 <% include ../templates/navbar.ejs %>
 <% include ../templates/alert_messages.ejs %>
 
-<div class="container"id="main_body">
+<div class="container">
     <div class=row">
-        <!-- 3/9 2/10  Buttons on the Left, Inbox on the Right-->
-        <!-- Buttons -->
-        <div class="col-sm-3 col-md-2">
-            <!-- New Message Button -->
-            <a href="#" class="btn btn-danger btn-sm btn-block" role="button" data-toggle="modal" data-target="#myModal" id="btn_New_Message">New Message</a>
+        <div class="col-md-2 text-center">
+            <h3 id="side-title" style="margin-top: 0px;">Opções</h3>
             <hr>
-            <!-- Bottom Buttons -->
-            <ul class="nav nav-pills nav-stacked">
-                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href=" <%= inboxType=="Inbox" ? "#" : "./inbox"%> "><%- newMessages ? '<span class="badge pull-right">New</span>' : '' %>Inbox </a></li>
-                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href=" <%= inboxType=="Offers" ? "#" : "./offers"%> ">Offers</a></li>
-                <li <%if(inboxType=="Important"){%> class="active" <%}%> ><a href=" <%= inboxType=="Important" ? "#" : "./starred"%> ">Important</a></li>
-                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href=" <%= inboxType=="Sent" ? "#" : "./sent"%> ">Sent Mail</a></li>
-                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href=" <%= inboxType=="Deleted" ? "#" : "./deleted"%> ">Deleted</a></li>
+            <a href="/" class="btn btn-default btn-sm btn-block">Voltar</a>
+            <a href="#" class="btn btn-danger btn-sm btn-block" role="button" data-toggle="modal" data-target="#myModal" id="btn_New_Message">Nova Mensagem</a>
+            <hr>
+            <ul class="nav nav-pills nav-stacked" style="margin-top: 15px;">
+                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href=" <%= inboxType=="Inbox" ? "#" : "./inbox"%> "><%- newMessages ? '<span class="glyphicon glyphicon-exclamation-sign pull-right" style="margin-left: 5px;"></span>' : '' %>Mensagens</a></li>
+                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href=" <%= inboxType=="Offers" ? "#" : "./offers"%> ">Ofertas</a></li>
+                <li <%if(inboxType=="Important"){%> class="active" <%}%> ><a href=" <%= inboxType=="Important" ? "#" : "./starred"%> ">Importantes</a></li>
+                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href=" <%= inboxType=="Sent" ? "#" : "./sent"%> ">Enviadas</a></li>
+                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href=" <%= inboxType=="Deleted" ? "#" : "./deleted"%> ">Removidas</a></li>
             </ul>
         </div>
 
-        <!-- Inbox -->
-        <div class="col-sm-9 col-md-10" >
-            <!-- Header -->
-            <div id=Inbox_Header">
-                <!-- Mark Read Button -->
-                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Mark all as Read" onclick="location.href = './inbox/markAllRead';">Mark all as Read</button>
-                <!-- Refresh Button -->
-                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Refresh" onclick="location.reload();">
-                    &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;&nbsp;</button>
-                <!-- Title -->
-                <h2><%= user %>'s Inbox</h2>
-                <hr>
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h3 style="margin-top: 0px;">Mensagens de <%= user %></h3>
+                </div>
+
+                <div class="col-sm-4 pull-right">
+                    <button type="button" class="btn btn-default btn-sm pull-right" onclick="location.href = './inbox/markAllRead';">Marcar Todas Como Lidas</button>
+                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="tooltip" title="Actualizar" onclick="location.reload();" style="margin-right: 5px;"><span class="glyphicon glyphicon-refresh"></span></button>
+                </div>
             </div>
 
-
-            <!-- Contents -->
-            <ul class="list-group" id="Inbox_Contents">
-
-                <% for(var i = 0; i < userMessages.length; i++) { %>
-                    <li class="list-group-item message_item <%if(!userMessages[i].read){%>active<%}%>">
-                        <!-- Star -->
+            <div class="row" style="margin-top: 10px;">
+                <div class="list-group col-sm-12">
+                    <% for(var i = 0; i < userMessages.length; i++) { %>
+                    <li class="list-group-item <%if(!userMessages[i].read){%>active<%}%>">
                         <a href="#"><span class="glyphicon glyphicon-star<%= userMessages[i].starred ? "" : "-empty" %>" star_id="<%= userMessages[i]._id %>" onclick="toggleStar(this)"></span></a>
-                        <!-- Other User's Name -->
+
                         <a href="./<%= inboxType=="Sent" ? "sent" : "id" %>/<%=  userMessages[i]._id %>">
                             <div class="message_sender_username">
                                 <%if(inboxType == "Sent") {%>
-                                <span class="message_sender_username_text"><%= userMessages[i].receiver %></span>
+                                <b><%= userMessages[i].receiver %></b>
                                 <%} else {%>
-                                <span class="message_sender_username_text"><%= userMessages[i].sender %></span>
+                                <b><%= userMessages[i].sender %></b>
                                 <% } %>
                             </div>
+
                             <div class="message_preview">
-                                <!-- Message Subject -->
                                 <span class="message_subject"><%= userMessages[i].subject %></span>
-                                <!-- Message Preview -->
-                                <span class="message_preview_text hidden-xs hidden-sm"> - <%= userMessages[i].content %></span>
+                                <span class="message_preview_text hidden-xs hidden-sm hidden-md"> - <%= userMessages[i].content %></span>
                             </div>
                         </a>
 
                         <div class="pull-right">
-                            <!-- Type -->
-                            <span class="glyphicon glyphicon-<%= userMessages[i].type %>"
-                                  data-toggle="tooltip" data-placement="left" title="<%= userMessages[i].typePopup %>"></span>
-                            <!-- Receive Date -->
-                            <span class="badge" title="<%= userMessages[i].date.toUTCString() %>"><%= userMessages[i].date.getDate() + "/" + userMessages[i].date.getMonth() + "/" + userMessages[i].date.getFullYear() %></span>
-                            <!-- Trash Can -->
+                            <span class="badge hidden-xs" title="<%= userMessages[i].date.toUTCString() %>"><%= userMessages[i].date.getDate() + "/" + userMessages[i].date.getMonth() + "/" + userMessages[i].date.getFullYear() %></span>
                             <% if(inboxType == 'Deleted'){ %>
                             <a href="#"><span class="glyphicon glyphicon-share-alt" onclick="recycleButton(this)" delete_id="<%= userMessages[i]._id %>"
                                               data-toggle="tooltip" data-placement="left" title="Restore Message"></span></a>
@@ -84,12 +71,11 @@
                             <% } %>
                         </div>
                     </li>
-                <% } %>
-
-            </ul>
+                    <% } %>
+                </div>
+            </div>
         </div>
 
-        <!-- Page Navigation  -->
         <div class="pull-right" id="Inbox_Navigation">
             <span id="navigation_text">Page: <muted><b>1</b> of <b>5</b></muted> </span>
             <div class="btn-group">
