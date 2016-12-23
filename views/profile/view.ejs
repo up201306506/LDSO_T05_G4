@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <div class="form-group well-bottom">
                             <label class="control-label" for="email">Email</label>
                             <input type="text" name="email" class="form-control" id="email"
@@ -87,7 +87,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-3">
                         <div class="form-group well-bottom">
                             <label class="control-label" for="phone">Contacto</label>
                             <input type="text" name="phone" class="form-control" id="phone"
@@ -99,8 +99,42 @@
                                    disabled>
                         </div>
                     </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group well-bottom">
+                            <a class="btn btn-default btn-block" href="/" style="width: 100%; margin-top: 25px;">Voltar</a>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <h1>Histórico</h1>
+            <% for(var index = 0; index < offerArr.length; index++) { %>
+            <div class="well">
+                <div class="offer-head">
+                    <span>Criado por: <a href="/profile/<%= offerArr[index].username %>"><%= offerArr[index].username %></a></span><br>
+                    <span>Criado em: <a href="/community/<%= offerArr[index].communityName %>"><%= offerArr[index].communityName %></a></span>
+                </div>
+
+                <div class="row offer-content">
+                    <div class="col-sm-4">
+                        <img class="img-responsive visible-md visible-lg" src="<% if(offerArr[index].imageDir != null && offerArr[index].imageDir != ''){ %>/images/offers/<%= offerArr[index].imageDir %><% }else{ %>http://placehold.it/420x320<% } %>"/>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <p class="lead">
+                            <a href="/view_offer/<%= offerArr[index]._id %>"><%= offerArr[index].title %></a>
+                        </p>
+                        <%= offerArr[index].description %>
+                    </div>
+                </div>
+
+                <div class="row offer-footer">
+                    <a class="btn btn-default pull-right" href="/view_offer/<%= offerArr[index]._id %>">Ver detalhes</a>
+                    <h6 class="pull-right" style="margin-right: 20px;">Preço: <%= offerArr[index].price %><span class="glyphicon glyphicon-gift" style="margin-left: 5px;"></span></h6>
+                </div>
+            </div>
+            <% } %>
         </div>
 
         <div class="col-sm-3">

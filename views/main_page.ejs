@@ -13,21 +13,40 @@
 <div class="container">
     <div class="row">
         <div class="col-md-2">
-            <div id="side-panel" class="text-center">
-                <h3 id="side-title">Comunidades</h3>
-                <a class="btn btn-primary" href="/create_community">Criar comunidade</a>
+            <div id="side-panel">
+                <h3 id="side-title">Utilizador</h3>
+                <h5><b style="margin-right: 15px;">Username:</b><%= user %></h5>
+                <br>
+                <h3 id="side-title">Estatísticas</h3>
+                <h5><b style="margin-right: 15px;">Mensagens Enviadas:</b><%= sentArray.length %></h5>
+                <h5><b style="margin-right: 15px;">Mensagens Recebidas:</b><%= receivedArray.length %></h5>
+                <h5><b style="margin-right: 15px;">Ofertas criadas:</b> <%= offerArr.length %></h5>
+                <h5><b style="margin-right: 15px;">Comunidades:</b> <%= communityArr.length %></h5>
             </div>
-
-            <ul class="list-group">
-                <% for(var index = 0; index < communityArr.length; index++) { %>
-                <li class="list-group-item text-center">
-                    <a href="/community/<%= communityArr[index].name %>"><%= communityArr[index].name %></a>
-                </li>
-                <% } %>
-            </ul>
         </div>
 
-        <div class="col-md-10">
+        <div class="col-md-8">
+            <h3 id="side-title">Comunidades</h3>
+            <% for(var index = 0; index < communityArr.length; index++) { %>
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="lead" href="/community/<%= communityArr[index].name %>"><%= communityArr[index].name %></a>
+                        <p><%= communityArr[index].description %></p>
+                        <h6 class="offer-footer">
+                            Comunidade <%= communityArr[index].privacy %>,
+                            <% if(communityArr[index].useCoin) { %>
+                            com uso de moeda de troca - <b style="font-size: 16px;"><%= communityArr[index].coinName %></b>
+                            <% } else { %>
+                            sem uso de moeda de troca
+                            <% } %>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+            <h3 id="side-title">Minhas Ofertas</h3>
             <% for(var index = 0; index < offerArr.length; index++) { %>
             <div class="well">
                 <div class="offer-head">
@@ -49,17 +68,21 @@
                 </div>
 
                 <div class="row offer-footer">
+                    <a class="btn btn-default pull-right" href="/delete_offer/<%= offerArr[index]._id %>">Eliminar</a>
                     <a class="btn btn-default pull-right" href="/view_offer/<%= offerArr[index]._id %>">Ver detalhes</a>
                     <h6 class="pull-right" style="margin-right: 20px;">Preço: <%= offerArr[index].price %><span class="glyphicon glyphicon-gift" style="margin-left: 5px;"></span></h6>
                 </div>
             </div>
             <% } %>
+        </div>
 
-            <ul class="pagination">
-                <% for(var pageNmr = 1; pageNmr <= nPages; pageNmr++){ %>
-                <li <% if(pageNmr==thisPage){ %> class="active" <% } %> ><a href="/?page=<%= pageNmr %>"><%= pageNmr %></a></li>
-                <% } %>
-            </ul>
+        <div class="col-md-2 text-center">
+            <h3 id="side-title">Atalhos</h3>
+            <a class="btn btn-primary btn-block" href="/profile/<%= user %>">Meu Perfil</a>
+            <a class="btn btn-primary btn-block" href="/message/inbox">Minhas Mensagens</a>
+            <a class="btn btn-primary btn-block" href="/create_community">Criar Comunidade</a>
+            <a class="btn btn-primary btn-block" href="/my_communities">Minhas Comunidades</a>
+            <a class="btn btn-default btn-block btn-sm" href="/faq">FAQ</a>
         </div>
     </div>
 </div>

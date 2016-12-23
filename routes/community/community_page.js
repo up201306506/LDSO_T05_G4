@@ -12,8 +12,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
 
     // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
-
-        //Verifica em que página está
+        // Verifies the page the user is in
         var page = req.query.page;
         if(!page){
             page = 1;
@@ -34,7 +33,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                         //Verifies if user is admin
                         communityController.isAdmin(db, communityName, req.user, function (admin) {
                             // Get this community offers
-                            offerController.getCommunityOffers(db, communityName, range, function (offers, totalOffersCount) {
+                            offerController.getActiveOffers(db, communityName, range, function (offers, totalOffersCount) {
                                 db.close();
                                 // If user is not enrolled in the community and had already requested to join
                                 if (community == false && requestdone == true) {
@@ -42,10 +41,14 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                         {
                                             communityName: communityName,
                                             communityinfo: result.description,
+                                            offerArr: [],
                                             privacy: privacy,
                                             enrolled: 0,
                                             pedido: 1,
-                                            admin: admin
+                                            admin: admin,
+                                            nPages: Math.ceil(totalOffersCount/2),
+                                            thisPage: page,
+                                            user: req.user
                                         });
                                 // If user is not enrolled in the community and still hasn't requested to join
                                 } else if (community == false && requestdone == false) {
@@ -53,10 +56,14 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                         {
                                             communityName: communityName,
                                             communityinfo: result.description,
+                                            offerArr: [],
                                             privacy: privacy,
                                             enrolled: 0,
                                             pedido: 0,
-                                            admin: admin
+                                            admin: admin,
+                                            nPages: Math.ceil(totalOffersCount/2),
+                                            thisPage: page,
+                                            user: req.user
                                         });
                                 // If user is enrolled in the community
                                 } else {
@@ -74,7 +81,8 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                                 admin: admin,
                                                 nPages: Math.ceil(totalOffersCount/2),
                                                 thisPage: page,
-                                                requests: 1
+                                                requests: 1,
+                                                user: req.user
                                             });
                                     // if there aren't any requests to join community
                                     } else {
@@ -89,7 +97,8 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                                 admin: admin,
                                                 nPages: Math.ceil(totalOffersCount / 2),
                                                 thisPage: page,
-                                                requests: 0
+                                                requests: 0,
+                                                user: req.user
                                             });
                                     }
                                 }
@@ -98,33 +107,11 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                     });
                 });
             });
-
-            // Get this community offers
-            /*offerController.getCommunityOffers(db, communityName, range, function (offers, totalOffersCount) {
-                db.close();
-
-                // If user is not enrolled in the community, no community should have been returned
-                if (community == null) {
-                    res.redirect('/');
-                } else {
-                    res.render('community/community_page',
-                        {
-                            communityName: communityName,
-                            offerArr: offers,
-                            nPages: Math.ceil(totalOffersCount/2),
-                            thisPage: page
-                        });
-                }
-            });*/
-
         });
-
-
     });
 });
 
 
-// O post ainda não está a dar
 router.get('/:communityName/join_community/', userPrivileges.ensureAuthenticated, function (req, res, next) {
 // GET community name from url
     var communityName = String(req.params.communityName);

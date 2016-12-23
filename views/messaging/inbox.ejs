@@ -5,142 +5,123 @@
 
     <% include ../templates/header.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/messaging/inbox.css">
-
 </head>
 <body>
 <% include ../templates/navbar.ejs %>
 <% include ../templates/alert_messages.ejs %>
 
-<div class="container"id="main_body">
+<div class="container">
     <div class=row">
-        <!-- 3/9 2/10  Buttons on the Left, Inbox on the Right-->
-        <!-- Buttons -->
-        <div class="col-sm-3 col-md-2">
-            <!-- New Message Button -->
-            <a href="#" class="btn btn-danger btn-sm btn-block" role="button" data-toggle="modal" data-target="#myModal" id="btn_New_Message">New Message</a>
+        <div class="col-md-2 text-center">
+            <h3 id="side-title" style="margin-top: 0px;">Opções</h3>
             <hr>
-            <!-- Bottom Buttons -->
-            <ul class="nav nav-pills nav-stacked">
-                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href=" <%= inboxType=="Inbox" ? "#" : "./inbox"%> "><%- newMessages ? '<span class="badge pull-right">New</span>' : '' %>Inbox </a></li>
-                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href=" <%= inboxType=="Offers" ? "#" : "./offers"%> ">Offers</a></li>
-                <li <%if(inboxType=="Important"){%> class="active" <%}%> ><a href=" <%= inboxType=="Important" ? "#" : "./starred"%> ">Important</a></li>
-                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href=" <%= inboxType=="Sent" ? "#" : "./sent"%> ">Sent Mail</a></li>
-                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href=" <%= inboxType=="Deleted" ? "#" : "./deleted"%> ">Deleted</a></li>
+            <a href="/" class="btn btn-default btn-sm btn-block">Voltar</a>
+            <a href="#" class="btn btn-danger btn-sm btn-block" role="button" data-toggle="modal" data-target="#myModal" id="btn_New_Message">Nova Mensagem</a>
+            <hr>
+            <ul class="nav nav-pills nav-stacked" style="margin-top: 15px;">
+                <li <%if(inboxType=="Inbox"){%> class="active" <%}%> ><a href=" <%= inboxType=="Inbox" ? "#" : "./inbox?pagina=1"%> "><%- newMessages ? '<span class="glyphicon glyphicon-exclamation-sign pull-right" style="margin-left: 5px;"></span>' : '' %>Mensagens</a></li>
+                <li <%if(inboxType=="Offers"){%> class="active" <%}%> ><a href=" <%= inboxType=="Offers" ? "#" : "./offers?pagina=1"%> ">Ofertas</a></li>
+                <li <%if(inboxType=="Important"){%> class="active" <%}%> ><a href=" <%= inboxType=="Important" ? "#" : "./starred?pagina=1"%> ">Importantes</a></li>
+                <li <%if(inboxType=="Sent"){%> class="active" <%}%> ><a href=" <%= inboxType=="Sent" ? "#" : "./sent?pagina=1"%> ">Enviadas</a></li>
+                <li <%if(inboxType=="Deleted"){%> class="active" <%}%> ><a href=" <%= inboxType=="Deleted" ? "#" : "./deleted?pagina=1"%> ">Removidas</a></li>
             </ul>
         </div>
 
-        <!-- Inbox -->
-        <div class="col-sm-9 col-md-10" >
-            <!-- Header -->
-            <div id=Inbox_Header">
-                <!-- Mark Read Button -->
-                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Mark all as Read" onclick="location.href = './inbox/markAllRead';">Mark all as Read</button>
-                <!-- Refresh Button -->
-                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" title="Refresh" onclick="location.reload();">
-                    &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;&nbsp;</button>
-                <!-- Title -->
-                <h2><%= user %>'s Inbox</h2>
-                <hr>
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h3 style="margin-top: 0px;">Mensagens de <%= user %></h3>
+                </div>
+
+                <div class="col-sm-4 pull-right">
+                    <button type="button" class="btn btn-default btn-sm pull-right" onclick="location.href = './inbox/markAllRead';">Marcar Todas Como Lidas</button>
+                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="tooltip" title="Actualizar" onclick="location.reload();" style="margin-right: 5px;"><span class="glyphicon glyphicon-refresh"></span></button>
+                </div>
             </div>
 
-
-            <!-- Contents -->
-            <ul class="list-group" id="Inbox_Contents">
-
-                <% for(var i = 0; i < userMessages.length; i++) { %>
-                    <li class="list-group-item message_item <%if(!userMessages[i].read){%>active<%}%>">
-                        <!-- Star -->
+            <div class="row" style="margin-top: 10px;">
+                <div class="list-group col-sm-12">
+                    <% for(var i = 0; i < userMessages.length; i++) { %>
+                    <li class="list-group-item <%if(!userMessages[i].read){%>active<%}%>">
                         <a href="#"><span class="glyphicon glyphicon-star<%= userMessages[i].starred ? "" : "-empty" %>" star_id="<%= userMessages[i]._id %>" onclick="toggleStar(this)"></span></a>
-                        <!-- Other User's Name -->
+
                         <a href="./<%= inboxType=="Sent" ? "sent" : "id" %>/<%=  userMessages[i]._id %>">
                             <div class="message_sender_username">
                                 <%if(inboxType == "Sent") {%>
-                                <span class="message_sender_username_text"><%= userMessages[i].receiver %></span>
+                                <b><%= userMessages[i].receiver %></b>
                                 <%} else {%>
-                                <span class="message_sender_username_text"><%= userMessages[i].sender %></span>
+                                <b><%= userMessages[i].sender %></b>
                                 <% } %>
                             </div>
+
                             <div class="message_preview">
-                                <!-- Message Subject -->
                                 <span class="message_subject"><%= userMessages[i].subject %></span>
-                                <!-- Message Preview -->
-                                <span class="message_preview_text hidden-xs hidden-sm"> - <%= userMessages[i].content %></span>
+                                <span class="message_preview_text hidden-xs hidden-sm hidden-md"> - <%= userMessages[i].content %></span>
                             </div>
                         </a>
 
                         <div class="pull-right">
-                            <!-- Type -->
-                            <span class="glyphicon glyphicon-<%= userMessages[i].type %>"
-                                  data-toggle="tooltip" data-placement="left" title="<%= userMessages[i].typePopup %>"></span>
-                            <!-- Receive Date -->
-                            <span class="badge" title="<%= userMessages[i].date.toUTCString() %>"><%= userMessages[i].date.getDate() + "/" + userMessages[i].date.getMonth() + "/" + userMessages[i].date.getFullYear() %></span>
-                            <!-- Trash Can -->
+                            <span class="badge hidden-xs" title="<%= userMessages[i].date.toUTCString() %>"><%= userMessages[i].date.getDate() + "/" + userMessages[i].date.getMonth() + "/" + userMessages[i].date.getFullYear() %></span>
                             <% if(inboxType == 'Deleted'){ %>
                             <a href="#"><span class="glyphicon glyphicon-share-alt" onclick="recycleButton(this)" delete_id="<%= userMessages[i]._id %>"
-                                              data-toggle="tooltip" data-placement="left" title="Restore Message"></span></a>
+                                              data-toggle="tooltip" data-placement="left" title="Restaurar Mensagem"></span></a>
                             <%} else {%>
                             <a href="#"><span class="glyphicon glyphicon-trash" onclick="trashCanButton(this)" delete_id="<%= userMessages[i]._id %>"
-                                              data-toggle="tooltip" data-placement="left" title="Delete"></span></a>
+                                              data-toggle="tooltip" data-placement="left" title="Apagar" style="margin-left: 15px;"></span></a>
                             <% } %>
                         </div>
                     </li>
-                <% } %>
-
-            </ul>
+                    <% } %>
+                </div>
+            </div>
         </div>
 
-        <!-- Page Navigation  -->
         <div class="pull-right" id="Inbox_Navigation">
-            <span id="navigation_text">Page: <muted><b>1</b> of <b>5</b></muted> </span>
+            <span id="navigation_text">Página: <muted><b><%= page %></b> of <b><%= maxPage %></b></muted> </span>
             <div class="btn-group">
-                <button type="button" class="btn btn-default"><</button>
-                <button type="button" class="btn btn-default">></button>
+                <button type="button" class="btn btn-default" onclick="location.href = location.href.replace(location.search, '') + '?pagina=<%= page == 1 ? 1 : page-1 %>';"><</button>
+                <button type="button" class="btn btn-default" onclick="location.href = location.href.replace(location.search, '') + '?pagina=<%= page == maxPage ? maxPage : Number(page)+1 %>';">></button>
             </div>
         </div>
 
     </div>
 </div>
 
-<!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-        <!-- Modal content-->
         <div class="modal-content">
             <form id="New_Message_Form" class="form-horizontal" role="form" action="/message/new" method="post">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4><span class="glyphicon glyphicon-envelope"></span> Send a New Message</h4>
-            </div>
-            <div class="modal-body">
+                <div class="modal-header">
+                    <h4><span style="margin-right: 15px;" class="glyphicon glyphicon-envelope"></span>Escrever Nova Mensagem</h4>
+                </div>
+                <div class="modal-body">
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="compose_recipient">To:</label>
+                        <label class="control-label col-sm-2" for="compose_recipient">Para</label>
                         <div class="col-sm-10">
                             <input name="receiver" type="text" class="form-control" id="compose_recipient" placeholder="The username field needs a typeahead implementation">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="compose_subject">Subject:</label>
+                        <label class="control-label col-sm-2" for="compose_subject">Assunto</label>
                         <div class="col-sm-10">
-                            <input name="subject" type="text" class="form-control" id="compose_subject" placeholder="Enter Subject">
+                            <input name="subject" type="text" class="form-control" id="compose_subject" placeholder="Assunto da Mensagem">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="compose_type">Type:</label>
+                        <label class="control-label col-sm-2" for="compose_type">Tipo</label>
                         <div class="col-sm-10">
                             <select id="compose_type" class="form-control" disabled="true">
-                                <option value="Conversation" selected>Conversation</option>
-                                <option value="Offer">Offer</option>
+                                <option value="Conversation" selected>Conversa</option>
+                                <option value="Offer">Oferta</option>
                             </select>
                             <input name="type" value="conversation" hidden>
                         </div>
                     </div>
 
-
                     <!-- TextArea Input. If you're reading this, go HERE: http://mindmup.github.io/bootstrap-wysiwyg/ -->
-
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="compose_subject">Message:</label>
+                        <label class="control-label col-sm-2" for="compose_subject">Mensagem</label>
                         <div class="col-sm-10">
                             <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
                                 <div class="btn-group" id="editor-buttons">
@@ -150,8 +131,8 @@
                                     <a class="btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><u>U</u></a>
                                 </div>
                                 <div class="btn-group">
-                                    <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)">Undo</a>
-                                    <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)">Redo</a>
+                                    <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)">Desfazer</a>
+                                    <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)">Refazer</a>
                                 </div>
                             </div>
                             <div class="">
@@ -160,11 +141,12 @@
                             <input id="content_input" name="content" value="" hidden>
                         </div>
                     </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-default" onclick="sendMessage()">Send</button>
-            </div>
+                </div>
+
+                <div class="text-center" style="margin-bottom: 20px;">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="sendMessage()">Enviar</button>
+                </div>
             </form>
         </div>
 
@@ -208,6 +190,7 @@
     function trashCanButton(element){
         //console.log($(element).attr('delete_id'));
 
+        /*
         var red = $(element).attr('red');
         if (!(typeof red !== typeof undefined && red !== false)) {
             $(element).attr('red', true);
@@ -215,10 +198,13 @@
         } else {
             window.location.href = "/message/delete/"+$(element).attr('delete_id');
         }
+        */
+        window.location.href = "/message/delete/"+$(element).attr('delete_id');
     }
     function recycleButton(element){
         //console.log($(element).attr('delete_id'));
 
+        /*
         var green = $(element).attr('green');
         if (!(typeof green !== typeof undefined && green !== false)) {
             $(element).attr('green', true);
@@ -226,6 +212,8 @@
         } else {
             window.location.href = "/message/undelete/"+$(element).attr('delete_id');
         }
+        */
+        window.location.href = "/message/undelete/"+$(element).attr('delete_id');
     }
 </script>
 

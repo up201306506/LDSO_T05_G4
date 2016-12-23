@@ -23,7 +23,7 @@ module.exports = {
         //add message to collection
         messages.insertOne({sender:sender, receiver:receiver, subject:subject, content:content, read:false, starred:false, date:date, type:type, deleted:false},
             function (err,result) {
-                console.log('Inserted 1 document into the db');
+                //console.log('Inserted 1 document into the db');
                 callback(result);
             });
     },
@@ -187,5 +187,4 @@ module.exports = {
             callback(result);
         });
     }
-
-}
+};

@@ -8,52 +8,26 @@ var express = require('express'),
 
 router.post('/search', userPrivileges.ensureAuthenticated, function (req, res) {
 
+    // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
+        // Gets all non secret communities
+        communityController.getAllCommunities(db, req.body.search, false, function (communities) {
+            // Gets all users
+            userController.getAllUsers(db, req.body.search, function (users) {
+                // Closes db
+                db.close();
 
-        req.checkBody('search','Nada para procurar').notEmpty();
-
-        var errors = req.validationErrors();
-        console.log(req.body.search);
-        if(!errors)
-        {
-            communityController.getPublicAndPrivateCommunity(db, req.body.search, function (communities) {
-                userController.getAllUsers(db,req.body.search, function (users) {
-                    db.close();
-                    if (communities == null) {
-                        res.redirect('/');
-                    } else {
-                        res.render('search_results',
-                            {
-                                title: 'Local Exchange - Search_Results',
-                                communities: communities,
-                                users: users
-                            });
-                    }
-                });
-
+                // Renders the page
+                res.render('search_results',
+                    {
+                        title: 'Local Exchange - Página de resultados',
+                        term: req.body.search,
+                        communities: communities,
+                        users: users
+                    });
             });
-        }
-    });
-
-
-
-    //res.render('search_results', { title: 'Local Exchange - Search_Results' });
-});
-
-    /*mongo.connect(configDB.url, function (err, db) {
-        assert.equal(null, err);
-        db.collection('community').findOne({username: username, password: password}, function (err, user) {
-            if (err) {
-                console.log(err);
-            }
-            else if (user) {
-                return done(null, user.username);
-            }
-            else {
-                return done(null, false, {message: 'Credenciais inválidas'});
-            }
-            db.close();
         });
-    });*/
+    });
+});
 
 module.exports = router;

@@ -1,83 +1,43 @@
-body { margin-top: 75px;font: 14px Geneva, Helvetica, Arial, sans-serif;  background-color: lightsteelblue;}
+hr {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
 
-hr  {  margin-top: 10px;    margin-bottom: 20px;}
-
-#main_body {    background-color: white;  }
-
-#btn_New_Message{    margin-top: 5px;}
-
-#Inbox_Header {}
-
-#Inbox_Contents{    margin-top: 25px;}
-.message_item{    overflow:hidden}
-li > a:hover, li > a, li > .pull-right > a{
+li > a:hover, li > a, li > .pull-right > a {
     color: inherit;
     text-decoration: none;
 }
-.message_sender_username{
-    width: 180px;
-    margin-right: 25px;
+
+.message_sender_username {
+    width: 90px;
+    margin-left: 10px;
     display: inline-block;
-    vertical-align: top;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
-.message_sender_username_text{    font-weight: bold;}
-.message_subject{}
-.message_preview{
-    min-width: 80px;
-    max-width: 400px;
-    margin-right: 25px;
+
+.message_preview {
+    max-width: 550px;
     display: inline-block;
-    vertical-align: top;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
-.message_preview_text{
+
+.message_preview_text {
     font-size: smaller;
     color: #999999;
 }
 
-
-#Inbox_Navigation{
-    vertical-align: top;
-    /* Grids have a padding of 15px, doing the same for alignment reasons */
-    padding: 0px 15px 15px 0px;
-}
-#navigation_text{}
-
-.tooltip{
-    background-color: transparent;
-    color:green;
-}
-
 .modal-header, h4, .close {
-    background-color: #00B7FF;
-    color:white;
     text-align: center;
-    font-size: 30px;
+    font-size: 20px;
 }
-.modal-footer {
-    background-color: #00B7FF;
-}
-#editor {overflow: auto; max-height:700px; height: 300px;
+
+#editor {
+    overflow: auto;
+    height: 200px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-#editor-buttons{
-
-}
-
-/* If you want to see the page's grid*/
-/*
-.col-md-2 {
-    border: 1px solid blue;
-}
-.col-md-10 {
-    border: 1px solid blue;
-}
-#main_body{
-    border: dotted 2px crimson;
-*/
