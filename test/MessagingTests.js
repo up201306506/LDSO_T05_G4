@@ -1,6 +1,7 @@
 var assert = require('assert');
 var mongo = require('mongodb').MongoClient;
 var messagingController = require("./../controllers/MessageController.js");
+var userController = require("./../controllers/UserController.js");
 
 describe('Messaging', function() {
 	this.timeout(5000);
@@ -79,11 +80,13 @@ describe('Messaging', function() {
 		});
 	});
 
-	
-	it('TODO - This requires more tests', function() {
-	});	
-	
-	
+	//===================
+
+	it('TODO - This requires more tests', function(done) {
+		done();
+	});
+
+
 	//===================
 	
 });
