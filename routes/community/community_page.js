@@ -36,12 +36,12 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                             // Get this community offers
                             offerController.getCommunityOffers(db, communityName, range, function (offers, totalOffersCount) {
                                 db.close();
-
                                 // If user is not enrolled in the community and had already requested to join
                                 if (community == false && requestdone == true) {
                                     res.render('community/community_page',
                                         {
                                             communityName: communityName,
+                                            communityinfo: result.description,
                                             privacy: privacy,
                                             enrolled: 0,
                                             pedido: 1,
@@ -52,6 +52,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                     res.render('community/community_page',
                                         {
                                             communityName: communityName,
+                                            communityinfo: result.description,
                                             privacy: privacy,
                                             enrolled: 0,
                                             pedido: 0,
@@ -59,17 +60,38 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                         });
                                 // If user is enrolled in the community
                                 } else {
-                                    res.render('community/community_page',
-                                        {
-                                            communityName: communityName,
-                                            offerArr: offers,
-                                            privacy: privacy,
-                                            enrolled: 1,
-                                            pedido: 2,
-                                            admin: admin,
-                                            nPages: Math.ceil(totalOffersCount/2),
-                                            thisPage: page
-                                        });
+                                    // if there are any requests to join community, send information to appear button
+                                    if(result.requests.length != 0){
+
+                                        res.render('community/community_page',
+                                            {
+                                                communityName: communityName,
+                                                communityinfo: result.description,
+                                                offerArr: offers,
+                                                privacy: privacy,
+                                                enrolled: 1,
+                                                pedido: 2,
+                                                admin: admin,
+                                                nPages: Math.ceil(totalOffersCount/2),
+                                                thisPage: page,
+                                                requests: 1
+                                            });
+                                    // if there aren't any requests to join community
+                                    } else {
+                                        res.render('community/community_page',
+                                            {
+                                                communityName: communityName,
+                                                communityinfo: result.description,
+                                                offerArr: offers,
+                                                privacy: privacy,
+                                                enrolled: 1,
+                                                pedido: 2,
+                                                admin: admin,
+                                                nPages: Math.ceil(totalOffersCount / 2),
+                                                thisPage: page,
+                                                requests: 0
+                                            });
+                                    }
                                 }
                             });
                         });

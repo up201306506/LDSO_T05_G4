@@ -26,7 +26,7 @@
                 <a class="btn btn-primary disabled" style="margin-top:20px" >Pedido enviado</a>
                 <% } else if (privacy == "Pública" && enrolled == 0) { %>
                 <a type="submit" class="btn btn-primary" style="margin-top:20px" href="/community/<%= communityName %>/join_community">Aderir à comunidade</a>
-                <% } else if (privacy == "Privada" && enrolled == 1 && admin==true) { %>
+                <% } else if (privacy == "Privada" && enrolled == 1 && admin==true && requests == 1) { %>
                 <a type="submit" class="btn btn-primary" style="margin-top:20px" href="/accept_requests/<%= communityName %>">Aceitar Pedidos</a>
                 <% } %>
                 <a id="delete-button" class="btn btn-primary" href="/delete_community/<%= communityName %>">Apagar Comunidade</a>
@@ -45,7 +45,11 @@
 
         </div>
 
+        <h3> Descrição e Regras </h3>
+        <pre><%= communityinfo %></pre>
+
         <div class="col-md-10">
+            <h3> Ofertas </h3>
             <% for(var index = 0; index < offerArr.length; index++){ %>
             <div class="well">
                 <div class="offer-head">
@@ -80,6 +84,7 @@
                 <% } %>
             </ul>
         </div>
+
     </div>
 </div>
 </body>
