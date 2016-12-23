@@ -2,7 +2,7 @@ var assert = require('assert');
 var mongo = require('mongodb').MongoClient;
 var offerController = require("./../controllers/OfferController.js");
 
-describe('Users', function() {
+describe('Offers', function() {
 	this.timeout(5000);
 	DBurl = 'mongodb://localhost:27017/test';
 	var db;
@@ -34,7 +34,8 @@ describe('Users', function() {
 	//===================
 	// TESTS
 	//===================
-	it('TODO - This requires more tests', function() {
+	it('TODO - This requires more tests', function(done) {
+		done();
 	});	
 
 	//===================

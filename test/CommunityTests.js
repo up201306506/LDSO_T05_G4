@@ -2,7 +2,7 @@ var assert = require('assert');
 var mongo = require('mongodb').MongoClient;
 var communityController = require("./../controllers/CommunityController.js");
 
-describe('Users', function() {
+describe('Community', function() {
 	this.timeout(5000);
 	DBurl = 'mongodb://localhost:27017/test';
 	var db;
@@ -34,8 +34,9 @@ describe('Users', function() {
 	//===================
 	// TESTS
 	//===================
-	it('TODO - This requires more tests', function() {
-	});	
+	it('TODO - This requires more tests', function(done) {
+		done();
+	});
 
 	//===================
 	
