@@ -112,6 +112,26 @@ module.exports = {
         }
     },
 
+    // Retrieves all information of a community
+    getCommunityData: function (db, communityName, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Search for the community in the tb
+        community.findOne({name: communityName}, function (err, communityData) {
+            assert.equal(err, null);
+
+            // Process the community
+            callback(communityData);
+        });
+    },
+
+
+
+
+
+
+
 
 
 
@@ -214,21 +234,6 @@ module.exports = {
             } else {
                 callback(false);
             }
-        });
-    },
-
-
-    // Retrieves all information of a community
-    getCommunityData: function (db, communityName, callback) {
-        // Get Community collection
-        var community = db.collection('community');
-
-        // Search for the community in the tb
-        community.findOne({name: communityName}, function (err, communityData) {
-            assert.equal(err, null);
-
-            // Process the community
-            callback(communityData);
         });
     },
 

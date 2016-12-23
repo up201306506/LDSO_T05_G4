@@ -22,6 +22,34 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
         var pageSize = 10;
         var range = {from:(pageSize*(page-1)), size:pageSize};
 
+        // Gets the info from the community
+        communityController.getCommunityData(db, communityName, function (community) {
+            // Get this community offers
+            offerController.getCommunityOffers(db, communityName, range, function (offers, totalOffersCount) {
+                // Closes db
+                db.close();
+
+                // Renders page
+                res.render('community/community_page',
+                    {
+                        communityName: community.name,
+                        communityOffice: community.office,
+                        communityDescription: community.description,
+                        communityRules: community.ruleDescription,
+                        useCoin: community.useCoin,
+                        coinName: community.coinName,
+                        privacy: community.privacy,
+                        admins: community.admins,
+                        members: community.members,
+                        offers: offers,
+                        nPages: Math.ceil(totalOffersCount/2),
+                        thisPage: page,
+                        user: req.user
+                    });
+            });
+        });
+
+        /*
         // Verifies if this user is enrolled in this community
         communityController.isUserEnrolledInCommunity(db, req.user, communityName, function (community) {
             // Gets the info from the community
@@ -111,7 +139,11 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                     });
                 });
             });
-        });
+        });*/
+
+
+
+
     });
 });
 
