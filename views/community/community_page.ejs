@@ -22,7 +22,7 @@
                 <h3 id="side-title">Estatísticas</h3>
                 <h5><b style="margin-right: 15px;">Número de Moderadores:</b><%= admins.length %></h5>
                 <h5><b style="margin-right: 15px;">Número de Membros:</b><%= members.length %></h5>
-                <h5><b style="margin-right: 15px;">Número de Ofertas:</b><%= offers.length %></h5>
+                <h5><b style="margin-right: 15px;">Número de Ofertas:</b><%= offerArr.length %></h5>
             </div>
         </div>
 
@@ -45,12 +45,44 @@
                     </div>
                 </div>
             </div>
+
+            <!-- MY CRAP -->
+            <h3 id="side-title">Ofertas</h3>
+            <% if(offerArr.length == 0) { %>
+            <h5> <b style="margin-right: 15px;">Ainda não foram feitas ofertas nesta comunidade.</b></h5>
+            <% } else {for(var index = 0; index < offerArr.length; index++) { %>
+            <div class="well">
+                <div class="offer-head">
+                    <h4 class="offer-title"><a href="/community/<%= offerArr[index].communityName %>"><%= offerArr[index].communityName %></a></h4>
+                    <span>Criado por: <a href="/profile/<%= offerArr[index].username %>"><%= offerArr[index].username %></a></span>
+                </div>
+
+                <div class="row offer-content">
+                    <div class="col-sm-4">
+                        <img class="img-responsive visible-md visible-lg" src="<% if(offerArr[index].imageDir != null && offerArr[index].imageDir != ''){ %>/images/offers/<%= offerArr[index].imageDir %><% }else{ %>http://placehold.it/420x320<% } %>"/>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <p class="lead">
+                            <a href="/view_offer/<%= offerArr[index]._id %>"><%= offerArr[index].title %></a>
+                        </p>
+                        <%= offerArr[index].description %>
+                    </div>
+                </div>
+
+                <div class="row offer-footer">
+                    <a class="btn btn-default pull-right" href="/delete_offer/<%= offerArr[index]._id %>">Eliminar</a>
+                    <a class="btn btn-default pull-right" href="/view_offer/<%= offerArr[index]._id %>">Ver detalhes</a>
+                    <h6 class="pull-right" style="margin-right: 20px;">Preço: <%= offerArr[index].price %><span class="glyphicon glyphicon-gift" style="margin-left: 5px;"></span></h6>
+                </div>
+            </div>
+            <% }} %>
+
         </div>
 
         <div class="col-md-2 text-center">
             <h3 id="side-title">Atalhos</h3>
             <a class="btn btn-primary btn-block" href="/create_offer/<%= communityName %>">Criar Oferta</a>
-            <a class="btn btn-primary btn-block" href="#">Ver Ofertas</a>
             <a class="btn btn-primary btn-block" href="/community_users">Ver Membros</a>
             <a class="btn btn-default btn-block btn-sm" href="/faq">FAQ</a>
         </div>

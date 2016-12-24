@@ -27,7 +27,10 @@
 
         <div class="col-md-8">
             <h3 id="side-title">Comunidades</h3>
-            <% for(var index = 0; index < communityArr.length; index++) { %>
+            <% if(communityArr.length == 0) { %>
+             <h5> <b style="margin-right: 15px;">Atualmente, não estás a participar em nenhuma comunidade.</b></h5>
+            <% } else {
+                for(var index = 0; index < communityArr.length; index++) { %>
             <div class="well">
                 <div class="row">
                     <div class="col-sm-12">
@@ -44,10 +47,12 @@
                     </div>
                 </div>
             </div>
-            <% } %>
+            <% }} %>
 
             <h3 id="side-title">Minhas Ofertas</h3>
-            <% for(var index = 0; index < offerArr.length; index++) { %>
+            <% if(offerArr.length == 0) { %>
+            <h5> <b style="margin-right: 15px;">Ainda não ofereceste nada. De que estás à espera?</b></h5>
+            <% } else {for(var index = 0; index < offerArr.length; index++) { %>
             <div class="well">
                 <div class="offer-head">
                     <h4 class="offer-title"><a href="/community/<%= offerArr[index].communityName %>"><%= offerArr[index].communityName %></a></h4>
@@ -73,7 +78,7 @@
                     <h6 class="pull-right" style="margin-right: 20px;">Preço: <%= offerArr[index].price %><span class="glyphicon glyphicon-gift" style="margin-left: 5px;"></span></h6>
                 </div>
             </div>
-            <% } %>
+            <% }} %>
         </div>
 
         <div class="col-md-2 text-center">

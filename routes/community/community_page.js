@@ -41,7 +41,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                         privacy: community.privacy,
                         admins: community.admins,
                         members: community.members,
-                        offers: offers,
+                        offerArr: offers,
                         nPages: Math.ceil(totalOffersCount/2),
                         thisPage: page,
                         user: req.user
