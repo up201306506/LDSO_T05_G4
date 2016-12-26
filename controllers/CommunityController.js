@@ -249,19 +249,19 @@ module.exports = {
     },
 
     // Edit all information of a community
-    editCommunityData: function (db, communityName, headOffice, category, description, privacy, callback) {
+    editCommunityData: function (db, communityName, headOffice, description, privacy, rules, callback) {
         // Get Community collection
         var community = db.collection('community');
 
         // Update the community in the db
         community.updateOne({name: communityName},
             {
-                $set: {office: headOffice, category: category, description: description, privacy: privacy}
+                $set: {office: headOffice, description: description, privacy: privacy, ruleDescription: rules}
             }, function (err) {
                 assert.equal(err, null);
 
                 // Process the edit
-                callback();
+                callback(true);
             });
     },
 
