@@ -15,7 +15,7 @@
         <div class="col-sm-offset-2 col-sm-8">
             <h1 id="create-title">Editar Comunidade - <%= communityName %></h1>
 
-            <form role="form" action="/edit_community/<%= communityName %>/edit" method="post">
+            <form role="form" action="/edit_community/<%= communityName %>" method="post">
                 <div class="form-group">
                     <label class="control-label" for="communityName">Nome</label>
                     <input type="text" name="communityName" class="form-control" id="communityName"
@@ -35,39 +35,34 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-8">
+                    <div class="col-sm-9">
                         <div class="form-group">
-                            <label class="control-label" for="category">Categoria</label>
-                            <select class="form-control" name="category" id="category">
-                                <% for(var index = 0; index < categoryList.length; index++) { %>
-                                <% if(categoryList[index] == category) { %>
-                                <option value="<%= categoryList[index] %>" selected>
-                                    <%= categoryList[index] %>
+                            <label class="control-label" for="coin">Moeda</label>
+                            <div>
+                                <input type="checkbox" name="useCoin" id="useCoin" style="margin-right: 5px;">Usar moeda, nome:
+                                <input class="form-control" type="text" name="coinName" id="coinName" disabled required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="control-label" for="privacy">Visualização</label>
+                        <div>
+                            <br>
+                            <select class="form-control" name="privacy" id="privacy">
+                                <% for(var index = 0; index < privacyList.length; index++) { %>
+                                <option value="<%= privacyList[index] %>">
+                                    <%= privacyList[index] %>
                                 </option>
-                                <% } else { %>
-                                <option value="<%= categoryList[index] %>">
-                                    <%= categoryList[index] %>
-                                </option>
-                                <% }} %>
+                                <% } %>
                             </select>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-sm-4">
-                        <label class="control-label" for="privacy">Visualização</label>
-                        <select class="form-control" name="privacy" id="privacy">
-                            <% for(var index = 0; index < privacyList.length; index++) { %>
-                            <% if(privacyList[index] == privacy) { %>
-                            <option value="<%= privacyList[index] %>" selected>
-                                <%= privacyList[index] %>
-                            </option>
-                            <% } else { %>
-                            <option value="<%= privacyList[index] %>">
-                                <%= privacyList[index] %>
-                            </option>
-                            <% }} %>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label class="control-label" for="description">Regras da Comunidade:</label>
+                    <textarea class="form-control" name="rules" id="description"
+                              rows="5"><%= rules %></textarea>
                 </div>
 
                 <div class="col-sm-offset-1 col-sm-9">
@@ -80,6 +75,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>
