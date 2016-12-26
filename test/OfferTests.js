@@ -26,6 +26,7 @@ describe('Offers', function() {
 	});	
 	//Runs after all tests in this block
 	after(function() {
+		db.dropDatabase();
 		db.close();
 	});	
 	
