@@ -6,7 +6,7 @@ var express = require('express'),
     communityController = require('./../controllers/CommunityController'),
     userPrivileges = require('./../config/userPrivileges');
 
-router.post('/search', userPrivileges.ensureAuthenticated, function (req, res) {
+router.post('/search', function (req, res) {
 
     // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
