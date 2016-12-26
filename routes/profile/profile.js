@@ -8,7 +8,7 @@ var express = require('express'),
     userPrivileges = require('./../../config/userPrivileges'),
     dropdownList = require('./../../config/dropdownLists');
 
-router.get('/:username', userPrivileges.ensureAuthenticated, function (req, res) {
+router.get('/:username', function (req, res) {
     // GET username from url
     var username = String(req.params.username);
 
