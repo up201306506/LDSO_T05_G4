@@ -126,6 +126,17 @@ module.exports = {
         });
     },
 
+    getCommunityUsers: function (db,communityName, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+        community.findOne({name: communityName},function (err, communityData) {
+            assert.equal(err, null);
+
+            // Process the community
+            callback(communityData);
+        });
+    },
+
 
 
 
@@ -294,7 +305,7 @@ module.exports = {
 
     removeUserFromCommunity: function (db, name, member, callback) {
         var community = db.collection('community');
-        community.updateOne({name: name}, {$pull: {members: member}}, function (err, result) {
+        community.updateOne({name: name}, {$pull: {members: {name:member}}}, function (err, result) {
             assert.equal(err, null);
             console.log("Member removed from community");
             callback(result);

@@ -85,6 +85,7 @@ var webpage_communityUserList = require('./routes/community/community_user_list'
 var webpage_communityOfferList = require('./routes/community/community_offer_list');
 var webpage_accept_requests = require('./routes/community/accept_requests');
 var webpage_deleteCommunity = require('./routes/community/remove_community');
+var webpage_removeCommunityUser = require('./routes/community/remove_community_user');
 // offer
 var webpage_createOffer = require('./routes/offer/create_offer');
 var webpage_viewoffer = require('./routes/offer/viewoffer');
@@ -111,6 +112,7 @@ app.use('/community_users', webpage_communityUserList);
 app.use('/community_offers', webpage_communityOfferList);
 app.use('/accept_requests', webpage_accept_requests);
 app.use('/delete_community', webpage_deleteCommunity);
+app.use('/remove_user', webpage_removeCommunityUser);
 // offer
 app.use('/create_offer', webpage_createOffer);
 app.use('/view_offer', webpage_viewoffer);
