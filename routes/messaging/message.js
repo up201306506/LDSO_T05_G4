@@ -270,6 +270,7 @@ router.get('/sent/:id', userPrivileges.ensureAuthenticated, function(req, res) {
                 receiver: data.receiver,
                 messageReceiver: false,
                 message_type: message_type,
+                date: data.date,
                 tooltip: tooltip,
                 message_subject: data.subject,
                 message_content: data.content,

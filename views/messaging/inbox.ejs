@@ -56,7 +56,6 @@
 
                             <div class="message_preview">
                                 <span class="message_subject"><%= userMessages[i].subject %></span>
-                                <span class="message_preview_text hidden-xs hidden-sm hidden-md"> - <%= userMessages[i].content %></span>
                             </div>
                         </a>
 
@@ -77,7 +76,7 @@
         </div>
 
         <div class="pull-right" id="Inbox_Navigation">
-            <span id="navigation_text">Página: <muted><b><%= page %></b> of <b><%= maxPage %></b></muted> </span>
+            <span id="navigation_text">Página: <muted><b><%= page %></b> de <b><%= maxPage %></b></muted> </span>
             <div class="btn-group">
                 <button type="button" class="btn btn-default" onclick="location.href = location.href.replace(location.search, '') + '?pagina=<%= page == 1 ? 1 : page-1 %>';"><</button>
                 <button type="button" class="btn btn-default" onclick="location.href = location.href.replace(location.search, '') + '?pagina=<%= page == maxPage ? maxPage : Number(page)+1 %>';">></button>
@@ -98,7 +97,7 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="compose_recipient">Para</label>
                         <div class="col-sm-10">
-                            <input name="receiver" type="text" class="form-control" id="compose_recipient" placeholder="The username field needs a typeahead implementation">
+                            <input name="receiver" type="text" class="form-control" id="compose_recipient" placeholder="Nome do Utilizador">
                         </div>
                     </div>
                     <div class="form-group">
@@ -143,7 +142,7 @@
                     </div>
                 </div>
 
-                <div class="text-center" style="margin-bottom: 20px;">
+                <div id="modal-buttons" class="text-center" style="margin-bottom: 20px;">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-success" onclick="sendMessage()">Enviar</button>
                 </div>

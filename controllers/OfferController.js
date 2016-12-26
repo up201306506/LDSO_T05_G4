@@ -2,7 +2,6 @@ var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 
 module.exports = {
-
     // Insert a new offer in the db
     insertOffer: function (db, username, communityName, title, description, price, type, imageDir, isExpired, date, callback) {
         // Get Offer collection
@@ -134,5 +133,4 @@ module.exports = {
                 callback(result);
             });
     }
-
 };

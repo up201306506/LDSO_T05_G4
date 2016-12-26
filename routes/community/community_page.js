@@ -22,6 +22,34 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
         var pageSize = 10;
         var range = {from:(pageSize*(page-1)), size:pageSize};
 
+        // Gets the info from the community
+        communityController.getCommunityData(db, communityName, function (community) {
+            // Get this community offers
+            offerController.getCommunityOffers(db, communityName, range, function (offers, totalOffersCount) {
+                // Closes db
+                db.close();
+
+                // Renders page
+                res.render('community/community_page',
+                    {
+                        communityName: community.name,
+                        communityOffice: community.office,
+                        communityDescription: community.description,
+                        communityRules: community.ruleDescription,
+                        useCoin: community.useCoin,
+                        coinName: community.coinName,
+                        privacy: community.privacy,
+                        admins: community.admins,
+                        members: community.members,
+                        offerArr: offers,
+                        nPages: Math.ceil(totalOffersCount/2),
+                        thisPage: page,
+                        user: req.user
+                    });
+            });
+        });
+
+        /*
         // Verifies if this user is enrolled in this community
         communityController.isUserEnrolledInCommunity(db, req.user, communityName, function (community) {
             // Gets the info from the community
@@ -35,12 +63,13 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                             // Get this community offers
                             offerController.getActiveOffers(db, communityName, range, function (offers, totalOffersCount) {
                                 db.close();
-
                                 // If user is not enrolled in the community and had already requested to join
                                 if (community == false && requestdone == true) {
                                     res.render('community/community_page',
                                         {
                                             communityName: communityName,
+                                            communityinfo: result.description,
+                                            communityrules: result.ruleDescription,
                                             offerArr: [],
                                             privacy: privacy,
                                             enrolled: 0,
@@ -55,6 +84,8 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                     res.render('community/community_page',
                                         {
                                             communityName: communityName,
+                                            communityinfo: result.description,
+                                            communityrules: result.ruleDescription,
                                             offerArr: [],
                                             privacy: privacy,
                                             enrolled: 0,
@@ -66,30 +97,57 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                                         });
                                 // If user is enrolled in the community
                                 } else {
-                                    res.render('community/community_page',
-                                        {
-                                            communityName: communityName,
-                                            offerArr: offers,
-                                            privacy: privacy,
-                                            enrolled: 1,
-                                            pedido: 2,
-                                            admin: admin,
-                                            nPages: Math.ceil(totalOffersCount/2),
-                                            thisPage: page,
-                                            user: req.user
-                                        });
+                                    // if there are any requests to join community, send information to appear button
+                                    if(result.requests.length != 0){
+
+                                        res.render('community/community_page',
+                                            {
+                                                communityName: communityName,
+                                                communityinfo: result.description,
+                                                communityrules: result.ruleDescription,
+                                                offerArr: offers,
+                                                privacy: privacy,
+                                                enrolled: 1,
+                                                pedido: 2,
+                                                admin: admin,
+                                                nPages: Math.ceil(totalOffersCount/2),
+                                                thisPage: page,
+                                                requests: 1,
+                                                user: req.user
+                                            });
+                                    // if there aren't any requests to join community
+                                    } else {
+                                        res.render('community/community_page',
+                                            {
+                                                communityName: communityName,
+                                                communityinfo: result.description,
+                                                communityrules: result.ruleDescription,
+                                                offerArr: offers,
+                                                privacy: privacy,
+                                                enrolled: 1,
+                                                pedido: 2,
+                                                admin: admin,
+                                                nPages: Math.ceil(totalOffersCount / 2),
+                                                thisPage: page,
+                                                requests: 0,
+                                                user: req.user
+                                            });
+                                    }
                                 }
                             });
                         });
                     });
                 });
             });
-        });
+        });*/
+
+
+
+
     });
 });
 
 
-// O post ainda não está a dar
 router.get('/:communityName/join_community/', userPrivileges.ensureAuthenticated, function (req, res, next) {
 // GET community name from url
     var communityName = String(req.params.communityName);
