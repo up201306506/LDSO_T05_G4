@@ -5,3 +5,19 @@
 .well-bottom {
     margin-bottom: 0px;
 }
+
+.modal-header, h4, .close {
+    text-align: center;
+    font-size: 20px;
+}
+
+#editor {
+    overflow: auto;
+    height: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#modal-buttons button {
+    width: 9em;
+}
