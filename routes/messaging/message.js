@@ -45,7 +45,9 @@ router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
                     req.flash('success_msg', 'Mensagem enviada!');
                 else
                     req.flash('error_msg', 'O remetente "'+ req.body.receiver+'" não existe!');
-                res.redirect('/message/inbox');
+
+                var backURL=req.header('Referer') || '/';
+                res.redirect(backURL);
             } );
         });
     }
@@ -280,7 +282,6 @@ router.get('/sent/:id', userPrivileges.ensureAuthenticated, function(req, res) {
     });
 });
 
-//TODO: Message preview should show escaped text, no format tags
 router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, req.user, function(userMessages){
