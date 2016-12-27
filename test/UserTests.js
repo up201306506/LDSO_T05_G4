@@ -38,9 +38,8 @@ describe('Users', function() {
 
 
     /*
-         Inserting users with colliding data should fail on server side
          Coverage:
-         UserController.insertUser() - Success, Failure
+            UserController.insertUser() - Success, Failure
      */
     it('Trying to insert Users with conflicting data should fail', function(done) {
         userController.insertUser(db, "TestUser1","password","Test1","email1",999999999,"male",function(success){
@@ -73,10 +72,9 @@ describe('Users', function() {
     //===================
 
 	/*
-		 Insert users and then check if some exist and others don't
 		 Coverage:
-			UserController.insertUser() - Success, Failure
-			UserController.getUser() - Success
+			UserController.insertUser() - Success
+			UserController.getUser() - Success, Failure
 	 */
 	it('Using getUser() to check if inserted users exist or not', function(done) {
         userController.insertUser(db, "TestUser1","password","Test1","email",999999999,"male",function(success){
@@ -104,11 +102,78 @@ describe('Users', function() {
 
 	});
 
+
     //===================
 
-    it('TODO - This requires more tests', function(done) {
-        done();
+	/*
+        Coverage:
+            UserController.insertUser() - Success
+	 */
+	it('Using logIn() to check if inserted users exist or not', function(done) {
+        userController.insertUser(db, "TestUser1","password","Test1","email",999999999,"male",function(success){
+        assert.equal(success, null);
+
+            //The user must be returned on succesful log in
+            userController.logIn(db,"TestUser1","password",function(err, success){
+            assert.notEqual(success._id, null);
+            assert.equal(success.name, "Test1");
+            assert.equal(success.username, "TestUser1");
+            assert.equal(success.email, "email");
+            assert.equal(success.password, "password");
+            assert.equal(success.gender, "male");
+            assert.equal(success.phone, 999999999);
+
+            //Wrong password must fail
+            userController.logIn(db,"TestUser1","WRONG!!",function(err, success){
+            assert.equal(success, null);
+
+
+            //Nonexistent user should too
+            userController.logIn(db,"TestUser2","password",function(err, success){
+            assert.equal(success, null);
+
+                done();
+
+            });});});
+
+
+        });
+	});
+
+
+    //===================
+
+    /*
+        Coverage:
+            UserController.editUser() - Success
+            UserController.insertUser() - Success
+            UserController.getUser() - Success
+     */
+    it('TODO: EditUser() should accurately change data, fail on non-existing users', function(done) {
+        userController.insertUser(db, "TestUser1","password","Test1","email1",999999999,"male",function(success){
+            assert.equal(success, null);
+
+
+            done();
+        });
     });
+
+    //===================
+
+    /*
+         Coverage:
+            UserController.insertUser() - Success
+     */
+    it('TODO: getAllUsers() should always retrieve te full list of users', function(done) {
+        userController.insertUser(db, "TestUser1","password","Test1","email1",999999999,"male",function(success){
+            assert.equal(success, null);
+
+
+            done();
+        });
+    });
+
+
 
     //===================
 	
