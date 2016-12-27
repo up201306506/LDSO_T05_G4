@@ -149,7 +149,7 @@ describe('Users', function() {
             UserController.insertUser() - Success
             UserController.getUser() - Success
      */
-    it('TODO: EditUser() should accurately change data, fail on non-existing users', function(done) {
+    it('EditUser() should accurately change data, fail on non-existing users', function(done) {
         userController.insertUser(db, "TestUser1","password","Test1","email",999999999,"male",function(success){
         assert.equal(success, null);
         userController.insertUser(db, "TestUser2","password","Test2","email2",999999999,"male",function(success){
@@ -222,13 +222,44 @@ describe('Users', function() {
     /*
          Coverage:
             UserController.insertUser() - Success
+            UserController.getAllUsers() - Success, Failure
      */
-    it('TODO: getAllUsers() should always retrieve te full list of users', function(done) {
-        userController.insertUser(db, "TestUser1","password","Test1","email1",999999999,"male",function(success){
+    it('getAllUsers() should always retrieve te full list of users', function(done) {
+        userController.getAllUsers(db,"",function(result){
+        assert.equal(result.length, 0);
+
+
+            userController.insertUser(db, "TestUser_aa_bb","password","Test1","email1",999999999,"male",function(success){
+            assert.equal(success, null);
+            userController.insertUser(db, "TestUser_aa_cc","password","Test2","email2",999999999,"male",function(success){
+            assert.equal(success, null);
+            userController.insertUser(db, "TestUser_bb_cc","password","Test3","email3",999999999,"male",function(success){
             assert.equal(success, null);
 
+                userController.getAllUsers(db,"",function(result){
+                assert.equal(result.length, 3);
+                userController.getAllUsers(db,"TestUser",function(result){
+                assert.equal(result.length, 3);
+                userController.getAllUsers(db,"aa",function(result){
+                assert.equal(result.length, 2);
+                    userController.getAllUsers(db,"aa_bb",function(result){
+                    assert.equal(result.length, 1);
+                    userController.getAllUsers(db,"aa_cc",function(result){
+                    assert.equal(result.length, 1);
+                    userController.getAllUsers(db,"bb_cc",function(result){
+                    assert.equal(result.length, 1);
+                        userController.getAllUsers(db,"aa_bb_cc",function(result){
+                        assert.equal(result.length, 0);
 
-            done();
+
+
+                            done();
+                        });
+                });});});
+                });});});
+            });
+            });
+            });
         });
     });
 
