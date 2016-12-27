@@ -25,8 +25,8 @@
                 <tr>
                     <td> <a><%= requests[index] %></a> </td>
                     <td>
-                        <a type="submit" class="glyphicon glyphicon-ok" data-*="<%= requests[index] %>" style="margin-top:20px" href="/community/<%= communityName %>/acceptrequest"></a>
-                        <a type="submit" class="glyphicon glyphicon-remove" data-*="<%= requests[index] %>" style="margin-top:20px" href="/community/<%= communityName %>/acceptrequest"></a>
+                        <a type="button" class="glyphicon glyphicon-ok ok" style="margin-top:20px" href="/accept_requests/<%= communityName %>/<%= requests[index] %>/accept"></a>
+                        <a type="button" class="glyphicon glyphicon-remove remove" style="margin-top:20px" href="/accept_requests/<%= communityName %>/<%= requests[index] %>/remove"></a>
                     </td>
                 </tr>
             <% } %>
