@@ -26,7 +26,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
     });
 });
 
-router.get('/accept_requests/:communityName/:user/accept', userPrivileges.ensureAuthenticated, function (req, res, next) {
+router.get('/:communityName/:user/accept', userPrivileges.ensureAuthenticated, function (req, res, next) {
     var communityName = String(req.params.communityName);
     var userName = String(req.params.user);
     console.log(communityName);
@@ -43,7 +43,7 @@ router.get('/accept_requests/:communityName/:user/accept', userPrivileges.ensure
     res.redirect("/accept_requests/"+communityName);
 });
 
-router.get('/accept_requests/:communityName/:user/remove', userPrivileges.ensureAuthenticated, function (req, res, next) {
+router.get('/:communityName/:user/remove', userPrivileges.ensureAuthenticated, function (req, res, next) {
     var communityName = String(req.params.communityName);
     var userName = String(req.params.user);
     console.log(communityName);
