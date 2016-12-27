@@ -46,7 +46,6 @@
                 </div>
             </div>
 
-            <!-- MY CRAP -->
             <h3 id="side-title">Ofertas</h3>
             <% if(offerArr.length == 0) { %>
             <h5> <b style="margin-right: 15px;">Ainda não foram feitas ofertas nesta comunidade.</b></h5>
@@ -84,7 +83,11 @@
             <h3 id="side-title">Atalhos</h3>
             <a class="btn btn-primary btn-block" href="/create_offer/<%= communityName %>">Criar Oferta</a>
             <a class="btn btn-primary btn-block" href="/community_users/<%= communityName %>">Ver Membros</a>
+            <a class="btn btn-primary btn-block" href="#">Sair da Comunidade</a>
+            <% if (isMod) { %>
+            <a class="btn btn-primary btn-block" href="#">Pedidos de Adesão</a>
             <a class="btn btn-primary btn-block" href="/edit_community/<%= communityName %>">Editar Comunidade</a>
+            <% } %>
             <a class="btn btn-default btn-block btn-sm" href="/faq">FAQ</a>
         </div>
     </div>

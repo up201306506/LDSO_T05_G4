@@ -1,3 +1,7 @@
 #description {
     resize: none;
 }
+
+#buttons-panel button {
+    width: 8em;
+}
