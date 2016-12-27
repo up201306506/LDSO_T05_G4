@@ -34,26 +34,29 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                     isModeratorBool = true;
 
                 communityController.isUserEnrolledInCommunity(db, req.user, communityName, function (isMemberBool) {
-                    db.close();
-                    // Renders page
-                    res.render('community/community_page',
-                        {
-                            communityName: community.name,
-                            communityOffice: community.office,
-                            communityDescription: community.description,
-                            communityRules: community.ruleDescription,
-                            useCoin: community.useCoin,
-                            coinName: community.coinName,
-                            privacy: community.privacy,
-                            admins: community.admins,
-                            members: community.members,
-                            offerArr: offers,
-                            isMod: isModeratorBool,
-                            isMember: isMemberBool,
-                            nPages: Math.ceil(totalOffersCount/2),
-                            thisPage: page,
-                            user: req.user
-                        });
+                    communityController.verifyUserRequest(db, req.user, communityName, function (requestBool) {
+                        db.close();
+                        // Renders page
+                        res.render('community/community_page',
+                            {
+                                communityName: community.name,
+                                communityOffice: community.office,
+                                communityDescription: community.description,
+                                communityRules: community.ruleDescription,
+                                useCoin: community.useCoin,
+                                coinName: community.coinName,
+                                privacy: community.privacy,
+                                admins: community.admins,
+                                members: community.members,
+                                offerArr: offers,
+                                isMod: isModeratorBool,
+                                isMember: isMemberBool,
+                                nPages: Math.ceil(totalOffersCount/2),
+                                thisPage: page,
+                                user: req.user,
+                                isrequested: requestBool
+                            });
+                    });
                 });
             });
         });
