@@ -53,10 +53,6 @@ describe('Messaging', function() {
                 messagingController.getMessagesByUser(db, "testreceiver", function(receiver){
                 messagingController.getSentByUser(db, "testuser", function(sender){
 
-                    console.log(receiver.length);
-                    console.log(sender.length);
-
-
                     assert.equal(receiver.length, 1);
                     assert.equal(sender.length, 1);
 

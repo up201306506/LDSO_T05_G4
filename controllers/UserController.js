@@ -88,22 +88,36 @@ module.exports = {
         // Get Community collection
         var user = db.collection('user');
 
-        // Finds if the email is already taken
-        user.findOne({email: email}, function (err, userData) {
-            assert.equal(err, null);
+        // Find the user in the db
+        user.findOne({username: username}, function (err, result) {
+        assert.equal(err, null);
+            if(result != null)
+            {
 
-            // Verifies if email is not being used
-            if(userData == null || userData.username == username){ // Email not being used or is the same user
-                // Updates information about the user
-                user.updateOne({username: username},
-                    {
-                        $set: {password: password, name: name, email: email, phone: phone, gender: gender}
-                    },function (err) {
-                        assert.equal(err, null);
+                // Finds if the email is already taken
+                user.findOne({email: email}, function (err, userData) {
+                    assert.equal(err, null);
 
-                        callback(true);
-                    });
-            }else{
+                    // Verifies if email is not being used
+                    if(userData == null || userData.username == username ){
+                        // Updates information about the user
+                        user.updateOne({username: username},
+                            {
+                                $set: {password: password, name: name, email: email, phone: phone, gender: gender}
+                            },function (err) {
+                                assert.equal(err, null);
+
+                                callback(true);
+                            });
+                    }else{
+                        callback(false);
+                    }
+                });
+
+
+            }
+            else
+            {
                 callback(false);
             }
         });
