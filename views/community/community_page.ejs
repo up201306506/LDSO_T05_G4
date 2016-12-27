@@ -5,6 +5,7 @@
 
     <% include ./../templates/header.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/community/community_page.css">
+
 </head>
 <body>
 <% include ./../templates/navbar.ejs %>
@@ -83,7 +84,11 @@
             <h3 id="side-title">Atalhos</h3>
             <a class="btn btn-primary btn-block" href="/create_offer/<%= communityName %>">Criar Oferta</a>
             <a class="btn btn-primary btn-block" href="/community_users/<%= communityName %>">Ver Membros</a>
+            <% if (isMember) { %>
             <a class="btn btn-primary btn-block" href="#">Sair da Comunidade</a>
+            <% } else { %>
+            <a class="btn btn-primary btn-block" href="/community/<%= communityName%>/join_community">Entrar na Comunidade</a>
+            <% } %>
             <% if (isMod) { %>
             <a class="btn btn-primary btn-block" href="#">Pedidos de Adesão</a>
             <a class="btn btn-primary btn-block" href="/edit_community/<%= communityName %>">Editar Comunidade</a>
