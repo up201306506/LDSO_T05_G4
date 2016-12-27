@@ -16,7 +16,7 @@
 				<div id="search">
 					<form class="navbar-form" action="/search_results/search" method="post" role="search">
 						<div class="input-group">
-						<input id="search-box" name="search" type="text" class="form-control" placeholder="Procura" required>
+						<input id="search-box" name="search" type="text" class="form-control" placeholder="Pesquisa" required>
 							<div class="input-group-btn">
 								<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
 							</div>
@@ -47,37 +47,39 @@
 		</div>
 
 		<div id="navbar" class="navbar-collapse collapse">
-
 			<ul class="nav navbar-nav">
-				<form class="navbar-form" action="/search_results/search" method="post" role="search">
-					<div class="input-group">
-						<input id="search-box" name="search" type="text" class="form-control input-sm" placeholder="Procura" required>
-						<div class="input-group-btn">
-							<button class="btn btn-default btn-sm" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-						</div>
-					</div>
-				</form>
+				<div id="search">
+                    <form class="navbar-form" action="/search_results/search" method="post" role="search"">
+                        <div class="input-group">
+                            <input id="search-box" name="search" type="text" class="form-control input-sm" placeholder="Procura" required>
+                            <div class="input-group-btn">
+                                <button class="btn btn-default btn-sm" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
-				<form id="signIn" class="navbar-form navbar-right" role="form" action="/login" method="post">
-					<div class="input-group">
-						<span class="input-group-addon" style="height: 18px; padding: 0 4px; margin: 0;"><i class="glyphicon glyphicon-user"></i></span>
-						<input type="text" class="form-control input-sm" name="username" value="" placeholder="Username" required>
-					</div>
+                <div>
+                    <form id="signIn" class="navbar-form navbar-right" role="form" action="/login" method="post">
+                        <div class="input-group">
+                            <span class="input-group-addon" style="height: 18px; padding: 0 4px; margin: 0;"><i class="glyphicon glyphicon-user"></i></span>
+                            <input type="text" class="form-control input-sm" name="username" value="" placeholder="Username" required>
+                        </div>
 
-					<div class="input-group">
-						<span class="input-group-addon" style="height: 18px; padding: 0 4px; margin: 0;"><i class="glyphicon glyphicon-lock "></i></span>
-						<input type="password" class="form-control input-sm" name="password" value="" placeholder="Password" required>
-					</div>
+                        <div class="input-group">
+                            <span class="input-group-addon" style="height: 18px; padding: 0 4px; margin: 0;"><i class="glyphicon glyphicon-lock "></i></span>
+                            <input type="password" class="form-control input-sm" name="password" value="" placeholder="Password" required>
+                        </div>
 
-					<button type="submit" name="login-submit" id="login-submit" class="btn btn-primary">Login</button>
+                        <button type="submit" name="login-submit" id="login-submit" class="btn btn-primary">Login</button>
 
-					<a href="/login" class="btn btn-primary" >Junta-te ao Lets</a>
-				</form>
+                        <a href="/login" class="btn btn-primary" >Junta-te ao Lets</a>
+                    </form>
+                </div>
 			</ul>
 		</div>
 	</div>
 </nav>
-
 <% } %>

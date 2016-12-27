@@ -29,6 +29,18 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                 // Closes db
                 db.close();
 
+                var isModeratorBool = false;
+
+                console.log(req.user);
+                console.log(isModeratorBool);
+
+                console.log(community.admins);
+
+                if(community.admins.indexOf(req.user) != -1)
+                    isModeratorBool = true;
+
+                console.log(isModeratorBool);
+
                 // Renders page
                 res.render('community/community_page',
                     {
@@ -42,108 +54,13 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                         admins: community.admins,
                         members: community.members,
                         offerArr: offers,
+                        isMod: isModeratorBool,
                         nPages: Math.ceil(totalOffersCount/2),
                         thisPage: page,
                         user: req.user
                     });
             });
         });
-
-        /*
-        // Verifies if this user is enrolled in this community
-        communityController.isUserEnrolledInCommunity(db, req.user, communityName, function (community) {
-            // Gets the info from the community
-            communityController.getCommunityData(db, communityName, function (result) {
-                // Verifies if user is in the requests field
-                communityController.verifyUserRequest(db, req.user, communityName, function (requestdone) {
-                    // Gets the privacy from the community
-                    communityController.getCommunityPrivacy(db, communityName, function (privacy) {
-                        //Verifies if user is admin
-                        communityController.isAdmin(db, communityName, req.user, function (admin) {
-                            // Get this community offers
-                            offerController.getActiveOffers(db, communityName, range, function (offers, totalOffersCount) {
-                                db.close();
-                                // If user is not enrolled in the community and had already requested to join
-                                if (community == false && requestdone == true) {
-                                    res.render('community/community_page',
-                                        {
-                                            communityName: communityName,
-                                            communityinfo: result.description,
-                                            communityrules: result.ruleDescription,
-                                            offerArr: [],
-                                            privacy: privacy,
-                                            enrolled: 0,
-                                            pedido: 1,
-                                            admin: admin,
-                                            nPages: Math.ceil(totalOffersCount/2),
-                                            thisPage: page,
-                                            user: req.user
-                                        });
-                                // If user is not enrolled in the community and still hasn't requested to join
-                                } else if (community == false && requestdone == false) {
-                                    res.render('community/community_page',
-                                        {
-                                            communityName: communityName,
-                                            communityinfo: result.description,
-                                            communityrules: result.ruleDescription,
-                                            offerArr: [],
-                                            privacy: privacy,
-                                            enrolled: 0,
-                                            pedido: 0,
-                                            admin: admin,
-                                            nPages: Math.ceil(totalOffersCount/2),
-                                            thisPage: page,
-                                            user: req.user
-                                        });
-                                // If user is enrolled in the community
-                                } else {
-                                    // if there are any requests to join community, send information to appear button
-                                    if(result.requests.length != 0){
-
-                                        res.render('community/community_page',
-                                            {
-                                                communityName: communityName,
-                                                communityinfo: result.description,
-                                                communityrules: result.ruleDescription,
-                                                offerArr: offers,
-                                                privacy: privacy,
-                                                enrolled: 1,
-                                                pedido: 2,
-                                                admin: admin,
-                                                nPages: Math.ceil(totalOffersCount/2),
-                                                thisPage: page,
-                                                requests: 1,
-                                                user: req.user
-                                            });
-                                    // if there aren't any requests to join community
-                                    } else {
-                                        res.render('community/community_page',
-                                            {
-                                                communityName: communityName,
-                                                communityinfo: result.description,
-                                                communityrules: result.ruleDescription,
-                                                offerArr: offers,
-                                                privacy: privacy,
-                                                enrolled: 1,
-                                                pedido: 2,
-                                                admin: admin,
-                                                nPages: Math.ceil(totalOffersCount / 2),
-                                                thisPage: page,
-                                                requests: 0,
-                                                user: req.user
-                                            });
-                                    }
-                                }
-                            });
-                        });
-                    });
-                });
-            });
-        });*/
-
-
-
-
     });
 });
 
