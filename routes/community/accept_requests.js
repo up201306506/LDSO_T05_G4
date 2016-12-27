@@ -26,18 +26,36 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
     });
 });
 
-router.post('/:communityName', userPrivileges.ensureAuthenticated, function (req, res, next) {
-    var x = document.getElementsByTagName("a")[0].getAttribute("data-*");
-    console.log(x);
-    // GET community name from url
+router.get('/:communityName/:user/accept', userPrivileges.ensureAuthenticated, function (req, res, next) {
     var communityName = String(req.params.communityName);
-
+    var userName = String(req.params.user);
+    console.log(communityName);
+    console.log(userName);
     // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
-
-
-
+        communityController.removeFromRequests(db, communityName, userName, function (community_data) {
+            communityController.insertUserInCommunity(db, communityName, userName, function (community_data) {
+                db.close();
+            });
+        });
     });
+    console.log("accept");
+    res.redirect("/accept_requests/"+communityName);
+});
+
+router.get('/:communityName/:user/remove', userPrivileges.ensureAuthenticated, function (req, res, next) {
+    var communityName = String(req.params.communityName);
+    var userName = String(req.params.user);
+    console.log(communityName);
+    console.log(userName);
+    // Connects to the db
+    mongo.connect(configDB.url, function (err, db) {
+        communityController.removeFromRequests(db, communityName, userName, function (community_data) {
+            db.close();
+        });
+    });
+    console.log("remove");
+    res.redirect("/accept_requests/"+communityName);
 });
 
 module.exports = router;

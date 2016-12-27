@@ -211,7 +211,7 @@ module.exports = {
         var community = db.collection('community');
 
         // remove the user from the requests field
-        community.removeOne({requests: username}, function (err, result) {
+        community.updateOne({name: communityName}, {$pull: {requests: username}}, function (err, result) {
             assert.equal(err, null);
             callback(result);
         });
