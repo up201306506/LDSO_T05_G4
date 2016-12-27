@@ -8,6 +8,7 @@
 </head>
 <body>
 <% include ../templates/navbar.ejs %>
+<% include ../templates/alert_messages.ejs %>
 
 <div class="container well">
     <div class="row">
@@ -39,7 +40,10 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <textarea class="form-control" style="height: 330px; resize: none;"><%= message_content %></textarea>
+            <div class="form-control" id="editor_redirect" contenteditable="true">
+                <blockquote>
+                    <%- message_content%>
+                </blockquote></div>
         </div>
     </div>
 
@@ -159,13 +163,13 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="redirect_recipient">Para</label>
                             <div class="col-sm-10">
-                                <input name="receiver" type="text" class="form-control" id="redirect_recipient" placeholder="The username field needs a typeahead implementation">
+                                <input name="receiver" type="text" class="form-control" id="redirect_recipient" placeholder="Nome do Utilizador">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="redirect_subject">Assunto</label>
                             <div class="col-sm-10">
-                                <input name="subject"  type="text" class="form-control" id="redirect_subject" placeholder="Enter Subject">
+                                <input name="subject"  type="text" class="form-control" id="redirect_subject" placeholder="Assunto da Mensagem">
                             </div>
                         </div>
 

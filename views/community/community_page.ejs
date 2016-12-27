@@ -13,52 +13,47 @@
 <div class="container">
     <div class="row">
         <div class="col-md-2">
-            <div id="side-panel" class="text-center">
-                <h3 id="side-title"><%= communityName %></h3>
-                <% if(enrolled == 1 && admin==true){ %>
-                <a id="edit-button" class="btn btn-primary" href="/edit_community/<%= communityName %>">Editar Comunidade</a>
-                <% } %>
-
-                <!--Informação a enviar para o post-->
-                <% if(privacy == "Privada" && enrolled == 0 && pedido == 0) { %>
-                <a type="submit" class="btn btn-primary" style="margin-top:20px" href="/community/<%= communityName %>/join_community">Pedir adesão</a>
-                <% } else if (privacy == "Privada" && enrolled == 0 && pedido == 1) { %>
-                <a class="btn btn-primary disabled" style="margin-top:20px" >Pedido enviado</a>
-                <% } else if (privacy == "Pública" && enrolled == 0) { %>
-                <a type="submit" class="btn btn-primary" style="margin-top:20px" href="/community/<%= communityName %>/join_community">Aderir à comunidade</a>
-                <% } else if (privacy == "Privada" && enrolled == 1 && admin==true && requests == 1) { %>
-                <a type="submit" class="btn btn-primary" style="margin-top:20px" href="/accept_requests/<%= communityName %>">Aceitar Pedidos</a>
-                <% } %>
-                <a id="delete-button" class="btn btn-primary" href="/delete_community/<%= communityName %>">Apagar Comunidade</a>
-
-                <a class="btn btn-primary" href="/" style="margin-top:20px">Voltar</a>
-
-                <% if(enrolled == 1){ %>
-                <ul class="list-group">
-                    <li class="list-group-item text-center">
-                        <a href="/create_offer/<%= communityName %>">Criar Oferta</a>
-                    </li>
-                </ul>
-                <% } %>
-
+            <div id="side-panel">
+                <h3 id="side-title">Comunidade</h3>
+                <h5><b style="margin-right: 15px;">Nome:</b><%= communityName %></h5>
+                <h5><b style="margin-right: 15px;">Sede:</b><%= communityOffice %></h5>
+                <h5><b style="margin-right: 15px;">Visualização:</b><%= privacy %></h5>
+                <br>
+                <h3 id="side-title">Estatísticas</h3>
+                <h5><b style="margin-right: 15px;">Número de Moderadores:</b><%= admins.length %></h5>
+                <h5><b style="margin-right: 15px;">Número de Membros:</b><%= members.length %></h5>
+                <h5><b style="margin-right: 15px;">Número de Ofertas:</b><%= offerArr.length %></h5>
             </div>
-
         </div>
 
-        <h3> Descrição da Comunidade </h3>
-        <pre><%= communityinfo %></pre>
-        <h3> Regras da Comunidade</h3>
-        <pre><%= communityrules %></pre>
+        <div class="col-md-8">
+            <h3 id="side-title"><%= communityName %></h3>
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a style="pointer-events: none; cursor: default;" class="lead" href="">Descrição</a>
+                        <p><%= communityDescription %></p>
+                    </div>
+                </div>
+            </div>
 
-        <div class="col-md-10">
-            <h3> Ofertas </h3>
-            <% for(var index = 0; index < offerArr.length; index++){ %>
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a style="pointer-events: none; cursor: default;" class="lead" href="">Regras</a>
+                        <p><%= communityRules %></p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 id="side-title">Ofertas</h3>
+            <% if(offerArr.length == 0) { %>
+            <h5> <b style="margin-right: 15px;">Ainda não foram feitas ofertas nesta comunidade.</b></h5>
+            <% } else {for(var index = 0; index < offerArr.length; index++) { %>
             <div class="well">
                 <div class="offer-head">
-                    <h4 class="offer-title"><a href="/view_offer/<%= offerArr[index]._id %>"><%= offerArr[index].title %></a></h4>
+                    <h4 class="offer-title"><a href="/community/<%= offerArr[index].communityName %>"><%= offerArr[index].communityName %></a></h4>
                     <span>Criado por: <a href="/profile/<%= offerArr[index].username %>"><%= offerArr[index].username %></a></span>
-
-                    <h6 class="pull-right"><%= (new Date(offerArr[index].date).toLocaleString()) %></h6>
                 </div>
 
                 <div class="row offer-content">
@@ -68,30 +63,33 @@
 
                     <div class="col-sm-8">
                         <p class="lead">
-                            <%= offerArr[index].description %>
+                            <a href="/view_offer/<%= offerArr[index]._id %>"><%= offerArr[index].title %></a>
                         </p>
+                        <%= offerArr[index].description %>
                     </div>
                 </div>
+
                 <div class="row offer-footer">
-                    <% if(user ==  offerArr[index].username) { %>
-                            <a class="btn btn-default pull-right" href="/delete_offer/<%= offerArr[index]._id %>">Eliminar</a>
-                    <% } else { %>
-                            <a class="btn btn-default pull-right" href="/accept_offer/<%= offerArr[index]._id %>">Aceitar</a>
-                    <% } %>
-                    <a class="btn btn-default pull-right" href="/view_offer/<%= offerArr[index]._id %>">Abrir</a>
+                    <a class="btn btn-default pull-right" href="/delete_offer/<%= offerArr[index]._id %>">Eliminar</a>
+                    <a class="btn btn-default pull-right" href="/view_offer/<%= offerArr[index]._id %>">Ver detalhes</a>
                     <h6 class="pull-right" style="margin-right: 20px;">Preço: <%= offerArr[index].price %><span class="glyphicon glyphicon-gift" style="margin-left: 5px;"></span></h6>
                 </div>
-                </div>
+            </div>
+            <% }} %>
 
-            <% } %>
-
-            <ul class="pagination">
-                <% for(var pageNmr = 1; pageNmr <= nPages; pageNmr++){ %>
-                    <li <% if(pageNmr==thisPage){ %> class="active" <% } %> ><a href="/community/<%= communityName %>?page=<%= pageNmr %>"><%= pageNmr %></a></li>
-                <% } %>
-            </ul>
         </div>
 
+        <div class="col-md-2 text-center">
+            <h3 id="side-title">Atalhos</h3>
+            <a class="btn btn-primary btn-block" href="/create_offer/<%= communityName %>">Criar Oferta</a>
+            <a class="btn btn-primary btn-block" href="/community_users/<%= communityName %>">Ver Membros</a>
+            <a class="btn btn-primary btn-block" href="#">Sair da Comunidade</a>
+            <% if (isMod) { %>
+            <a class="btn btn-primary btn-block" href="#">Pedidos de Adesão</a>
+            <a class="btn btn-primary btn-block" href="/edit_community/<%= communityName %>">Editar Comunidade</a>
+            <% } %>
+            <a class="btn btn-default btn-block btn-sm" href="/faq">FAQ</a>
+        </div>
     </div>
 </div>
 </body>

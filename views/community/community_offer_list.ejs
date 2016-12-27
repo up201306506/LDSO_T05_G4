@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Local Exchange - <%= communityName %></title>
+
+    <% include ./../templates/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/community/community_page.css">
+</head>
+<body>
+<% include ./../templates/navbar.ejs %>
+<% include ../templates/alert_messages.ejs %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <div id="side-panel">
+                <h3 id="side-title">Comunidade</h3>
+                <h5><b style="margin-right: 15px;">Nome:</b><%= communityName %></h5>
+                <h5><b style="margin-right: 15px;">Sede:</b><%= communityOffice %></h5>
+                <h5><b style="margin-right: 15px;">Visualização:</b><%= privacy %></h5>
+                <br>
+                <h3 id="side-title">Estatísticas</h3>
+                <h5><b style="margin-right: 15px;">Número de Moderadores:</b><%= admins.length %></h5>
+                <h5><b style="margin-right: 15px;">Número de Membros:</b><%= members.length %></h5>
+                <h5><b style="margin-right: 15px;">Número de Ofertas:</b><%= offers.length %></h5>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h3 id="side-title"><%= communityName %></h3>
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a style="pointer-events: none; cursor: default;" class="lead" href="">Descrição</a>
+                        <p><%= communityDescription %></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a style="pointer-events: none; cursor: default;" class="lead" href="">Regras</a>
+                        <p><%= communityRules %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 text-center">
+            <h3 id="side-title">Atalhos</h3>
+            <a class="btn btn-primary btn-block" href="/community/<%= communityName %>">Voltar</a>
+            <a class="btn btn-primary btn-block" href="/community_users">Ver Membros</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

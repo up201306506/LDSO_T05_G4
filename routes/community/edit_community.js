@@ -28,7 +28,7 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
                         description: communityData.description,
                         category: communityData.category,
                         privacy: communityData.privacy,
-                        categoryList: dropdownList.categoryList,
+                        rules: communityData.ruleDescription,
                         privacyList: dropdownList.privacyList
                     });
             }
@@ -36,23 +36,18 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
     });
 });
 
-router.post('/:communityName/edit', userPrivileges.ensureAuthenticated, function (req, res) {
+router.post('/:communityName', userPrivileges.ensureAuthenticated, function (req, res) {
     // GET community name from url
     var communityName = String(req.params.communityName);
 
     // Verifies if the form is completed
     req.checkBody('headQuarter', 'Sede da comunidade necessária').notEmpty();
     req.checkBody('description', 'Descricao da comunidade necessária').notEmpty();
-    req.checkBody('category', 'É necessário escolher uma categoria').notEmpty();
     req.checkBody('privacy', 'É necessário escolher o tipo de privacidade').notEmpty();
 
     // If an error is found an error message will be displayed
     var errors = req.validationErrors();
 
-    if(dropdownList.categoryList.indexOf(req.body.category) == -1){
-        if(errors.constructor != Array) errors = [];
-        errors.push({msg:'Categoria não válida'} );
-    }
     if(dropdownList.privacyList.indexOf(req.body.privacy) == -1){
         if(errors.constructor != Array) errors = [];
         errors.push({msg:'Tipo de visualização não válida'} );
@@ -72,7 +67,7 @@ router.post('/:communityName/edit', userPrivileges.ensureAuthenticated, function
                         description: communityData.description,
                         category: communityData.category,
                         privacy: communityData.privacy,
-                        categoryList: dropdownList.categoryList,
+                        rules: communityData.ruleDescription,
                         privacyList: dropdownList.privacyList,
                         errors: errors
                     });
@@ -83,11 +78,16 @@ router.post('/:communityName/edit', userPrivileges.ensureAuthenticated, function
         mongo.connect(configDB.url, function (err, db, next) {
             // Edit the community info in the db
             communityController.editCommunityData(db, communityName, req.body.headQuarter,
-                req.body.category, req.body.description, req.body.privacy, function () {
+                req.body.description, req.body.privacy, req.body.rules, function (wasEdited) {
                     db.close();
-
-                    req.flash('success_msg', 'Comunidade editada com sucesso');
-                    res.redirect('/community/' + communityName);
+                    // If community was edited
+                    if (wasEdited) {
+                        req.flash('success_msg', 'Comunidade atualizada');
+                        res.redirect('/community/' + communityName);
+                    } else {
+                        req.flash('error_msg', 'Ocorreu um erro ao atualizar a comunidade');
+                        res.redirect('/edit_community/' + username);
+                    }
                 });
         });
     }

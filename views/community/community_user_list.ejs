@@ -21,7 +21,7 @@
 			<thead>
 				<tr>
 					<th>Nome</th>
-					<th>Email</th>
+					<th>Coins</th>
 					
 					<% if(isModerator){ %>
 					<th>Administrar</th>
@@ -33,7 +33,7 @@
 				<% for(var index = 0; index < users.length; index++) { %>
 				<tr>
 					<td class="col-sm-4"><%= users[index].name %></td>
-					<td class="col-sm-4"><%= users[index].email %></td>
+					<td class="col-sm-4"><%= users[index].coins %></td>
 					<% if(isModerator){ %>
 					<td class="col-sm-4">
 						<div class="row">
@@ -42,7 +42,7 @@
 							</div>
 							
 							<div class="col-sm-4">
-								<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+								<a href="/remove_user/<%= communityName %>/<%= users[index].name %>" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></a>
 							</div>
 						</div>
 					</td>

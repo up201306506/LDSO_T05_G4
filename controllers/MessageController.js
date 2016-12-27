@@ -1,5 +1,6 @@
 var assert = require('assert');
 var ObjectID = require('mongodb').ObjectID;
+var userController = require("./UserController.js");
 
 module.exports = {
 
@@ -20,12 +21,29 @@ module.exports = {
         // Get messages collection
         var messages = db.collection('messages');
 
-        //add message to collection
-        messages.insertOne({sender:sender, receiver:receiver, subject:subject, content:content, read:false, starred:false, date:date, type:type, deleted:false},
-            function (err,result) {
-                //console.log('Inserted 1 document into the db');
-                callback(result);
-            });
+        //make sure the sender is an existing user
+        userController.getUser(db, sender ,function (result) {
+        if(result === null){
+            callback(false);
+            return;
+        }
+        userController.getUser(db, receiver ,function (result) {
+        if(result === null){
+            callback(false);
+            return;
+        }
+
+            //add message to collection
+            messages.insertOne({sender:sender, receiver:receiver, subject:subject, content:content, read:false, starred:false, date:date, type:type, deleted:false},
+                function (err,result) {
+                    callback(true);
+                });
+
+
+        });
+        });
+
+
     },
 
     //Get specific message with id

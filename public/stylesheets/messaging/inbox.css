@@ -41,3 +41,7 @@ li > a:hover, li > a, li > .pull-right > a {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+#modal-buttons button {
+    width: 9em;
+}

@@ -112,6 +112,37 @@ module.exports = {
         }
     },
 
+    // Retrieves all information of a community
+    getCommunityData: function (db, communityName, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Search for the community in the tb
+        community.findOne({name: communityName}, function (err, communityData) {
+            assert.equal(err, null);
+
+            // Process the community
+            callback(communityData);
+        });
+    },
+
+    getCommunityUsers: function (db,communityName, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+        community.findOne({name: communityName},function (err, communityData) {
+            assert.equal(err, null);
+
+            // Process the community
+            callback(communityData);
+        });
+    },
+
+
+
+
+
+
+
 
 
 
@@ -217,35 +248,20 @@ module.exports = {
         });
     },
 
-
-    // Retrieves all information of a community
-    getCommunityData: function (db, communityName, callback) {
-        // Get Community collection
-        var community = db.collection('community');
-
-        // Search for the community in the tb
-        community.findOne({name: communityName}, function (err, communityData) {
-            assert.equal(err, null);
-
-            // Process the community
-            callback(communityData);
-        });
-    },
-
     // Edit all information of a community
-    editCommunityData: function (db, communityName, headOffice, category, description, privacy, callback) {
+    editCommunityData: function (db, communityName, headOffice, description, privacy, rules, callback) {
         // Get Community collection
         var community = db.collection('community');
 
         // Update the community in the db
         community.updateOne({name: communityName},
             {
-                $set: {office: headOffice, category: category, description: description, privacy: privacy}
+                $set: {office: headOffice, description: description, privacy: privacy, ruleDescription: rules}
             }, function (err) {
                 assert.equal(err, null);
 
                 // Process the edit
-                callback();
+                callback(true);
             });
     },
 
@@ -289,7 +305,7 @@ module.exports = {
 
     removeUserFromCommunity: function (db, name, member, callback) {
         var community = db.collection('community');
-        community.updateOne({name: name}, {$pull: {members: member}}, function (err, result) {
+        community.updateOne({name: name}, {$pull: {members: {name:member}}}, function (err, result) {
             assert.equal(err, null);
             console.log("Member removed from community");
             callback(result);

@@ -23,12 +23,8 @@ router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
         errors.push({msg:'Houve um problema em encontrar o teu ID de utilizador'} );
     }
 
-    //TODO:Verificar se existe o utilizador remetente
-
-
     if (errors) {
         // If an error was found an error message should appear
-        console.log("!!!!!!!! Message NOT Created")
         console.log(errors);
 
         //Redirect
@@ -37,7 +33,6 @@ router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
     } else {
 
         // If no error is found a new message will be sent
-        console.log("!!!!!!!! Message Created")
         console.log(req.body);
 
         //MESSAGE CREATION
@@ -46,8 +41,13 @@ router.post('/new', userPrivileges.ensureAuthenticated, function(req, res) {
             messagingController.insertMessage(db, req.user, req.body.receiver, req.body.subject, req.body.content, new Date(), req.body.type, function(success){
                 db.close();
 
-                req.flash('success_msg', 'Mensagem enviada!');
-                res.redirect('/message/inbox');
+                if(success)
+                    req.flash('success_msg', 'Mensagem enviada!');
+                else
+                    req.flash('error_msg', 'O remetente "'+ req.body.receiver+'" não existe!');
+
+                var backURL=req.header('Referer') || '/';
+                res.redirect(backURL);
             } );
         });
     }
@@ -270,6 +270,7 @@ router.get('/sent/:id', userPrivileges.ensureAuthenticated, function(req, res) {
                 receiver: data.receiver,
                 messageReceiver: false,
                 message_type: message_type,
+                date: data.date,
                 tooltip: tooltip,
                 message_subject: data.subject,
                 message_content: data.content,
@@ -281,7 +282,6 @@ router.get('/sent/:id', userPrivileges.ensureAuthenticated, function(req, res) {
     });
 });
 
-//TODO: Message preview should show escaped text, no format tags
 router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
     mongo.connect(configDB.url, function (err, db) {
         messagingController.getMessagesByUser(db, req.user, function(userMessages){
