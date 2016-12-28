@@ -38,9 +38,8 @@ describe('Users', function() {
 
 
     /*
-         Inserting users with colliding data should fail on server side
          Coverage:
-         UserController.insertUser() - Success, Failure
+            UserController.insertUser() - Success, Failure
      */
     it('Trying to insert Users with conflicting data should fail', function(done) {
         userController.insertUser(db, "TestUser1","password","Test1","email1",999999999,"male",function(success){
@@ -73,10 +72,9 @@ describe('Users', function() {
     //===================
 
 	/*
-		 Insert users and then check if some exist and others don't
 		 Coverage:
-			UserController.insertUser() - Success, Failure
-			UserController.getUser() - Success
+			UserController.insertUser() - Success
+			UserController.getUser() - Success, Failure
 	 */
 	it('Using getUser() to check if inserted users exist or not', function(done) {
         userController.insertUser(db, "TestUser1","password","Test1","email",999999999,"male",function(success){
@@ -104,11 +102,168 @@ describe('Users', function() {
 
 	});
 
+
     //===================
 
-    it('TODO - This requires more tests', function(done) {
-        done();
+	/*
+        Coverage:
+            UserController.insertUser() - Success
+	 */
+	it('Using logIn() to check if inserted users exist or not', function(done) {
+        userController.insertUser(db, "TestUser1","password","Test1","email",999999999,"male",function(success){
+        assert.equal(success, null);
+
+            //The user must be returned on succesful log in
+            userController.logIn(db,"TestUser1","password",function(err, success){
+            assert.notEqual(success._id, null);
+            assert.equal(success.name, "Test1");
+            assert.equal(success.username, "TestUser1");
+            assert.equal(success.email, "email");
+            assert.equal(success.password, "password");
+            assert.equal(success.gender, "male");
+            assert.equal(success.phone, 999999999);
+
+            //Wrong password must fail
+            userController.logIn(db,"TestUser1","WRONG!!",function(err, success){
+            assert.equal(success, null);
+
+
+            //Nonexistent user should too
+            userController.logIn(db,"TestUser2","password",function(err, success){
+            assert.equal(success, null);
+
+                done();
+
+            });});});
+
+
+        });
+	});
+
+
+    //===================
+
+    /*
+        Coverage:
+            UserController.editUser() - Success
+            UserController.insertUser() - Success
+            UserController.getUser() - Success
+     */
+    it('EditUser() should accurately change data, fail on non-existing users', function(done) {
+        userController.insertUser(db, "TestUser1","password","Test1","email",999999999,"male",function(success){
+        assert.equal(success, null);
+        userController.insertUser(db, "TestUser2","password","Test2","email2",999999999,"male",function(success){
+        assert.equal(success, null);
+
+            //The user data must originally be correct
+            userController.getUser(db,"TestUser1",function(success){
+                assert.notEqual(success._id, null);
+                assert.equal(success.name, "Test1");
+                assert.equal(success.username, "TestUser1");
+                assert.equal(success.email, "email");
+                assert.equal(success.password, "password");
+                assert.equal(success.gender, "male");
+                assert.equal(success.phone, 999999999);
+
+
+                //change the user
+                userController.editUser(db,"TestUser1","password_new","Test1_new","email_new",999999991,"female",function(success){
+                    assert.equal(success, true);
+
+
+                    //after being edited the data must have all changed
+                    userController.getUser(db,"TestUser1",function(success){
+                    assert.notEqual(success._id, null);
+                    assert.equal(success.username, "TestUser1");
+
+                    assert.notEqual(success.name, "Test1");
+                    assert.notEqual(success.email, "email");
+                    assert.notEqual(success.password, "password");
+                    assert.notEqual(success.gender, "male");
+                    assert.notEqual(success.phone, 999999999);
+
+                    assert.equal(success.name, "Test1_new");
+                    assert.equal(success.email, "email_new");
+                    assert.equal(success.password, "password_new");
+                    assert.equal(success.gender, "female");
+                    assert.equal(success.phone, 999999991);
+
+
+                        //editting email to another user's old email should pass
+                        userController.editUser(db,"TestUser2","password","Test2","email",999999999,"male",function(success){
+                        assert.equal(success, true);
+
+                        //editting email to another user's new email should fail
+                        userController.editUser(db,"TestUser2","password","Test2","email_new",999999999,"male",function(success){
+                        assert.equal(success, false);
+
+                            //editting a non existent user should fail
+                            //noexistent mail email
+                            userController.editUser(db,"TestUser3","newdata","newdata","newdata",999999999,"male",function(success){
+                            assert.equal(success, false);
+                            //existing mail
+                            userController.editUser(db,"TestUser3","newdata","newdata","email_new",999999999,"male",function(success){
+                            assert.equal(success, false);
+
+
+                                done();
+
+                            });});
+                        });});
+                    });
+                });
+            });
+        });
+        });
     });
+
+    //===================
+
+    /*
+         Coverage:
+            UserController.insertUser() - Success
+            UserController.getAllUsers() - Success, Failure
+     */
+    it('getAllUsers() should always retrieve te full list of users', function(done) {
+        userController.getAllUsers(db,"",function(result){
+        assert.equal(result.length, 0);
+
+
+            userController.insertUser(db, "TestUser_aa_bb","password","Test1","email1",999999999,"male",function(success){
+            assert.equal(success, null);
+            userController.insertUser(db, "TestUser_aa_cc","password","Test2","email2",999999999,"male",function(success){
+            assert.equal(success, null);
+            userController.insertUser(db, "TestUser_bb_cc","password","Test3","email3",999999999,"male",function(success){
+            assert.equal(success, null);
+
+                userController.getAllUsers(db,"",function(result){
+                assert.equal(result.length, 3);
+                userController.getAllUsers(db,"TestUser",function(result){
+                assert.equal(result.length, 3);
+                userController.getAllUsers(db,"aa",function(result){
+                assert.equal(result.length, 2);
+                    userController.getAllUsers(db,"aa_bb",function(result){
+                    assert.equal(result.length, 1);
+                    userController.getAllUsers(db,"aa_cc",function(result){
+                    assert.equal(result.length, 1);
+                    userController.getAllUsers(db,"bb_cc",function(result){
+                    assert.equal(result.length, 1);
+                        userController.getAllUsers(db,"aa_bb_cc",function(result){
+                        assert.equal(result.length, 0);
+
+
+
+                            done();
+                        });
+                });});});
+                });});});
+            });
+            });
+            });
+        });
+    });
+
+
 
     //===================
 	
