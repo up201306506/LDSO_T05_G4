@@ -86,30 +86,17 @@ module.exports = {
     },
 
     // Get the administrated communities by an user
-    getUserAdminCommunities: function (db, username, showSecretCommunities, callback) {
+    getUserAdminCommunities: function (db, username, callback) {
         // Get Community collection
         var community = db.collection('community');
 
-        // Shows secret communities
-        if (showSecretCommunities) {
             // Get a list of communities that this user is admin of
-            community.find({admins: {$exists: username}}).toArray(function (err, communities) {
+            community.find({admins: username}).toArray(function (err, communities) {
                 assert.equal(err, null);
 
                 // Process the list of communities
                 callback(communities);
             });
-        } else {
-            // Get a list of public and private communities that this user is member of
-            community.find({admins: {$exists: username},
-                $or: [{privacy: dropdownList.privacyList[0]}, {privacy: dropdownList.privacyList[1]}]
-            }).toArray(function (err, communities) {
-                assert.equal(err, null);
-
-                // Process the list of communities
-                callback(communities);
-            });
-        }
     },
 
     // Retrieves all information of a community
@@ -136,29 +123,6 @@ module.exports = {
             callback(communityData);
         });
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // Verifies if an user is enrolled in a community
     isUserEnrolledInCommunity: function (db, username, communityName, callback) {
