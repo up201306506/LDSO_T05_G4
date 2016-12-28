@@ -113,16 +113,83 @@ module.exports = {
         });
     },
 
-    getCommunityUsers: function (db,communityName, callback) {
+    // Insert a new user in the community
+    insertUserInCommunity: function (db, communityName, userName) {
         // Get Community collection
         var community = db.collection('community');
-        community.findOne({name: communityName},function (err, communityData) {
-            assert.equal(err, null);
 
-            // Process the community
-            callback(communityData);
-        });
+        // Inserts user
+        community.updateOne({name: communityName}, {$push: {members: {name: userName, coins: 0}}});
     },
+
+    // User request to be inserted in the community
+    insertUserRequestsInCommunity: function (db, communityName, userName) {
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Inserts user's request
+        community.updateOne({name: communityName}, {$push: {requests: userName}});
+    },
+
+    // Remove user from community
+    removeUserFromCommunity: function (db, communityName, userName) {
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Removes user from members
+        community.updateOne({name: communityName, founder: {$ne: userName}}, {$pull: {members: {name: userName}}});
+
+        // Removes user from admins
+        community.updateOne({name: communityName, founder: {$ne: userName}}, {$pull: {admins: userName}});
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Verifies if an user is enrolled in a community
     isUserEnrolledInCommunity: function (db, username, communityName, callback) {
@@ -155,20 +222,6 @@ module.exports = {
                     callback(false);
                 }
             });
-    },
-
-    // If an user is not in private community require permission
-    insertRequests: function (db, communityName, username, callback) {
-        // Get Community collection
-        var community = db.collection('community');
-
-        // Inserts the new user in requests
-        community.updateOne({name: communityName}, {$push: {requests: username}}, function (err, result) {
-        assert.equal(err, null);
-        console.log("New request inserted");
-            callback(result);
-        });
-
     },
 
     removeFromRequests: function (db, communityName, username, callback){
@@ -255,24 +308,6 @@ module.exports = {
             console.log('Found ' + docs.length + " documents");
             console.log(docs);
             callback(docs);
-        });
-    },
-
-    insertUserInCommunity: function (db, name, member, callback) {
-        var community = db.collection('community');
-        community.updateOne({name: name}, {$push: {members: member}}, function (err, result) {
-            assert.equal(err, null);
-            console.log("New member inserted");
-            callback(result);
-        });
-    },
-
-    removeUserFromCommunity: function (db, name, member, callback) {
-        var community = db.collection('community');
-        community.updateOne({name: name}, {$pull: {members: {name:member}}}, function (err, result) {
-            assert.equal(err, null);
-            console.log("Member removed from community");
-            callback(result);
         });
     },
 

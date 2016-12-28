@@ -21,8 +21,9 @@ router.get('/:username', function (req, res) {
         userController.getUser(db, username, function (userData) {
             // Gets user enrolled communities
             communityController.getUserEnrolledCommunities(db, username, isOwnProfile, function (communitiesArr) {
+                // Gets offers in enrolled communities
                 offerController.getOfferHistory(db, req.user, function(offers){
-                // Gets offers in inrolled communities
+                    // Closes db
                     db.close();
 
                     res.render('profile/view',
@@ -52,6 +53,7 @@ router.get('/edit/:username', userPrivileges.ensureAuthenticated, function (req,
     mongo.connect(configDB.url, function (err, db) {
         // Gets the user information
         userController.getUser(db, username, function (userData) {
+            // Closes db
             db.close();
 
             res.render('profile/edit',
@@ -97,6 +99,7 @@ router.post('/edit/:username', userPrivileges.ensureAuthenticated, function (req
         mongo.connect(configDB.url, function (err, db) {
             // Edit the user information
             userController.editUser(db, username, req.body.password, req.body.name, req.body.email, req.body.phone, req.body.gender, function (wasEdited) {
+                // Closes db
                 db.close();
 
                 // If user was edited
