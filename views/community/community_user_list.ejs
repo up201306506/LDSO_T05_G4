@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title><%= title %></title>
 
@@ -20,7 +20,7 @@
 		</div>
 
 		<div class="col-sm-2 pull-right">
-			<button style="margin-top: 20px; width: 8em;" type="button" class="btn btn-default" onclick="location.href = '/'">Voltar</button>
+			<button style="margin-top: 20px; width: 8em;" type="button" class="btn btn-default" onclick="location.href = '/community/<%= communityName %>'">Voltar</button>
 		</div>
 	</div>
 
@@ -43,15 +43,25 @@
 				<tbody>
 				<% for(var index = 0; index < members.length; index++){ %>
 				<tr>
-					<td><a href="/profile/<%= members[index].name %>"><%= members[index].name %></a></td>
-                    <% if(useCoin) { %>
-                    <td><%= members[index].coins %></td>
-                    <% } %>
-                    <td>Expulsar</td>
-                    <% if(isModerator){ %>
-                    <td>Mudar Permissões</td>
-                    <td>Expulsar</td>
-                    <% } %>
+					<form>
+						<td><a href="/profile/<%= members[index].name %>"><%= members[index].name %></a></td>
+						<% if(useCoin) { %>
+						<td><%= members[index].coins %></td>
+						<% } %>
+						<td><% if(founder == members[index].name) { %>Fundador<% } else if (admins.indexOf(members[index].name) != -1) { %>Moderador<% } else { %>Membro<% } %></td>
+						<% if(isModerator){ %>
+                        <% if(founder == members[index].name) { %>
+                        <td>Não Pode Mudar Permissões</td>
+                        <td>Não Pode Ser Expulso</td>
+                        <% } else { %>
+						<td>
+                            <input type="radio" name="permissions" value="admin" <% if (admins.indexOf(members[index].name) != -1) { %>checked<% } %>> Moderador</input>
+                            <input style="margin-left: 20px;" type="radio" name="permissions" value="member" <% if (!admins.indexOf(members[index].name) != -1) { %>checked<% } %>> Membro</input>
+                            <button style="margin-right: 5px;" type="button" class="btn btn-success btn-xs pull-right" onclick="location.href = '#'"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                        </td>
+						<td><button type="button" class="btn btn-danger btn-xs" onclick="location.href = '#'"><span class="glyphicon glyphicon-remove"></span></button></td>
+						<% }} %>
+					</form>
 				</tr>
 				<% } %>
 				</tbody>

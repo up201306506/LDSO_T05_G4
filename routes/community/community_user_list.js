@@ -16,13 +16,20 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
             // Closes DB
             db.close();
 
+            // Gets this user community permissions
+            var isModeratorBool = false;
+            if(community.admins.indexOf(req.user) != -1)
+                isModeratorBool = true;
+
             res.render('community/community_user_list',
                 {
                     title: 'Local Exchange - Lista de Utilizadores',
-                    isModerator: true,
+                    isModerator: isModeratorBool,
                     communityName: communityName,
+                    founder: community.founder,
                     useCoin: community.useCoin,
                     coinName: community.coinName,
+                    admins: community.admins,
                     members: community.members
                 });
         });
