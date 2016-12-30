@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= communityName %></title>
+    <title><%= title %></title>
 
     <% include ./../templates/header.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/offer/create_offer.css">
@@ -15,48 +15,32 @@
         <div class="col-sm-offset-2 col-sm-8">
             <h1>Criar Oferta em <i><%= communityName %></i></h1>
 
-            <form role="form" action="/create_offer/<%= communityName %>/create" method="post" enctype="multipart/form-data">
+            <form role="form" action="/create_offer/create/<%= communityName %>" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="control-label" for="offerTitle">Titulo</label>
-                    <input type="text" name="offerTitle" class="form-control" id="offerTitle">
+                    <input type="text" name="offerTitle" class="form-control" id="offerTitle" required>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="offerDescription">Descrição</label>
-                    <textarea class="form-control" name="offerDescription" id="offerDescription" rows="5"></textarea>
+                    <textarea class="form-control" name="offerDescription" id="offerDescription" rows="7"></textarea>
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="control-label" for="offerPrice">Preço</label>
-                            <input type="text" name="offerPrice" class="form-control" id="offerPrice">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="control-label" for="offerType">Tipo</label>
-                            <div id="offerType">
-                                <div class="radio text-center">
-                                    <label id="offerTypeMaterial">
-                                        <input type="radio" name="offerType" value="Material"> Material
-                                    </label>
-
-                                    <label>
-                                        <input type="radio" name="offerType" value="Servicos"> Serviços
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
+                    <div <% if(useCoin) { %>class="col-md-6"<% } else { %>class="col-md-12"<% } %>>
                         <div class="form-group">
                             <label class="control-label" for="offer_image">Imagem</label>
                             <input type="file" name="offer_image" class="form-control" id="offer_image">
                         </div>
                     </div>
+                    <% if(useCoin) { %>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label" for="offerPrice">Preço - <%= coinName %></label>
+                            <input type="text" name="offerPrice" class="form-control" id="offerPrice" required>
+                        </div>
+                    </div>
+                    <% } %>
                 </div>
 
                 <div class="col-sm-offset-1 col-sm-9">

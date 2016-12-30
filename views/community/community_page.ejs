@@ -19,13 +19,13 @@
                 <% if (isLogged) { %>
                 <h5><b style="margin-right: 15px;">Sede:</b><%= communityOffice %></h5>
                 <h5><b style="margin-right: 15px;">Visualização:</b><%= privacy %></h5>
-                <h5><b style="margin-right: 15px;">Moeda:</b><% if(useCoin) { %><%= coinName %><% } else { %>-<% } %></h5>
+                <% if(useCoin) { %><h5><b style="margin-right: 15px;">Moeda:</b><%= coinName %></h5><% } %>
                 <% } %>
                 <br>
                 <% if(isMember) { %>
                 <h3 id="side-title"><%= user %></h3>
                 <h5><b style="margin-right: 15px;">Permissão:</b><% if(isMod) { %>Moderador<% } else { %>Membro<% } %></h5>
-                <h5><b style="margin-right: 15px;"><%= coinName %>:</b><% for(var i = 0; i < members.length; i++){ if(members[i].name == user) { %><%= members[i].coins %><% break; }} %></h5>
+                <% if(useCoin) { %><h5><b style="margin-right: 15px;"><%= coinName %>:</b><% for(var i = 0; i < members.length; i++){ if(members[i].name == user) { %><%= members[i].coins %><% break; }} %></h5><% } %>
                 <br>
                 <% } %>
                 <h3 id="side-title">Estatísticas</h3>
@@ -96,6 +96,7 @@
             <% if (isLogged) { %>
             <a class="btn btn-primary btn-block" href="/community_users/<%= communityName %>">Ver Membros</a>
             <% if (isMember) { %>
+            <a class="btn btn-primary btn-block" href="/create_offer/<%= communityName%>">Criar Oferta</a>
             <a class="btn btn-primary btn-block" href="/community/<%= communityName%>/abandon_community">Sair da Comunidade</a>
             <% } else if (isPending && isPrivate) { %>
             <a class="btn btn-primary btn-block disabled" href="#">Pedido Enviado</a>

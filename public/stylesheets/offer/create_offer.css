@@ -1,11 +1,7 @@
-#offerTypeMaterial {
-    margin-right: 20px;
-}
-
 textarea {
     resize: none;
 }
 
-button {
+#buttons-panel button {
     width: 8em;
 }
