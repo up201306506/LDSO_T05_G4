@@ -2,60 +2,71 @@ var express = require('express'),
     router = express.Router(),
     configDB = require('./../../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
-    userController = require('./../../controllers/UserController'),
     communityController = require('./../../controllers/CommunityController'),
     userPrivileges = require('./../../config/userPrivileges');
 
-
 router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req, res, next) {
-    // GET community name from url
+    // GET community name
     var communityName = String(req.params.communityName);
 
-    // Connects to the db
+    // Connects to database
     mongo.connect(configDB.url, function (err, db) {
-        // Get list of users in requests
-        communityController.getCommunityData(db, communityName, function (community_data) {
+        // Gets the info from the community
+        communityController.getCommunityData(db, communityName, function (community) {
+            // Closes DB
             db.close();
-            console.log(community_data.requests);
+
             res.render('community/accept_requests',
                 {
+                    title: 'Local Exchange - Pedidos de Adesão',
                     communityName: communityName,
-                    requests: community_data.requests
+                    requests: community.requests
                 });
         });
     });
 });
 
-router.get('/:communityName/:user/accept', userPrivileges.ensureAuthenticated, function (req, res, next) {
+router.post('/accept_member/:communityName', userPrivileges.ensureAuthenticated, function (req, res) {
+    // GET community name
     var communityName = String(req.params.communityName);
-    var userName = String(req.params.user);
-    console.log(communityName);
-    console.log(userName);
-    // Connects to the db
+
+    // Gets username from post
+    var userName = req.body.userName;
+
+    // Connects to database
     mongo.connect(configDB.url, function (err, db) {
-        communityController.removeFromRequests(db, communityName, userName, function (community_data) {
-            communityController.insertUserInCommunity(db, communityName, userName, function (community_data) {
-                db.close();
-            });
-        });
+        // Remove user request from community
+        communityController.removeFromRequests(db, communityName, userName);
+
+        // Insert user in community
+        communityController.insertUserInCommunity(db, communityName, userName);
+
+        // Closes DB
+        db.close();
+
+        // Redirects to user list page
+        res.redirect('/accept_requests/' + communityName);
     });
-    console.log("accept");
-    res.redirect("/accept_requests/"+communityName);
 });
 
-router.get('/:communityName/:user/remove', userPrivileges.ensureAuthenticated, function (req, res, next) {
+router.post('/reject_member/:communityName', userPrivileges.ensureAuthenticated, function (req, res) {
+    // GET community name
     var communityName = String(req.params.communityName);
-    var userName = String(req.params.user);
-    console.log(communityName);
-    console.log(userName);
-    // Connects to the db
+
+    // Gets username from post
+    var userName = req.body.userName;
+
+    // Connects to database
     mongo.connect(configDB.url, function (err, db) {
-        communityController.removeFromRequests(db, communityName, userName, function (community_data) {
-            db.close();
-        });
+        // Remove user request from community
+        communityController.removeFromRequests(db, communityName, userName);
+
+        // Closes DB
+        db.close();
+
+        // Redirects to user list page
+        res.redirect('/accept_requests/' + communityName);
     });
-    console.log("remove");
-    res.redirect("/accept_requests/"+communityName);
 });
 
 module.exports = router;

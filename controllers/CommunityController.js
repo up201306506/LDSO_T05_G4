@@ -161,6 +161,15 @@ module.exports = {
         community.updateOne({name: communityName}, {$pull: {admins: userName}});
     },
 
+    // Remove user request
+    removeFromRequests: function (db, communityName, username){
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Remove user from request list
+        community.updateOne({name: communityName}, {$pull: {requests: username}});
+    },
+
 
 
 
@@ -247,16 +256,6 @@ module.exports = {
                     callback(false);
                 }
             });
-    },
-
-    removeFromRequests: function (db, communityName, username, callback){
-        var community = db.collection('community');
-
-        // remove the user from the requests field
-        community.updateOne({name: communityName}, {$pull: {requests: username}}, function (err, result) {
-            assert.equal(err, null);
-            callback(result);
-        });
     },
 
     // Retrieves the privacy of a community

@@ -29,14 +29,14 @@
 			<table class="table table-bordered">
 				<thead>
 				<tr>
-					<th>Nome de Utilizador</th>
+					<th class="col-sm-4">Nome de Utilizador</th>
                     <% if(useCoin) { %>
-					<th><%= coinName %></th>
+					<th class="col-sm-2"><%= coinName %></th>
                     <% } %>
-                    <th>Permissões</th>
+                    <th class="col-sm-2">Permissões</th>
                     <% if(isModerator){ %>
-                    <th>Mudar Permissões</th>
-                    <th>Expulsar</th>
+                    <th class="col-sm-3">Mudar Permissões</th>
+                    <th class="col-sm-1">Expulsar</th>
                     <% } %>
 				</tr>
 				</thead>
