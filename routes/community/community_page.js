@@ -31,7 +31,9 @@ router.get('/:communityName', function (req, res, next) {
                 db.close();
 
                 // Verifies if user is logged
-                var isLogged = true;
+                var isLogged = false;
+                if(req.user)
+                    isLogged = true;
 
                 // Verifies if this user is a community member
                 var isMemberBool = false;

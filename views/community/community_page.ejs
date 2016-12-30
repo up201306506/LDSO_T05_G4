@@ -16,9 +16,11 @@
             <div id="side-panel">
                 <h3 id="side-title">Comunidade</h3>
                 <h5><b style="margin-right: 15px;">Nome:</b><%= communityName %></h5>
+                <% if (isLogged) { %>
                 <h5><b style="margin-right: 15px;">Sede:</b><%= communityOffice %></h5>
                 <h5><b style="margin-right: 15px;">Visualização:</b><%= privacy %></h5>
                 <h5><b style="margin-right: 15px;">Moeda:</b><% if(useCoin) { %><%= coinName %><% } else { %>-<% } %></h5>
+                <% } %>
                 <br>
                 <% if(isMember) { %>
                 <h3 id="side-title"><%= user %></h3>

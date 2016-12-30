@@ -6,7 +6,6 @@ var express = require('express'),
     userPrivileges = require('./../../config/userPrivileges'),
     dropdownList = require('./../../config/dropdownLists');
 
-/* GET community creation page. */
 router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req, res) {
     // GET community name from url
     var communityName = String(req.params.communityName);
@@ -14,24 +13,23 @@ router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req,
     // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
         // Get commmunity info for the edit page placeholders
-        communityController.getCommunityData(db, communityName, function (communityData) {
+        communityController.getCommunityData(db, communityName, function (community) {
+            // Close DB
             db.close();
 
-            // If this community does not exist in the tb
-            if (communityData == null) {
-                res.redirect('/message/inbox');
-            } else {
-                res.render('community/edit_community',
-                    {
-                        communityName: communityName,
-                        headQuartes: communityData.office,
-                        description: communityData.description,
-                        category: communityData.category,
-                        privacy: communityData.privacy,
-                        rules: communityData.ruleDescription,
-                        privacyList: dropdownList.privacyList
-                    });
-            }
+            res.render('community/edit_community',
+                {
+                    communityName: communityName,
+                    headQuartes: community.office,
+                    description: community.description,
+                    category: community.category,
+                    privacy: community.privacy,
+                    rules: community.ruleDescription,
+                    useCoin: community.useCoin,
+                    coinName: community.coinName,
+                    privacy: community.privacy,
+                    privacyList: dropdownList.privacyList
+                });
         });
     });
 });
@@ -58,6 +56,7 @@ router.post('/:communityName', userPrivileges.ensureAuthenticated, function (req
         mongo.connect(configDB.url, function (err, db) {
             // Get commmunity info for the edit page placeholders
             communityController.getCommunityData(db, communityName, function (communityData) {
+                // Close DB
                 db.close();
 
                 res.render('community/edit_community',
@@ -79,7 +78,9 @@ router.post('/:communityName', userPrivileges.ensureAuthenticated, function (req
             // Edit the community info in the db
             communityController.editCommunityData(db, communityName, req.body.headQuarter,
                 req.body.description, req.body.privacy, req.body.rules, function (wasEdited) {
+                    // Close DB
                     db.close();
+
                     // If community was edited
                     if (wasEdited) {
                         req.flash('success_msg', 'Comunidade atualizada');

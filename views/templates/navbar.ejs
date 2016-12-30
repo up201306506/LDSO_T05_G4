@@ -12,18 +12,19 @@
 		</div>
 		
 		<div id="navbar" class="navbar-collapse collapse">
-			<ul class="nav navbar-nav">
-				<div id="search">
-					<form class="navbar-form" action="/search_results/search" method="post" role="search">
-						<div class="input-group">
-						<input id="search-box" name="search" type="text" class="form-control" placeholder="Pesquisa" required>
-							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-							</div>
-						</div>
-					</form>
-				</div>
-			</ul>
+            <ul class="nav navbar-nav">
+                <div id="search">
+                    <form class="navbar-form" action="/search_results/search" method="post" role="search">
+                        <div class="input-group">
+                            <input id="search-box" name="search" type="text" class="form-control" placeholder="Pesquisa" required>
+                            <div class="input-group-btn">
+                                <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                <button class="btn btn-default" onclick="location.href = '/search_results/search'"><span class="glyphicon glyphicon-th-list"></span></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </ul>
 			
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="/message/inbox"><span class="glyphicon glyphicon-envelope" style="padding-left: 0.5rem;"></span></a></li>

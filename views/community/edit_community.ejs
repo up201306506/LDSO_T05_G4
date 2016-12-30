@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="description">Descrição:</label>
+                    <label class="control-label" for="description">Descrição</label>
                     <textarea class="form-control" name="description" id="description"
                               rows="5"><%= description %></textarea>
                 </div>
@@ -39,8 +39,8 @@
                         <div class="form-group">
                             <label class="control-label" for="coin">Moeda</label>
                             <div>
-                                <input type="checkbox" name="useCoin" id="useCoin" style="margin-right: 5px;">Usar moeda, nome:
-                                <input class="form-control" type="text" name="coinName" id="coinName" disabled required>
+                                <input type="checkbox" name="useCoin" id="useCoin" disabled style="margin-right: 5px;" <% if(useCoin) { %>checked<% } %>>Usar moeda, nome:</input>
+                                <input class="form-control" type="text" name="coinName" id="coinName" disabled required <% if(useCoin) { %>value="<%= coinName %>" <% } %>>
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                             <br>
                             <select class="form-control" name="privacy" id="privacy">
                                 <% for(var index = 0; index < privacyList.length; index++) { %>
-                                <option value="<%= privacyList[index] %>">
+                                <option value="<%= privacyList[index] %>" <% if(privacyList[index] == privacy) { %>selected<% } %>>
                                     <%= privacyList[index] %>
                                 </option>
                                 <% } %>
@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="description">Regras da Comunidade:</label>
+                    <label class="control-label" for="description">Regras da Comunidade</label>
                     <textarea class="form-control" name="rules" id="description"
                               rows="5"><%= rules %></textarea>
                 </div>
