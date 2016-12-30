@@ -43,25 +43,40 @@
 				<tbody>
 				<% for(var index = 0; index < members.length; index++){ %>
 				<tr>
-					<form>
-						<td><a href="/profile/<%= members[index].name %>"><%= members[index].name %></a></td>
-						<% if(useCoin) { %>
-						<td><%= members[index].coins %></td>
-						<% } %>
-						<td><% if(founder == members[index].name) { %>Fundador<% } else if (admins.indexOf(members[index].name) != -1) { %>Moderador<% } else { %>Membro<% } %></td>
-						<% if(isModerator){ %>
-                        <% if(founder == members[index].name) { %>
-                        <td>Não Pode Mudar Permissões</td>
-                        <td>Não Pode Ser Expulso</td>
-                        <% } else { %>
-						<td>
-                            <input type="radio" name="permissions" value="admin" <% if (admins.indexOf(members[index].name) != -1) { %>checked<% } %>> Moderador</input>
-                            <input style="margin-left: 20px;" type="radio" name="permissions" value="member" <% if (!admins.indexOf(members[index].name) != -1) { %>checked<% } %>> Membro</input>
-                            <button style="margin-right: 5px;" type="button" class="btn btn-success btn-xs pull-right" onclick="location.href = '#'"><span class="glyphicon glyphicon-floppy-disk"></span></button>
-                        </td>
-						<td><button type="button" class="btn btn-danger btn-xs" onclick="location.href = '#'"><span class="glyphicon glyphicon-remove"></span></button></td>
-						<% }} %>
-					</form>
+                    <td><a href="/profile/<%= members[index].name %>"><%= members[index].name %></a></td>
+                    <% if(useCoin) { %>
+                    <td><%= members[index].coins %></td>
+                    <% } %>
+                    <td><% if(founder == members[index].name) { %>Fundador<% } else if (admins.indexOf(members[index].name) != -1) { %>Moderador<% } else { %>Membro<% } %></td>
+                    <% if(isModerator){ %>
+                    <% if(founder == members[index].name || (admins.indexOf(members[index].name) != -1) && thisUser != founder) { %>
+                    <td>-</td>
+                    <td>-</td>
+                    <% } else { %>
+                    <td>
+                        <form role="form" action="/community_users/change_member/<%= communityName %>" method="post">
+                            <input type="radio" name="permissions" id="permissions<%= index %>" value="admin" <% if (admins.indexOf(members[index].name) != -1) { %>checked<% } %>> Moderador</input>
+                            <input type="radio" name="permissions" id="permissions<%= index %>" value="member" style="margin-left: 20px;" <% if (!(admins.indexOf(members[index].name) != -1)) { %>checked<% } %>> Membro</input>
+                            <input type="hidden" name="userName" value="<%= members[index].name %>">
+                            <button id="saveButton<%= index %>" style="margin-right: 5px; visibility: hidden;" type="submit" class="btn btn-success btn-xs pull-right" onclick="location.href = '#'"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                            <script>
+                                $('input[type=radio][id=permissions<%= index %>]').on('change', function() {
+                                    if(document.getElementById('saveButton<%= index %>').style.visibility != 'hidden') {
+                                        document.getElementById('saveButton<%= index %>').style.visibility = 'hidden';
+                                    } else {
+                                        document.getElementById('saveButton<%= index %>').style.visibility = 'visible';
+                                    }
+                                });
+                            </script>
+                        </form>
+                    </td>
+                    <td>
+                        <form role="form" action="/community_users/remove_member/<%= communityName %>" method="post">
+                            <input type="hidden" name="userName" value="<%= members[index].name %>">
+                            <button type="submit" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
+                        </form>
+                    </td>
+                    <% }} %>
 				</tr>
 				<% } %>
 				</tbody>
@@ -69,5 +84,15 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	$('input[type=radio][name=permissions]').on('change', function() {
+        if(document.getElementById('saveButton').style.visibility != 'hidden') {
+            document.getElementById('saveButton').style.visibility = 'hidden';
+        } else {
+            document.getElementById('saveButton').style.visibility = 'visible';
+        }
+	});
+</script>
 </body>
 </html>

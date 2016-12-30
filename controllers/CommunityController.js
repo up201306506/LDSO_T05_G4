@@ -143,6 +143,31 @@ module.exports = {
         community.updateOne({name: communityName, founder: {$ne: userName}}, {$pull: {admins: userName}});
     },
 
+    // Insert new admin to community
+    insertAdminInCommunity: function (db, communityName, userName) {
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Inserts user
+        community.updateOne({name: communityName}, {$push: {admins: userName}});
+    },
+
+    // Remove admin from community
+    removeAdminFromCommunity: function (db, communityName, userName) {
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Inserts user
+        community.updateOne({name: communityName}, {$pull: {admins: userName}});
+    },
+
+
+
+
+
+
+
+
 
 
 
