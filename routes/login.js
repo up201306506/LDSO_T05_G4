@@ -95,6 +95,22 @@ router.post('/', function (req, res, next) {
     req.checkBody('username', 'Username é necessário').notEmpty();
     req.checkBody('password', 'Password é necessária').notEmpty();
 
+    mongo.connect(configDB.url, function (err, db) {
+        if(err){
+            console.log(err);
+            return done(null, false, {message: 'Base de dados inacessivel'});
+        }
+
+        userController.getUser(db, req.body.username, function (userinfo) {
+            db.close();
+            if(!userinfo) {
+                req.flash('error_msg', 'Username não existente');
+            } else if(userinfo.password != req.body.password) {
+                req.flash('error_msg', 'Password errada');
+            }
+        });
+    });
+
     // Verifies if the login form was completed correctly
     var errors = req.validationErrors();
     if (errors) {
