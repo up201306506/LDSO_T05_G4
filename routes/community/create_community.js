@@ -19,12 +19,14 @@ router.post('/create', userPrivileges.ensureAuthenticated, function (req, res) {
         useCoin = true;
 
     // Verifies if the form is completed
-    req.checkBody('communityName', 'Nome da comunidade necessário').notEmpty();
-    req.checkBody('headQuarter', 'Sede da comunidade necessária').notEmpty();
-    req.checkBody('description', 'Descricao da comunidade necessária').notEmpty();
-    if(useCoin)
-        req.checkBody('coinName', 'Nome da moeda da comunidade necessária').notEmpty();
+    req.checkBody('communityName', 'Nome da comunidade deverá ter entre 4 e 50 carácteres').isLength({min: 4, max: 50});
+    req.checkBody('headQuarter', 'Sede da comunidade deverá ter entre 4 e 50 carácteres').isLength({min: 4, max: 50});
+    req.checkBody('description', 'Descricao da comunidade deverá ter até 800 carácteres').isLength({min: 1, max: 800});
+    if(useCoin) {
+        req.checkBody('coinName', 'Nome da moeda da comunidade deverá ter entre 1 e 10 carácteres').isLength({min: 1, max: 10});
+    }
     req.checkBody('privacy', 'É necessário escolher o tipo de privacidade').notEmpty();
+    req.checkBody('rules', 'Regras da comunidade deverá ter até 800 carácteres').isLength({min: 1, max: 800});
 
     var errors = req.validationErrors();
 
@@ -48,12 +50,13 @@ router.post('/create', userPrivileges.ensureAuthenticated, function (req, res) {
                     db.close();
 
                     // The main page will be rendered
-                    if (wasCreated)
+                    if (wasCreated){
                         req.flash('success_msg', 'Comunidade criada com sucesso');
-                    else
-                        req.flash('error_msg', 'Comunidade já existe');
-
-                    res.redirect('/');
+                        res.redirect('/');
+                    } else {
+                        req.flash('error_msg', 'Comunidade já existente');
+                        res.redirect('/');
+                    }
                 });
         });
     }

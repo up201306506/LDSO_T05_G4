@@ -30,17 +30,17 @@
             <form role="form" action="/create_community/create" method="post">
                 <div class="form-group">
                     <label class="control-label" for="communityName">Nome</label>
-                    <input type="text" name="communityName" class="form-control" onkeypress="return blockSpecialChar(event)" id="communityName" required>
+                    <input type="text" name="communityName" class="form-control" maxlength="50" onkeypress="return blockSpecialChar(event)" id="communityName" required>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="headQuarter">Sede</label>
-                    <input type="text" name="headQuarter" class="form-control" id="headQuarter" required>
+                    <input type="text" name="headQuarter" class="form-control" maxlength="50" id="headQuarter" required>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="description">Descrição</label>
-                    <textarea class="form-control" maxlength="1800" name="description" id="description" rows="5"></textarea>
+                    <textarea class="form-control" name="description" id="description" maxlength="800" rows="5"></textarea>
                 </div>
 
                 <div class="row">
@@ -49,7 +49,7 @@
                             <label class="control-label" for="coin">Moeda</label>
                             <div>
                                 <input type="checkbox" name="useCoin" id="useCoin" style="margin-right: 5px;">Usar moeda, nome:
-                                <input class="form-control" type="text" name="coinName" id="coinName" disabled required>
+                                <input class="form-control" type="text" name="coinName" maxlength="10" id="coinName" disabled required>
                             </div>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
 
                 <div class="form-group">
                     <label class="control-label" for="description">Regras da Comunidade</label>
-                    <textarea class="form-control" name="rules" id="description" rows="5"></textarea>
+                    <textarea class="form-control" name="rules" id="description" maxlength="800" rows="5"></textarea>
                 </div>
 
                 <div class="text-center" style="margin-top: 20px;">

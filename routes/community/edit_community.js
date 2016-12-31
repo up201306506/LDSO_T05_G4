@@ -38,10 +38,18 @@ router.post('/:communityName', userPrivileges.ensureAuthenticated, function (req
     // GET community name from url
     var communityName = String(req.params.communityName);
 
+    var useCoin = false;
+    if(req.body.useCoin === 'on')
+        useCoin = true;
+
     // Verifies if the form is completed
-    req.checkBody('headQuarter', 'Sede da comunidade necessária').notEmpty();
-    req.checkBody('description', 'Descricao da comunidade necessária').notEmpty();
+    req.checkBody('headQuarter', 'Sede da comunidade deverá ter entre 4 e 50 carácteres').isLength({min: 4, max: 50});
+    req.checkBody('description', 'Descricao da comunidade deverá ter até 800 carácteres').isLength({min: 1, max: 800});
+    if(useCoin) {
+        req.checkBody('coinName', 'Nome da moeda da comunidade deverá ter entre 1 e 10 carácteres').isLength({min: 1, max: 10});
+    }
     req.checkBody('privacy', 'É necessário escolher o tipo de privacidade').notEmpty();
+    req.checkBody('rules', 'Regras da comunidade deverá ter até 800 carácteres').isLength({min: 1, max: 800});
 
     // If an error is found an error message will be displayed
     var errors = req.validationErrors();
@@ -55,18 +63,21 @@ router.post('/:communityName', userPrivileges.ensureAuthenticated, function (req
         // Connects to the db
         mongo.connect(configDB.url, function (err, db) {
             // Get commmunity info for the edit page placeholders
-            communityController.getCommunityData(db, communityName, function (communityData) {
+            communityController.getCommunityData(db, communityName, function (community) {
                 // Close DB
                 db.close();
 
                 res.render('community/edit_community',
                     {
                         communityName: communityName,
-                        headQuartes: communityData.office,
-                        description: communityData.description,
-                        category: communityData.category,
-                        privacy: communityData.privacy,
-                        rules: communityData.ruleDescription,
+                        headQuartes: community.office,
+                        description: community.description,
+                        category: community.category,
+                        privacy: community.privacy,
+                        rules: community.ruleDescription,
+                        useCoin: community.useCoin,
+                        coinName: community.coinName,
+                        privacy: community.privacy,
                         privacyList: dropdownList.privacyList,
                         errors: errors
                     });
