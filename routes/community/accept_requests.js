@@ -36,16 +36,16 @@ router.post('/accept_member/:communityName', userPrivileges.ensureAuthenticated,
     // Connects to database
     mongo.connect(configDB.url, function (err, db) {
         // Remove user request from community
-        communityController.removeFromRequests(db, communityName, userName);
+        communityController.removeFromRequests(db, communityName, userName, function () {
+            // Insert user in community
+            communityController.insertUserInCommunity(db, communityName, userName, function () {
+                // Closes DB
+                db.close();
 
-        // Insert user in community
-        communityController.insertUserInCommunity(db, communityName, userName);
-
-        // Closes DB
-        db.close();
-
-        // Redirects to user list page
-        res.redirect('/accept_requests/' + communityName);
+                // Redirects to user list page
+                res.redirect('/accept_requests/' + communityName);
+            });
+        });
     });
 });
 
@@ -59,13 +59,13 @@ router.post('/reject_member/:communityName', userPrivileges.ensureAuthenticated,
     // Connects to database
     mongo.connect(configDB.url, function (err, db) {
         // Remove user request from community
-        communityController.removeFromRequests(db, communityName, userName);
+        communityController.removeFromRequests(db, communityName, userName, function () {
+            // Closes DB
+            db.close();
 
-        // Closes DB
-        db.close();
-
-        // Redirects to user list page
-        res.redirect('/accept_requests/' + communityName);
+            // Redirects to user list page
+            res.redirect('/accept_requests/' + communityName);
+        });
     });
 });
 

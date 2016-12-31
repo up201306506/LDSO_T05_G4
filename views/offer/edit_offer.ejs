@@ -1,48 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %></title>
-
-    <% include ./../templates/header.ejs %>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/offer/create_offer.css">
+    <title> <%= title %> </title>
+    <!-- Bootstrap & jQuery -->
+    <% include ../templates/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/offer/edit_offer.css">
 </head>
 <body>
-<% include ./../templates/navbar.ejs %>
-<% include ./../templates/alert_messages.ejs %>
+
+<% include ../templates/navbar.ejs %>
+<% include ../templates/alert_messages.ejs %>
 
 <div class="container">
     <div class="row">
         <div class="col-sm-offset-2 col-sm-8 well">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1>Criar Oferta em</h1>
+                    <h1>Editar Oferta de</h1>
                     <h2 style="margin-top: 0px;"><i><%= communityName %></i></h2>
+                    <p>Criado por <a style="pointer-events: none; cursor: default;" href=""><%= username %></a></p>
                 </div>
             </div>
 
-            <form role="form" action="/create_offer/create/<%= communityName %>" method="post" enctype="multipart/form-data">
+            <form role="form" action="/edit_offer/edit/<%= offerId %>" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="control-label" for="offerTitle">Titulo</label>
-                    <input type="text" name="offerTitle" class="form-control" maxlength="80" id="offerTitle" required>
+                    <input type="text" name="offerTitle" class="form-control" id="offerTitle" required value="<%= offerTitle %>">
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="offerDescription">Descrição</label>
-                    <textarea class="form-control" maxlength="700" name="offerDescription" id="offerDescription" rows="7"></textarea>
+                    <textarea class="form-control" name="offerDescription" id="offerDescription" rows="7"><%= offerDescription %></textarea>
                 </div>
 
                 <div class="row">
                     <div <% if(useCoin) { %>class="col-md-6"<% } else { %>class="col-md-12"<% } %>>
                         <div class="form-group">
                             <label class="control-label" for="offer_image">Imagem</label>
-                            <input type="file" name="offer_image" class="form-control" id="offer_image">
+                            <input type="file" name="offer_image" class="form-control" id="offer_image" value="offerImage">
                         </div>
                     </div>
                     <% if(useCoin) { %>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label" for="offerPrice">Preço - <%= coinName %></label>
-                            <input type="text" name="offerPrice" class="form-control" id="offerPrice" required>
+                            <input type="text" name="offerPrice" class="form-control" id="offerPrice" required value="<%= offerPrice %>">
                         </div>
                     </div>
                     <% } %>
@@ -50,8 +52,8 @@
 
                 <div class="col-sm-offset-1 col-sm-9">
                     <div class="form-group text-center" id="buttons-panel">
-                        <button type="button" class="btn btn-default" onclick="location.href = '/community/<%= communityName %>'">Voltar</button>
-                        <button type="submit" class="btn btn-success">Criar</button>
+                        <button type="button" class="btn btn-default" onclick="location.href = '<%= lastURL %>'">Voltar</button>
+                        <button type="submit" class="btn btn-success">Editar</button>
                     </div>
                 </div>
             </form>

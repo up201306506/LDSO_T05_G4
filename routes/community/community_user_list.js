@@ -54,17 +54,23 @@ router.post('/change_member/:communityName', userPrivileges.ensureAuthenticated,
         // Add admin
         if(addToAdminBool){
             // Add user to community's admins
-            communityController.insertAdminInCommunity(db, communityName, userName);
+            communityController.insertAdminInCommunity(db, communityName, userName, function () {
+                // Closes DB
+                db.close();
+
+                // Redirects to user list page
+                res.redirect('/community_users/' + communityName);
+            });
         } else {
             // Remove user from community's admins
-            communityController.removeAdminFromCommunity(db, communityName, userName);
+            communityController.removeAdminFromCommunity(db, communityName, userName, function () {
+                // Closes DB
+                db.close();
+
+                // Redirects to user list page
+                res.redirect('/community_users/' + communityName);
+            });
         }
-
-        // Closes DB
-        db.close();
-
-        // Redirects to user list page
-        res.redirect('/community_users/' + communityName);
     });
 });
 
@@ -78,13 +84,13 @@ router.post('/remove_member/:communityName', userPrivileges.ensureAuthenticated,
     // Connects to database
     mongo.connect(configDB.url, function (err, db) {
         // Remove member from community
-        communityController.removeUserFromCommunity(db, communityName, userName);
+        communityController.removeUserFromCommunity(db, communityName, userName, function () {
+            // Closes DB
+            db.close();
 
-        // Closes DB
-        db.close();
-
-        // Redirects to user list page
-        res.redirect('/community_users/' + communityName);
+            // Redirects to user list page
+            res.redirect('/community_users/' + communityName);
+        });
     });
 });
 

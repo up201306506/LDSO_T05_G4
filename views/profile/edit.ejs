@@ -14,8 +14,12 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-offset-2 col-sm-8">
-            <h1>Editar Perfil - <%= username %></h1>
+        <div class="col-sm-offset-2 col-sm-8 well">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1>Editar Perfil de <i><%= username %></i></h1>
+                </div>
+            </div>
 
             <form role="form" action="/profile/edit/<%= username %>" method="post">
                 <div class="form-group">
@@ -88,10 +92,10 @@
 
                 <div class="col-sm-offset-1 col-sm-9">
                     <div class="form-group text-center" id="buttons-panel">
-                        <button type="submit" class="btn btn-default">Editar</button>
                         <button type="button" class="btn btn-default"
                                 onclick="location.href = '/profile/<%= username %>'">Voltar
                         </button>
+                        <button type="submit" class="btn btn-success">Editar</button>
                     </div>
                 </div>
             </form>
