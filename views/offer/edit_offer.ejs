@@ -25,12 +25,12 @@
             <form role="form" action="/edit_offer/edit/<%= offerId %>" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="control-label" for="offerTitle">Titulo</label>
-                    <input type="text" name="offerTitle" class="form-control" id="offerTitle" required value="<%= offerTitle %>">
+                    <input type="text" name="offerTitle" class="form-control" maxlength="50" id="offerTitle" required value="<%= offerTitle %>">
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="offerDescription">Descrição</label>
-                    <textarea class="form-control" name="offerDescription" id="offerDescription" rows="7"><%= offerDescription %></textarea>
+                    <textarea class="form-control" name="offerDescription" maxlength="350" id="offerDescription" rows="7"><%= offerDescription %></textarea>
                 </div>
 
                 <div class="row">
@@ -44,7 +44,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label" for="offerPrice">Preço - <%= coinName %></label>
-                            <input type="text" name="offerPrice" class="form-control" id="offerPrice" required value="<%= offerPrice %>">
+                            <input type="text" name="offerPrice" class="form-control" maxlength="6" id="offerPrice" required value="<%= offerPrice %>">
                         </div>
                     </div>
                     <% } %>

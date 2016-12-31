@@ -18,14 +18,12 @@ router.get('/', function (req, res) {
 router.post('/register', function (req, res) {
 
     // Verifies if the form is completed correctly
-    req.checkBody('username', 'Username é necessário').notEmpty();
-    req.checkBody('username', 'Username deve ter entre 4 a 20 caracteres').len(4, 20);
-    req.checkBody('password', 'Password é necessária').notEmpty();
-    req.checkBody('password', 'Password deve ter entre 6 a 20 caracteres').len(6, 20);
-    req.checkBody('password2', 'Passwords não coincidem').equals(req.body.password);
+    req.checkBody('username', 'Username deve ter entre 4 a 20 caracteres').isLength({min: 4, max: 20});
+    req.checkBody('password', 'Password deve ter entre 6 a 20 caracteres').isLength({min: 6, max: 20});
+    req.checkBody('passwordre', 'Passwords não coincidem').equals(req.body.password);
     req.checkBody('email', 'Email é necessário').notEmpty();
     req.checkBody('email', 'Email inválido').isEmail();
-    req.checkBody('email2', 'Emails não coincidem').equals(req.body.email);
+    req.checkBody('emailre', 'Emails não coincidem').equals(req.body.email);
 
     // Verifies if there is any error
     var errors = req.validationErrors();

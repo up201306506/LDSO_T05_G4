@@ -77,12 +77,13 @@ router.post('/edit/:username', userPrivileges.ensureAuthenticated, function (req
     var username = String(req.params.username);
 
     // Verifies the form
-    req.checkBody('password', 'Password é necessária').notEmpty();
-    req.checkBody('password', 'Password deve ter entre 6 a 20 caracteres').len(6, 20);
+    req.checkBody('password', 'Password deve ter entre 6 a 20 caracteres').isLength({min: 6, max: 20});
     req.checkBody('passwordre', 'Passwords não coincidem').equals(req.body.password);
+    req.checkBody('name', 'Nome deve ter entre 3 a 40 caracteres').isLength({min: 3, max: 40});
     req.checkBody('email', 'Email é necessário').notEmpty();
     req.checkBody('email', 'Email inválido').isEmail();
     req.checkBody('emailre', 'Emails não coincidem').equals(req.body.email);
+
     var errors = req.validationErrors();
 
     if(req.body.gender != '' && dropdownList.genderList.indexOf(req.body.gender) == -1){

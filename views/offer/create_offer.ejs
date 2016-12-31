@@ -23,12 +23,12 @@
             <form role="form" action="/create_offer/create/<%= communityName %>" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="control-label" for="offerTitle">Titulo</label>
-                    <input type="text" name="offerTitle" class="form-control" maxlength="80" id="offerTitle" required>
+                    <input type="text" name="offerTitle" class="form-control" maxlength="50" id="offerTitle" required>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="offerDescription">Descrição</label>
-                    <textarea class="form-control" maxlength="700" name="offerDescription" id="offerDescription" rows="7"></textarea>
+                    <textarea class="form-control" name="offerDescription" maxlength="350" id="offerDescription" rows="7"></textarea>
                 </div>
 
                 <div class="row">
@@ -42,7 +42,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label" for="offerPrice">Preço - <%= coinName %></label>
-                            <input type="text" name="offerPrice" class="form-control" id="offerPrice" required>
+                            <input type="text" name="offerPrice" class="form-control" maxlength="6" id="offerPrice" required>
                         </div>
                     </div>
                     <% } %>

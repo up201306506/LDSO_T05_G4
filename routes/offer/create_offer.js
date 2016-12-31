@@ -35,8 +35,16 @@ router.post('/create/:communityName', userPrivileges.ensureAuthenticated, upload
     // GET community name from url
     var communityName = String(req.params.communityName);
 
-    req.checkBody('offerTitle', 'Título da oferta é necessário').notEmpty();
-    req.checkBody('offerDescription', 'Username é necessário').notEmpty();
+    var useCoin = false;
+    if(req.body.offerPrice != null)
+        useCoin = true;
+
+    // Verifies if the form is completed
+    req.checkBody('offerTitle', 'Título da oferta deverá ter entre 4 e 50 carácteres').isLength({min: 4, max: 50});
+    req.checkBody('offerDescription', 'Descrição da oferta deverá ter entre 4 e 350 carácteres').isLength({min: 4, max: 350});
+    if(useCoin){
+        req.checkBody('offerPrice', 'Preço da oferta deverá ser um número entre 1 e 6 carácteres').isInt({min: 0, max: 999999});
+    }
 
     var fileName = "";
     if(req.file) fileName = req.file.filename;
