@@ -3,6 +3,14 @@
 <head>
     <title><%= title %></title>
 
+    <script type="text/javascript">
+        function blockSpecialChar(e) {
+            var k = e.keyCode;
+            //código ASCII dos caracteres permitidos
+            return (k == 8 || k == 33 || (k >= 35 && k <= 36) || (k >= 38 && k <= 59) || k == 61 || (k > 62 && k < 92) || k == 93 || (k > 94 && k < 123) || k == 126);
+        }
+    </script>
+
     <% include ./../templates/header.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/community/create_community.css">
 </head>
@@ -18,7 +26,7 @@
             <form role="form" action="/create_community/create" method="post">
                 <div class="form-group">
                     <label class="control-label" for="communityName">Nome</label>
-                    <input type="text" name="communityName" class="form-control" id="communityName" required>
+                    <input type="text" name="communityName" class="form-control" onkeypress="return blockSpecialChar(event)" id="communityName" required>
                 </div>
 
                 <div class="form-group">
