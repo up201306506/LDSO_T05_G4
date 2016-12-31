@@ -9,7 +9,7 @@ var express = require('express'),
 var multer  = require('multer');
 var upload = multer({ dest: 'public/images/offers/' });
 
-router.get('/:communityName', userPrivileges.ensureAuthenticated, function(req, res, next) {
+router.get('/:communityName', userPrivileges.ensureAuthenticated, function(req, res) {
     // GET community name from url
     var communityName = String(req.params.communityName);
 
@@ -65,7 +65,7 @@ router.post('/create/:communityName', userPrivileges.ensureAuthenticated, upload
         mongo.connect(configDB.url, function (err, db, next) {
             // Insert a new offer in the db
             offerController.insertOffer(db, req.user, communityName, req.body.offerTitle, req.body.offerDescription, req.body.offerPrice,
-                req.body.offerType, fileName, false, Date.now(), function (wasCreated) {
+                fileName, false, Date.now(), function (wasCreated) {
                     // Closes DB
                     db.close();
 

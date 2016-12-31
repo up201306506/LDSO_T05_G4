@@ -116,7 +116,7 @@ app.use('/remove_user', webpage_removeCommunityUser);
 // offer
 app.use('/create_offer', webpage_createOffer);
 app.use('/view_offer', webpage_viewoffer);
-app.use('/editoffer', webpage_editoffer);
+app.use('/edit_offer', webpage_editoffer);
 app.use('/delete_offer', webpage_deleteoffer);
 app.use('/accept_offer', webpage_acceptoffer);
 // messaging

@@ -103,22 +103,25 @@ router.get('/:communityName/join_community/', userPrivileges.ensureAuthenticated
             // Verifies community privacy
             if(community.privacy == dropdownList.privacyList[0]){ // Public community
                 // Inserts the user
-                communityController.insertUserInCommunity(db, communityName, req.user);
+                communityController.insertUserInCommunity(db, communityName, req.user, function () {
+                    // Closes db
+                    db.close();
 
-                // Redirects page
-                req.flash('success_msg', 'Aderiu à comunidade ' + communityName);
-                res.redirect("/community/" + communityName);
+                    // Redirects page
+                    req.flash('success_msg', 'Aderiu à comunidade ' + communityName);
+                    res.redirect("/community/" + communityName);
+                });
             } else if(community.privacy == dropdownList.privacyList[1]) { // Private community
                 // Inserts the user's request
-                communityController.insertUserRequestsInCommunity(db, communityName, req.user);
+                communityController.insertUserRequestsInCommunity(db, communityName, req.user, function () {
+                    // Closes db
+                    db.close();
 
-                // Redirects page
-                req.flash('success_msg', 'Pedido de adesão à comunidade ' + communityName + ' enviado com sucesso');
-                res.redirect("/community/" + communityName);
+                    // Redirects page
+                    req.flash('success_msg', 'Pedido de adesão à comunidade ' + communityName + ' enviado com sucesso');
+                    res.redirect("/community/" + communityName);
+                });
             }
-
-            // Closes db
-            db.close();
         });
     });
 });
@@ -130,13 +133,13 @@ router.get('/:communityName/abandon_community/', userPrivileges.ensureAuthentica
     // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
         // Removes user from community
-        communityController.removeUserFromCommunity(db, communityName, req.user);
+        communityController.removeUserFromCommunity(db, communityName, req.user, function () {
+            // Closes db
+            db.close();
 
-        // Closes db
-        db.close();
-
-        req.flash('success_msg', 'Abandou a comunidade ' + communityName);
-        res.redirect("/");
+            req.flash('success_msg', 'Abandou a comunidade ' + communityName);
+            res.redirect("/");
+        });
     });
 });
 
