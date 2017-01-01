@@ -241,43 +241,65 @@ module.exports = {
         });
     },
 
+    // Inserts a user into a Community invitation List
+    insertUserInvitation: function(db, communityName, username, callback) {
+        // Get collections
+        var community = db.collection('community');
+        var communityInvitations = db.collection('communityInvitations');
 
+        community.findOne({name: communityName}, function (err, communityData) {
+            assert.equal(err, null);
+            if (communityData == null) {
+                callback("Comunidade não existe");
+                return;
+            }
 
+            // Verifies if the user is already invited
+            communityInvitations.findOne({community: communityName, user: username}, function (err, inviteData) {
+                assert.equal(err, null);
+                if (inviteData != null) {
+                    callback("O utilizador já foi convidado recentemente");
+                    return;
+                } else {
+                    communityInvitations.createIndex({ "createdAt": 1 }, { expireAfterSeconds: 86400 })
 
+                    communityInvitations.insertOne({community: communityName, user: username, createdAt: new Date()}, function(err, result) {
+                        assert.equal(err, null);
+                        assert.equal(1, result.result.n);
+                        assert.equal(1, result.ops.length);
+                        callback("Utilizador Convidado!");
+                        return;
+                    });
+                }
+            });
+        });
+    },
 
+    checkInvitation: function (db, communityName, username, callback) {
+        // Get collections
+        var communityInvitations = db.collection('communityInvitations');
 
+        // Verifies if the user is already invited
+        communityInvitations.findOne({community: communityName, user: username}, function (err, inviteData) {
+            assert.equal(err, null);
+            if (inviteData != null) {
+                callback(inviteData);
+            } else {
+                callback(false);
+            }
+        });
+    },
 
+    // Remove a user from a Community invitation List
+    removeUserInvitation: function(db, communityName, username, callback) {
+        // Get collection
+        var communityInvitations = db.collection('communityInvitations');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        communityInvitations.deleteOne({community: communityName, user: username}, function (err) {
+            assert.equal(err, null);
+            callback(true);
+        });
+    },
 
 
 
