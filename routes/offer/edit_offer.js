@@ -14,7 +14,7 @@ router.get('/:edit_offer', userPrivileges.ensureAuthenticated, function(req, res
     var offerId = String(req.params.edit_offer);
 
     // Connects to db
-    mongo.connect(configDB.url, function (err, db, next) {
+    mongo.connect(configDB.url, function (err, db) {
         // Get this offer data
         offerController.getOfferData(db, offerId, function (offer) {
             // Get this offer community data
@@ -62,15 +62,14 @@ router.post('/edit/:edit_offer', userPrivileges.ensureAuthenticated, upload.sing
     var errors = req.validationErrors();
     if (errors) {
         req.flash('errors', errors);
-        // If an error was found an error message will appear
         res.redirect('/edit_offer/' + offerId);
     } else {
         // If no error is found a new offer will be created
-        mongo.connect(configDB.url, function (err, db, next) {
+        mongo.connect(configDB.url, function (err, db) {
             // Get this offer data
             offerController.getOfferData(db, offerId, function (offer) {
                 // Edit this offer
-                offerController.editOffer(db, offerId, offer.title, offer.username, offer.communityName, req.body.offerTitle,
+                offerController.editOffer(db, offerId, offer.date, offer.username, offer.communityName, req.body.offerTitle,
                     req.body.offerDescription, req.body.offerPrice, fileName, function (wasEdited) {
                         // Closes DB
                         db.close();

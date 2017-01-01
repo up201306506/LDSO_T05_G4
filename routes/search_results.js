@@ -42,7 +42,7 @@ router.post('/search', function (req, res) {
 
                 // Does not show users if client is not logged in
                 var userList = users;
-                if(!req.user)
+                if (!req.user)
                     userList = [];
 
                 // Renders the page

@@ -80,6 +80,7 @@
                 <div class="row" style="border-top: 1px solid #d6d6d6; padding-top: 15px;">
                     <div class="col-sm-4 text-center" style="border-right: 1px solid #d6d6d6;">
                         <img class="img-responsive img-thumbnail" src="<% if(offerArr[index].imageDir != null && offerArr[index].imageDir != ''){ %>/images/offers/<%= offerArr[index].imageDir %><% }else{ %>http://placehold.it/420x320<% } %>"/>
+                        <p style="margin-top: 5px;"><%= ("0" + (new Date(offerArr[index].date)).getDate()).slice(-2) + "/" + ("0" + ((new Date(offerArr[index].date)).getMonth() + 1)).slice(-2) + "/" + (new Date(offerArr[index].date)).getFullYear() + " - " + ("0" + (new Date(offerArr[index].date)).getHours()).slice(-2) + ":" + ("0" + (new Date(offerArr[index].date)).getMinutes()).slice(-2) %></p>
                         <% if(useCoin) { %><h6>Custo <%= offerArr[index].price %> <b><%= coinName %></b></h6><% } %>
                         <% if(isMember) { %>
                         <form role="form" action="/community/accept_offer" method="post">

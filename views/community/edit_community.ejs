@@ -15,8 +15,7 @@
         <div class="col-sm-offset-2 col-sm-8 well">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1>Editar Comunidade</h1>
-                    <h2 style="margin-top: 0px; margin-bottom: 30px;"><i><%= communityName %></i></h2>
+                    <h2>Editar Comunidade, <i><%= communityName %></i></h2>
                 </div>
             </div>
 
@@ -44,8 +43,16 @@
                         <div class="form-group">
                             <label class="control-label" for="coin">Moeda</label>
                             <div>
-                                <input type="checkbox" name="useCoin" id="useCoin" style="margin-right: 5px;" <% if(useCoin) { %>checked<% } %>>Usar moeda, nome:</input>
-                                <input class="form-control" type="text" name="coinName" id="coinName" disabled required <% if(useCoin) { %>value="<%= coinName %>" <% } %>>
+                                <input disabled type="checkbox" name="useCoin" id="useCoin" style="margin-right: 5px;"
+                                       <% if(useCoin) { %>checked
+                                        <% } %>
+                                >Usar moeda, nome:</input>
+                                <input class="form-control" type="text" name="coinName" id="coinName"
+                                       <% if(!useCoin) { %>disabled
+                                        <% } %>
+                                       required <% if(useCoin) { %>value="<%= coinName %>"
+                                        <% } %>
+                                >
                             </div>
                         </div>
                     </div>
@@ -55,7 +62,10 @@
                             <br>
                             <select class="form-control" name="privacy" id="privacy">
                                 <% for(var index = 0; index < privacyList.length; index++) { %>
-                                <option value="<%= privacyList[index] %>" <% if(privacyList[index] == privacy) { %>selected<% } %>>
+                                <option value="<%= privacyList[index] %>"
+                                        <% if(privacyList[index] == privacy) { %>selected
+                                        <% } %>
+                                >
                                     <%= privacyList[index] %>
                                 </option>
                                 <% } %>
@@ -72,7 +82,9 @@
 
                 <div class="col-sm-offset-1 col-sm-9">
                     <div class="form-group text-center" id="buttons-panel">
-                        <button type="button" class="btn btn-default" onclick="location.href = '/community/<%= communityName %>'">Voltar</button>
+                        <button type="button" class="btn btn-default"
+                                onclick="location.href = '/community/<%= communityName %>'">Voltar
+                        </button>
                         <button type="submit" class="btn btn-success">Editar</button>
                     </div>
                 </div>

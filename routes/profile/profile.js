@@ -22,7 +22,7 @@ router.get('/:username', function (req, res) {
             // Gets user enrolled communities
             communityController.getUserEnrolledCommunities(db, username, isOwnProfile, function (communitiesArr) {
                 // Gets offers in enrolled communities
-                offerController.getOfferHistory(db, req.user, function(offers){
+                offerController.getOfferHistory(db, username, function(offers){
                     // Closes db
                     db.close();
 
@@ -93,7 +93,6 @@ router.post('/edit/:username', userPrivileges.ensureAuthenticated, function (req
 
     if (errors) {
         req.flash('errors', errors);
-        // If an error was found an error message will appear
         res.redirect('/profile/edit/' + username);
     } else {
         // Connects to the db

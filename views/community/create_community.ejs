@@ -15,14 +15,14 @@
         <div class="col-sm-offset-2 col-sm-8 well">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1>Criar Comunidade</h1>
+                    <h2>Criar Comunidade</h2>
                 </div>
             </div>
 
             <form role="form" action="/create_community/create" method="post">
                 <div class="form-group">
                     <label class="control-label" for="communityName">Nome</label>
-                    <input type="text" name="communityName" class="form-control" maxlength="50" id="communityName" required>
+                    <input type="text" name="communityName" class="form-control" maxlength="50" id="communityName" required onkeypress="return allowValidDigits(event)">
                 </div>
 
                 <div class="form-group">
@@ -80,6 +80,14 @@
     $("#useCoin").click(function(){
         $("#coinName").prop('disabled', !$('#useCoin').is(":checked"));
     });
+</script>
+
+<script type="text/javascript">
+    function allowValidDigits(e) {
+        var k = e.keyCode;
+        //código ASCII dos caracteres permitidos
+        return ((k >= 48 && k <= 57) || (k >= 65 && k <= 90) || (k >= 97 && k <= 122));
+    }
 </script>
 
 </body>
