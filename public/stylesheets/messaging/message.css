@@ -18,3 +18,9 @@ button {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+.message_display{
+    overflow: auto; min-height:300px;
+    border: 1px solid #ccc;
+    background-color: white;
+}

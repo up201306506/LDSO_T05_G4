@@ -3,6 +3,7 @@ var express = require('express'),
     configDB = require('./../../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
     communityController = require('./../../controllers/CommunityController'),
+    messagingController = require('./../../controllers/MessageController'),
     offerController = require('./../../controllers/OfferController'),
     userPrivileges = require('./../../config/userPrivileges'),
     dropdownList = require('./../../config/dropdownLists');
@@ -149,7 +150,9 @@ router.post('/invitation', userPrivileges.ensureAuthenticated, function(req, res
     // Verifies if the form is completed
     req.checkBody('recipient', 'Tem de indicar um utilizador a quem enviar convite ').notEmpty();
     req.checkBody('content', 'Por favor escreva uma mensagem junto com o seu convite').notEmpty();
+    req.checkBody('community', '_community_id?').notEmpty();
     var errors = req.validationErrors();
+
 
     //User not logged in???
     if(req.user == undefined){
@@ -159,33 +162,34 @@ router.post('/invitation', userPrivileges.ensureAuthenticated, function(req, res
 
     if (errors) {
         // If an error was found an error message should appear
-        console.log(errors);
+        req.flash('errors', errors);
         //Redirect
         var backURL=req.header('Referer') || '/';
         res.redirect(backURL);
+        return;
     }
 
-    /*
-     //MESSAGE CREATION
      mongo.connect(configDB.url, function (err, db) {
-     // function (db, sender, receiver, subject, content, date, type, callback)
-     messagingController.insertMessage(db, req.user, req.body.receiver, req.body.subject, req.body.content, new Date(), req.body.type, function(success){
-     db.close();
+         var subject = "Foi convidado a juntar-se à comunidade "+ req.body.community;
 
-     if(success)
-     req.flash('success_msg', 'Mensagem enviada!');
-     else
-     req.flash('error_msg', 'O remetente "'+ req.body.receiver+'" não existe!');
+         var message = "Foi convidado por <a href='./profile/"+ req.user +"'>"+req.user+"</a> a juntar-se à comunidade <a href='./community/"+req.body.community+"'>"+req.body.community+ "</a>. <br>Junto com este convite foi enviada a seguinte mensagem pessoal:<br>";
+         message += "<blockquote>" +req.body.content + "</blockquote>";
+         message += "Se quiser aceitar o convite, clique <a href='./community/"+req.body.community+"'>neste endereço</a> para entrar.<br>";
+         message += "Se não quiser aceitar o convite, pode ignorar ou apagar esta mensagem";
 
-     var backURL=req.header('Referer') || '/';
-     res.redirect(backURL);
-     } );
+
+         messagingController.insertMessage(db, req.user, req.body.recipient, subject, message, new Date(), 'invitation', function(success){
+             db.close();
+
+             if(success)
+             req.flash('success_msg', 'Convite enviado a '+ req.body.recipient +'!');
+             else
+             req.flash('error_msg', 'O utilizador "'+ req.body.recipient+'" não existe!');
+
+             var backURL=req.header('Referer') || '/';
+             res.redirect(backURL);
+         });
      });
-     */
-
-    req.flash('error_msg', 'LOL ainda não está feito espera ai!');
-    var backURL=req.header('Referer') || '/';
-    res.redirect(backURL);
 });
 
 module.exports = router;
