@@ -67,6 +67,7 @@ router.get('/:communityName', function (req, res, next) {
                 // Renders page
                 res.render('community/community_page',
                     {
+                        username: req.user,
                         communityName: community.name,
                         communityOffice: community.office,
                         communityDescription: community.description,
@@ -141,6 +142,50 @@ router.get('/:communityName/abandon_community/', userPrivileges.ensureAuthentica
             res.redirect("/");
         });
     });
+});
+
+router.post('/invitation', userPrivileges.ensureAuthenticated, function(req, res) {
+
+    // Verifies if the form is completed
+    req.checkBody('recipient', 'Tem de indicar um utilizador a quem enviar convite ').notEmpty();
+    req.checkBody('content', 'Por favor escreva uma mensagem junto com o seu convite').notEmpty();
+    var errors = req.validationErrors();
+
+    //User not logged in???
+    if(req.user == undefined){
+        if(errors.constructor != Array) errors = [];
+        errors.push({msg:'Houve um problema em encontrar o teu ID de utilizador'} );
+    }
+
+    if (errors) {
+        // If an error was found an error message should appear
+        console.log(errors);
+        //Redirect
+        var backURL=req.header('Referer') || '/';
+        res.redirect(backURL);
+    }
+
+    /*
+     //MESSAGE CREATION
+     mongo.connect(configDB.url, function (err, db) {
+     // function (db, sender, receiver, subject, content, date, type, callback)
+     messagingController.insertMessage(db, req.user, req.body.receiver, req.body.subject, req.body.content, new Date(), req.body.type, function(success){
+     db.close();
+
+     if(success)
+     req.flash('success_msg', 'Mensagem enviada!');
+     else
+     req.flash('error_msg', 'O remetente "'+ req.body.receiver+'" não existe!');
+
+     var backURL=req.header('Referer') || '/';
+     res.redirect(backURL);
+     } );
+     });
+     */
+
+    req.flash('error_msg', 'LOL ainda não está feito espera ai!');
+    var backURL=req.header('Referer') || '/';
+    res.redirect(backURL);
 });
 
 module.exports = router;

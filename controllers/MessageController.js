@@ -10,7 +10,7 @@ module.exports = {
         subject: text
         content: inner_html?? text??
         date: date
-        type: "offer", "conversation"
+        type: "offer", "conversation", "invitaton"
         read: bool
         starred: bool
         deleted: bool
