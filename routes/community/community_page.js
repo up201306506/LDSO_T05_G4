@@ -172,9 +172,9 @@ router.post('/invitation', userPrivileges.ensureAuthenticated, function(req, res
      mongo.connect(configDB.url, function (err, db) {
          var subject = "Foi convidado a juntar-se à comunidade "+ req.body.community;
 
-         var message = "Foi convidado por <a href='./profile/"+ req.user +"'>"+req.user+"</a> a juntar-se à comunidade <a href='./community/"+req.body.community+"'>"+req.body.community+ "</a>. <br>Junto com este convite foi enviada a seguinte mensagem pessoal:<br>";
+         var message = "Foi convidado por <a href='../../profile/"+ req.user +"'>"+req.user+"</a> a juntar-se à comunidade <a href='../../community/"+req.body.community+"'>"+req.body.community+ "</a>. <br>Junto com este convite foi enviada a seguinte mensagem pessoal:<br>";
          message += "<blockquote>" +req.body.content + "</blockquote>";
-         message += "Se quiser aceitar o convite, clique <a href='./community/"+req.body.community+"'>neste endereço</a> para entrar.<br>";
+         message += "Se quiser aceitar o convite, clique <a href='../../community/"+req.body.community+"'>neste endereço</a> para entrar.<br>";
          message += "Se não quiser aceitar o convite, pode ignorar ou apagar esta mensagem";
 
 
