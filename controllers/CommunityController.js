@@ -189,14 +189,14 @@ module.exports = {
     },
 
     // Edit all information of a community
-    editCommunityData: function (db, communityName, headOffice, description, privacy, rules, callback) {
+    editCommunityData: function (db, communityName, headOffice, description, coinName, privacy, rules, callback) {
         // Get Community collection
         var community = db.collection('community');
 
         // Update the community in the db
         community.updateOne({name: communityName},
             {
-                $set: {office: headOffice, description: description, privacy: privacy, ruleDescription: rules}
+                $set: {office: headOffice, description: description, coinName: coinName, privacy: privacy, ruleDescription: rules}
             }, function (err) {
                 assert.equal(err, null);
 

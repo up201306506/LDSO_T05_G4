@@ -15,8 +15,7 @@
         <div class="col-sm-offset-2 col-sm-8 well">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1>Criar Oferta em</h1>
-                    <h2 style="margin-top: 0px; margin-bottom: 30px;"><i><%= communityName %></i></h2>
+                    <h2>Criar Oferta em <i><%= communityName %></i></h2>
                 </div>
             </div>
 
@@ -42,7 +41,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label" for="offerPrice">Preço - <%= coinName %></label>
-                            <input type="text" name="offerPrice" class="form-control" maxlength="6" id="offerPrice" required>
+                            <input type="text" name="offerPrice" class="form-control" onkeypress="return allowNumbersOnly(event)" maxlength="6" id="offerPrice" required>
                         </div>
                     </div>
                     <% } %>
@@ -58,5 +57,13 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function allowNumbersOnly(e) {
+        var k = e.keyCode;
+        //código ASCII dos caracteres permitidos
+        return (k >= 48 && k <= 57);
+    }
+</script>
 </body>
 </html>

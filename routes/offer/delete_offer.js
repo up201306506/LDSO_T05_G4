@@ -10,7 +10,7 @@ router.get('/:delete_offer', userPrivileges.ensureAuthenticated, function(req, r
     var offerId = String(req.params.delete_offer);
 
     // Connects to db
-    mongo.connect(configDB.url, function (err, db, next) {
+    mongo.connect(configDB.url, function (err, db) {
         // Deletes offer from db
         offerController.removeOffer(db, offerId, function () {
             // Close DB

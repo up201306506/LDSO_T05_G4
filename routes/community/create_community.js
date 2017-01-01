@@ -8,7 +8,7 @@ var express = require('express'),
 
 router.get('/', userPrivileges.ensureAuthenticated, function (req, res) {
     res.render('community/create_community', {
-        title: 'Local Exchange - Nova Comunidade',
+        title: 'Local Exchange - Criar Comunidade',
         privacyList: dropdownList.privacyList
     });
 });
@@ -36,17 +36,15 @@ router.post('/create', userPrivileges.ensureAuthenticated, function (req, res) {
     }
 
     if (errors) {
-        res.render('community/create_community', {
-            title: 'Local Exchange - Nova Comunidade',
-            privacyList: dropdownList.privacyList,
-            errors: errors
-        });
+        req.flash('errors', errors);
+        res.redirect('/create_community');
     } else {
         // If no error is found a new community will be created
-        mongo.connect(configDB.url, function (err, db, next) {
+        mongo.connect(configDB.url, function (err, db) {
             // Insert a new community in the db
             communityController.insertCommunity(db, req.body.communityName, req.body.headQuarter, req.body.description,
                 useCoin, req.body.coinName, req.body.privacy, req.body.rules, req.user, [req.user], [{name: req.user, coins: 20}] ,function (wasCreated) {
+                    // Close DB
                     db.close();
 
                     // The main page will be rendered

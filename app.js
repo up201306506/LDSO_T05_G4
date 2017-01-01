@@ -82,14 +82,12 @@ var webpage_communitypage = require('./routes/community/community_page');
 var webpage_createCommunity = require('./routes/community/create_community');
 var webpage_editCommunity = require('./routes/community/edit_community');
 var webpage_communityUserList = require('./routes/community/community_user_list');
-var webpage_communityOfferList = require('./routes/community/community_offer_list');
 var webpage_accept_requests = require('./routes/community/accept_requests');
 var webpage_deleteCommunity = require('./routes/community/remove_community');
 // offer
 var webpage_createOffer = require('./routes/offer/create_offer');
 var webpage_editoffer = require('./routes/offer/edit_offer');
 var webpage_deleteoffer = require('./routes/offer/delete_offer');
-var webpage_acceptoffer = require('./routes/offer/accept_offer');
 // messaging
 var controller_message = require('./routes/messaging/message');
 
@@ -107,14 +105,12 @@ app.use('/community', webpage_communitypage);
 app.use('/create_community', webpage_createCommunity);
 app.use('/edit_community', webpage_editCommunity);
 app.use('/community_users', webpage_communityUserList);
-app.use('/community_offers', webpage_communityOfferList);
 app.use('/accept_requests', webpage_accept_requests);
 app.use('/delete_community', webpage_deleteCommunity);
 // offer
 app.use('/create_offer', webpage_createOffer);
 app.use('/edit_offer', webpage_editoffer);
 app.use('/delete_offer', webpage_deleteoffer);
-app.use('/accept_offer', webpage_acceptoffer);
 // messaging
 app.use('/message/', controller_message);
 
