@@ -259,16 +259,15 @@ module.exports = {
                 assert.equal(err, null);
                 if (inviteData != null) {
                     callback("O utilizador já foi convidado recentemente");
-                    return;
                 } else {
-                    communityInvitations.createIndex({ "createdAt": 1 }, { expireAfterSeconds: 86400 })
+                    communityInvitations.createIndex({ "createdAt": 1 }, { expireAfterSeconds: 86400 });
 
                     communityInvitations.insertOne({community: communityName, user: username, createdAt: new Date()}, function(err, result) {
                         assert.equal(err, null);
                         assert.equal(1, result.result.n);
                         assert.equal(1, result.ops.length);
+
                         callback("Utilizador Convidado!");
-                        return;
                     });
                 }
             });

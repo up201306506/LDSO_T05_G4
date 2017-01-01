@@ -183,88 +183,6 @@ router.get('/:communityName/abandon_community/', userPrivileges.ensureAuthentica
         });
     });
 });
-
-router.post('/invitation', userPrivileges.ensureAuthenticated, function(req, res) {
-
-    // Verifies if the form is completed
-    req.checkBody('recipient', 'Tem de indicar um utilizador a quem enviar convite ').notEmpty();
-    req.checkBody('content', 'Por favor escreva uma mensagem junto com o seu convite').notEmpty();
-    req.checkBody('community', '_community_id?').notEmpty();
-    var errors = req.validationErrors();
-
-
-    //User not logged in???
-    if(req.user == undefined){
-        if(errors.constructor != Array) errors = [];
-        errors.push({msg:'Houve um problema em encontrar o teu ID de utilizador'} );
-    }
-
-    if (errors) {
-        // If an error was found an error message should appear
-        req.flash('errors', errors);
-        //Redirect
-        var backURL=req.header('Referer') || '/';
-        res.redirect(backURL);
-        return;
-    }
-
-     mongo.connect(configDB.url, function (err, db) {
-        communityController.getUserEnrolledCommunities(db,req.body.recipient,true, function(result){
-
-            var found = false;
-            //console.log(result);
-            for(var i = 0; i < result.length; i++){
-                if(result[i].name == req.body.community)
-                    found = true;
-            }
-            if(found){
-                req.flash('error_msg', 'O utilizador "'+ req.body.recipient+'" já faz parte desta comunidade!');
-                var backURL=req.header('Referer') || '/';
-                res.redirect(backURL);
-                return;
-            }
-
-            communityController.insertUserInvitation(db,req.body.community,req.body.recipient,function(success){
-                if(success == null) {
-                    req.flash('error_msg', 'Ocorreu um erro a convidar o utilizador');
-                    var backURL=req.header('Referer') || '/';
-                    res.redirect(backURL);
-                    return;
-                }
-
-                if(success != "Utilizador Convidado!"){
-                    req.flash('error_msg', success);
-                    var backURL=req.header('Referer') || '/';
-                    res.redirect(backURL);
-                return;
-                }
-
-                 var subject = "Foi convidado a juntar-se à comunidade "+ req.body.community;
-
-                 var tomorrow = new Date();
-                 tomorrow.setDate(tomorrow.getDate() + 1);
-
-                 var message = "Foi convidado por <a href='../../profile/"+ req.user +"'>"+req.user+"</a> a juntar-se à comunidade <a href='../../community/"+req.body.community+"'>"+req.body.community+ "</a>. <br>Junto com este convite foi enviada a seguinte mensagem pessoal:<br>";
-                 message += "<blockquote>" +req.body.content + "</blockquote>";
-                 message += "Se quiser aceitar o convite, clique <a href='../../community/"+req.body.community+"/join_community'>neste endereço</a> para entrar.<br>";
-                 message += "Este convite expira a " + tomorrow.toLocaleTimeString() + " " + tomorrow.toLocaleDateString();
-
-                 messageController.insertMessage(db, req.user, req.body.recipient, subject, message, new Date(), 'invitation', function(success){
-                     db.close();
-
-                     if(success)
-                         req.flash('success_msg', 'Convite enviado a '+ req.body.recipient +'!');
-                     else
-                         req.flash('error_msg', 'O utilizador "'+ req.body.recipient+'" não existe!');
-
-                     var backURL=req.header('Referer') || '/';
-                     res.redirect(backURL);
-                 });
-
-            });
-         });
-     });
- });
 	 
 router.post('/accept_offer', userPrivileges.ensureAuthenticated, function (req, res) {
     // Get community name from post
@@ -310,6 +228,83 @@ router.post('/accept_offer', userPrivileges.ensureAuthenticated, function (req, 
             });
         });
     });
+});
+
+router.post('/invitation', userPrivileges.ensureAuthenticated, function(req, res) {
+
+    // Verifies if the form is completed
+    req.checkBody('recipient', 'Tem de indicar um utilizador a quem enviar convite ').notEmpty();
+    req.checkBody('content', 'Por favor escreva uma mensagem junto com o seu convite').notEmpty();
+    req.checkBody('community', '_community_id?').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        req.flash('errors', errors);
+        //Redirect
+        var backURL=req.header('Referer') || '/';
+        res.redirect(backURL);
+    } else {
+        // Connects to the database
+        mongo.connect(configDB.url, function (err, db) {
+            // Get the user enrolled communities
+            communityController.getUserEnrolledCommunities(db, req.body.recipient, true, function(communities){
+                var found = false;
+                for(var i = 0; i < communities.length; i++){
+                    if(communities[i].name == req.body.community){
+                        found = true;
+                        break;
+                    }
+                }
+
+                // The user is alreay in this community
+                if(found){
+                    // Closes DB
+                    db.close();
+
+                    req.flash('error_msg', 'O utilizador "'+ req.body.recipient+'" já faz parte desta comunidade');
+                    var backURL=req.header('Referer') || '/';
+                    res.redirect(backURL);
+                }else{
+                    // Insert the user invitation in the community
+                    communityController.insertUserInvitation(db, req.body.community, req.body.recipient, function(success){
+                        if(success == null) {
+                            req.flash('error_msg', 'Ocorreu um erro a convidar o utilizador');
+                            var backURL=req.header('Referer') || '/';
+                            res.redirect(backURL);
+                        }else if(success != "Utilizador Convidado!"){
+                            req.flash('error_msg', success);
+                            var backURL=req.header('Referer') || '/';
+                            res.redirect(backURL);
+                        }else{
+                            var subject = "Foi convidado a juntar-se à comunidade "+ req.body.community;
+
+                            var tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate() + 1);
+
+                            var message = "Foi convidado por <a href='../../profile/"+ req.user +"'>"+req.user+"</a> a juntar-se à comunidade <a href='../../community/"+req.body.community+"'>"+req.body.community+ "</a>. <br>Junto com este convite foi enviada a seguinte mensagem pessoal:<br>";
+                            message += "<blockquote>" +req.body.content + "</blockquote>";
+                            message += "Se quiser aceitar o convite, clique <a href='../../community/"+req.body.community+"/join_community'>neste endereço</a> para entrar.<br>";
+                            message += "Este convite expira a " + tomorrow.toLocaleTimeString() + " " + tomorrow.toLocaleDateString();
+
+                            // Inserts new message
+                            messageController.insertMessage(db, req.user, req.body.recipient, subject, message, new Date(), 'invitation', function(success){
+                                db.close();
+
+                                if(success)
+                                    req.flash('success_msg', 'Convite enviado a '+ req.body.recipient);
+                                else
+                                    req.flash('error_msg', 'O utilizador "'+ req.body.recipient+'" não existe');
+
+                                var backURL=req.header('Referer') || '/';
+                                res.redirect(backURL);
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    }
 });
 
 module.exports = router;
