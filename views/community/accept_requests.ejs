@@ -1,38 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>Local Exchange - <%= communityName %></title>
+    <title><%= title %></title>
 
     <% include ./../templates/header.ejs %>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/community/accept_requests.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/community/community_user_list.css">
 </head>
 <body>
 <% include ./../templates/navbar.ejs %>
 <% include ../templates/alert_messages.ejs %>
 
 <div class="container">
+    <div class="row">
+        <div class="col-sm-10">
+            <h2>Pedidos de Adesão, <%= communityName %></h2>
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#users">Pedidos de Adesão</a></li>
+            </ul>
+        </div>
 
-    <div class="tab-content" id="community">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Username</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <% for(var index = 0; index < requests.length; index++){ %>
-                <tr>
-                    <td> <a><%= requests[index] %></a> </td>
-                    <td>
-                        <a type="button" class="glyphicon glyphicon-ok ok" style="margin-top:20px" href="/accept_requests/<%= communityName %>/<%= requests[index] %>/accept"></a>
-                        <a type="button" class="glyphicon glyphicon-remove remove" style="margin-top:20px" href="/accept_requests/<%= communityName %>/<%= requests[index] %>/remove"></a>
-                    </td>
-                </tr>
-            <% } %>
-            </tbody>
-        </table>
-        <a class="btn btn-primary" href="/community/<%= communityName %>/" style="margin-top:20px">Voltar</a>
+        <div class="col-sm-2 pull-right">
+            <button style="margin-top: 20px; width: 8em;" type="button" class="btn btn-default" onclick="location.href = '/community/<%= communityName %>'">Voltar</button>
+        </div>
     </div>
 
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="users">
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                    <th class="col-sm-10">Nome de Utilizador</th>
+                    <th class="col-sm-2">Decisão</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for(var index = 0; index < requests.length; index++){ %>
+                <tr>
+                    <td><a href="/profile/<%= requests[index] %>"><%= requests[index] %></a>
+                    <td>
+                        <div class="btn-toolbar">
+                            <div class="btn-group">
+                                <form role="form" action="/accept_requests/accept_member/<%= communityName %>" method="post">
+                                    <input type="hidden" name="userName" value="<%= requests[index] %>">
+                                    <button type="submit" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-ok"></span></button>
+                                </form>
+                            </div>
+
+                            <div class="btn-group">
+                                <form role="form" action="/accept_requests/reject_member/<%= communityName %>" method="post">
+                                    <input type="hidden" name="userName" value="<%= requests[index] %>">
+                                    <button type="submit" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+</body>
+</html>

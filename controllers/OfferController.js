@@ -3,7 +3,7 @@ var ObjectId = require('mongodb').ObjectID;
 
 module.exports = {
     // Insert a new offer in the db
-    insertOffer: function (db, username, communityName, title, description, price, type, imageDir, isExpired, date, callback) {
+    insertOffer: function (db, username, communityName, title, description, price, imageDir, isExpired, date, callback) {
         // Get Offer collection
         var offer = db.collection('offer');
 
@@ -27,7 +27,6 @@ module.exports = {
                     title: title,
                     description: description,
                     price: price,
-                    type: type,
                     imageDir: imageDir,
                     isExpired: isExpired,
                     date: date
@@ -41,6 +40,104 @@ module.exports = {
             }
         });
     },
+
+    // Remove offer from db
+    removeOffer: function (db, id, callback) {
+        // Get Offer collection
+        var offer = db.collection('offer');
+
+        // Delete offer from db
+        offer.deleteOne({_id: ObjectId(id)}, function (err) {
+            assert.equal(err, null);
+
+            callback();
+        });
+    },
+
+    // Retrieves all information of an offer
+    getOfferData: function (db, id, callback) {
+        // Get Offer collection
+        var offer = db.collection('offer');
+
+        // Search for the community in the tb
+        offer.findOne({_id: ObjectId(id)}, function (err, offerData) {
+            assert.equal(err, null);
+
+            // Process the community
+            callback(offerData);
+        });
+    },
+
+    // Edit all information about an offer
+    editOffer: function (db, offerId, lastTitle, username, communityName, title, description, price, imageDir, callback) {
+        // Get Offer collection
+        var offer = db.collection('offer');
+
+        // Search for offers dups in the db
+        offer.findOne({
+            title: title
+        }, function (err, offerData) {
+            assert.equal(err, null);
+
+            // Verifies if there is another offer's dup
+            if (offerData != null && offerData._id != offerId) {
+                callback(false);
+            } else {
+                // Updates information about an offer
+                offer.updateOne({
+                        username: username,
+                        communityName: communityName,
+                        title: lastTitle
+                    },
+                    {
+                        $set: {
+                            title: title,
+                            description: description,
+                            price: price,
+                            imageDir: imageDir
+                        }
+                    },function (err) {
+                        assert.equal(err, null);
+
+                        callback(true);
+                    });
+            }
+        });
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Gets all offers from a community
     getCommunityOffers: function (db, communityName, range, callback) {
@@ -93,14 +190,6 @@ module.exports = {
                 assert.equal(err, null);
                 callback(offers, totalOffersCount);
             });
-        });
-    },
-
-    deleteOffer: function (db, id, callback) {
-        var offer = db.collection('offer');
-        offer.deleteOne({_id: ObjectId(id)}, function (err) {
-            assert.equal(err, null);
-            callback();
         });
     },
 

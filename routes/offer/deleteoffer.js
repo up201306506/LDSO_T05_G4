@@ -5,18 +5,20 @@ var express = require('express'),
     offerController = require('./../../controllers/OfferController'),
     userPrivileges = require('./../../config/userPrivileges');
 
-/* GET users listing. */
-router.get('/:delete_offer', userPrivileges.ensureAuthenticated, function(req, res, next) {
-
+router.get('/:delete_offer', userPrivileges.ensureAuthenticated, function(req, res) {
+    // GET offer id by url parameter
     var offerId = String(req.params.delete_offer);
 
+    // Connects to db
     mongo.connect(configDB.url, function (err, db, next) {
+        // Deletes offer from db
+        offerController.removeOffer(db, offerId, function () {
+            // Close DB
+            db.close();
 
-        offerController.deleteOffer(db, offerId, function (wasDeleted) {
-                db.close();
-                req.flash('success_msg', 'Oferta eliminada com sucesso');
-                res.redirect('/');
-            });
+            req.flash('success_msg', 'Oferta eliminada com sucesso');
+            res.redirect(req.headers.referer);
+        });
     });
 });
 

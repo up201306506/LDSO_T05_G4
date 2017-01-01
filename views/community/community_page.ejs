@@ -5,7 +5,6 @@
 
     <% include ./../templates/header.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/community/community_page.css">
-
 </head>
 <body>
 <% include ./../templates/navbar.ejs %>
@@ -17,10 +16,17 @@
             <div id="side-panel">
                 <h3 id="side-title">Comunidade</h3>
                 <h5><b style="margin-right: 15px;">Nome:</b><%= communityName %></h5>
+                <% if (isLogged) { %>
                 <h5><b style="margin-right: 15px;">Sede:</b><%= communityOffice %></h5>
                 <h5><b style="margin-right: 15px;">Visualização:</b><%= privacy %></h5>
-                <br>
-                <h3 id="side-title">Estatísticas</h3>
+                <% if(useCoin) { %><h5><b style="margin-right: 15px;">Moeda:</b><%= coinName %></h5><% } %>
+                <% } %>
+                <% if(isMember) { %>
+                <h3 id="side-title" style="border-top: 1px solid #d6d6d6; margin-top: 20px; padding-top: 10px;"><%= user %></h3>
+                <h5><b style="margin-right: 15px;">Permissão:</b><% if(isMod) { %>Moderador<% } else { %>Membro<% } %></h5>
+                <% if(useCoin) { %><h5><b style="margin-right: 15px;"><%= coinName %>:</b><% for(var i = 0; i < members.length; i++){ if(members[i].name == user) { %><%= members[i].coins %><% break; }} %></h5><% } %>
+                <% } %>
+                <h3 id="side-title" style="border-top: 1px solid #d6d6d6; margin-top: 20px; padding-top: 10px;">Estatísticas</h3>
                 <h5><b style="margin-right: 15px;">Número de Moderadores:</b><%= admins.length %></h5>
                 <h5><b style="margin-right: 15px;">Número de Membros:</b><%= members.length %></h5>
                 <h5><b style="margin-right: 15px;">Número de Ofertas:</b><%= offerArr.length %></h5>
@@ -48,32 +54,38 @@
             </div>
 
             <h3 id="side-title">Ofertas</h3>
-            <% if(offerArr.length == 0) { %>
+            <% if (!isLogged || (isPrivate && !isMember) || (isSecret && !isMember)) { %>
+            <h5> <b style="margin-right: 15px;">Não tens as permissões necessárias para visualizar este conteúdo</b></h5>
+            <% } else if(offerArr.length == 0) { %>
             <h5> <b style="margin-right: 15px;">Ainda não foram feitas ofertas nesta comunidade.</b></h5>
             <% } else {for(var index = 0; index < offerArr.length; index++) { %>
             <div class="well">
-                <div class="offer-head">
-                    <h4 class="offer-title"><a href="/community/<%= offerArr[index].communityName %>"><%= offerArr[index].communityName %></a></h4>
-                    <span>Criado por: <a href="/profile/<%= offerArr[index].username %>"><%= offerArr[index].username %></a></span>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <% if((user == offerArr[index].username) || isMod) { %>
+                        <div class="btn-group pull-right">
+                            <a style="pointer-events: none; cursor: default;" href="" class="btn btn-primary btn-xs">Opções</a>
+                            <a href="#" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/edit_offer/<%= offerArr[index]._id %>">Editar</a></li>
+                                <li><a href="/delete_offer/<%= offerArr[index]._id %>">Eliminar</a></li>
+                            </ul>
+                        </div>
+                        <% } %>
+                        <a style="pointer-events: none; cursor: default;" href="" class="lead"><%= offerArr[index].title %></a>
+                        <p>Criado por <a href="/profile/<%= offerArr[index].username %>"><%= offerArr[index].username %></a></p>
+                    </div>
                 </div>
 
-                <div class="row offer-content">
-                    <div class="col-sm-4">
-                        <img class="img-responsive visible-md visible-lg" src="<% if(offerArr[index].imageDir != null && offerArr[index].imageDir != ''){ %>/images/offers/<%= offerArr[index].imageDir %><% }else{ %>http://placehold.it/420x320<% } %>"/>
+                <div class="row" style="border-top: 1px solid #d6d6d6; padding-top: 15px;">
+                    <div class="col-sm-4 text-center" style="border-right: 1px solid #d6d6d6;">
+                        <img class="img-responsive img-thumbnail" src="<% if(offerArr[index].imageDir != null && offerArr[index].imageDir != ''){ %>/images/offers/<%= offerArr[index].imageDir %><% }else{ %>http://placehold.it/420x320<% } %>"/>
+                        <% if(useCoin) { %><h6>Custo <%= offerArr[index].price %> <b><%= coinName %></b></h6><% } %>
+                        <a class="btn btn-success <% if(user == offerArr[index].username) { %>disabled<% } %>" href="#" style="width: 8em;">Aceitar</a>
                     </div>
-
                     <div class="col-sm-8">
-                        <p class="lead">
-                            <a href="/view_offer/<%= offerArr[index]._id %>"><%= offerArr[index].title %></a>
-                        </p>
-                        <%= offerArr[index].description %>
+                        <p><%= offerArr[index].description %></p>
                     </div>
-                </div>
-
-                <div class="row offer-footer">
-                    <a class="btn btn-default pull-right" href="/delete_offer/<%= offerArr[index]._id %>">Eliminar</a>
-                    <a class="btn btn-default pull-right" href="/view_offer/<%= offerArr[index]._id %>">Ver detalhes</a>
-                    <h6 class="pull-right" style="margin-right: 20px;">Preço: <%= offerArr[index].price %><span class="glyphicon glyphicon-gift" style="margin-left: 5px;"></span></h6>
                 </div>
             </div>
             <% }} %>
@@ -81,20 +93,27 @@
         </div>
 
         <div class="col-md-2 text-center">
-            <h3 id="side-title">Atalhos</h3>
-            <a class="btn btn-primary btn-block" href="/create_offer/<%= communityName %>">Criar Oferta</a>
+            <h3 id="side-title" style="border-bottom: 1px solid #d6d6d6; margin-bottom: 20px; padding-bottom: 15px;">Atalhos</h3>
+            <a class="btn btn-default btn-block" href="/">Voltar</a>
+            <% if (isLogged) { %>
             <a class="btn btn-primary btn-block" href="/community_users/<%= communityName %>">Ver Membros</a>
             <% if (isMember) { %>
-            <a class="btn btn-primary btn-block" href="#">Sair da Comunidade</a>
-            <% } else if (isrequested) { %>
+            <a class="btn btn-primary btn-block" href="/create_offer/<%= communityName%>">Criar Oferta</a>
+            <a class="btn btn-primary btn-block" href="/community/<%= communityName%>/abandon_community">Sair da Comunidade</a>
+            <% } else if (isPending && isPrivate) { %>
             <a class="btn btn-primary btn-block disabled" href="#">Pedido Enviado</a>
-            <% } else { %>
-            <a class="btn btn-primary btn-block" href="/community/<%= communityName%>/join_community">Entrar na Comunidade</a>
+            <% } else if (isLogged) { %>
+            <a class="btn btn-primary btn-block" href="/community/<%= communityName%>/join_community">Pedir Adesão</a>
             <% } %>
             <% if (isMod) { %>
+            <% if (isPrivate || isSecret) { %>
+            <% if (!isSecret) { %>
             <a class="btn btn-primary btn-block" href="/accept_requests/<%= communityName %>/">Pedidos de Adesão</a>
-            <a class="btn btn-primary btn-block" href="/edit_community/<%= communityName %>">Editar Comunidade</a>
             <% } %>
+            <a class="btn btn-primary btn-block" href="#">Convidar Membros</a>
+            <% } %>
+            <a class="btn btn-primary btn-block" href="/edit_community/<%= communityName %>">Editar Comunidade</a>
+            <% }} %>
             <a class="btn btn-default btn-block btn-sm" href="/faq">FAQ</a>
         </div>
     </div>

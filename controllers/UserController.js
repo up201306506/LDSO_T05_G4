@@ -83,17 +83,16 @@ module.exports = {
         });
     },
 
-    // Edit all informatio about an user
+    // Edit all information about an user
     editUser: function (db, username, password, name, email, phone, gender, callback) {
         // Get Community collection
         var user = db.collection('user');
 
         // Find the user in the db
         user.findOne({username: username}, function (err, result) {
-        assert.equal(err, null);
-            if(result != null)
-            {
+            assert.equal(err, null);
 
+            if(result != null) {
                 // Finds if the email is already taken
                 user.findOne({email: email}, function (err, userData) {
                     assert.equal(err, null);
@@ -113,11 +112,7 @@ module.exports = {
                         callback(false);
                     }
                 });
-
-
-            }
-            else
-            {
+            } else {
                 callback(false);
             }
         });

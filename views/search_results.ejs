@@ -32,6 +32,7 @@
                     <th>Nome</th>
                     <th>Sede</th>
                     <th>Membros</th>
+                    <th>Moderadores</th>
                     <th>Moeda</th>
                     <th>Visualização</th>
                 </tr>
@@ -42,6 +43,7 @@
                     <td><a href="/community/<%= communities[index].name  %>"><%= communities[index].name %></a></td>
                     <td><%= communities[index].office %></td>
                     <td><%= communities[index].members.length %></td>
+                    <td><%= communities[index].admins.length %></td>
                     <% if(communities[index].useCoin) { %>
                     <td><%= communities[index].coinName %></td>
                     <% } else { %>

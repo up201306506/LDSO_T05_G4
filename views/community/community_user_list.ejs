@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title><%= title %></title>
 
@@ -10,51 +10,89 @@
 <% include ./../templates/navbar.ejs %>
 <% include ../templates/alert_messages.ejs %>
 
-<div class="container-fluid">
-	<div class="col-sm-2"></div>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-10">
+			<h2>Membros da Comunidade, <%= communityName %></h2>
+			<ul class="nav nav-tabs">
+				<li class="active"><a data-toggle="tab" href="#users">Membros</a></li>
+			</ul>
+		</div>
 
-	<div class="col-sm-8">
-		<h1><%= communityName %></h1>
-		<br>
-
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>Nome</th>
-					<th>Coins</th>
-					
-					<% if(isModerator){ %>
-					<th>Administrar</th>
-					<% } %>
-				</tr>
-			</thead>
-			
-			<tbody>
-				<% for(var index = 0; index < users.length; index++) { %>
-				<tr>
-					<td class="col-sm-4"><%= users[index].name %></td>
-					<td class="col-sm-4"><%= users[index].coins %></td>
-					<% if(isModerator){ %>
-					<td class="col-sm-4">
-						<div class="row">
-							<div class="col-sm-8">
-								<span><input id="admin-checkbox" type="checkbox" value="">Moderador</span>
-							</div>
-							
-							<div class="col-sm-4">
-								<a href="/remove_user/<%= communityName %>/<%= users[index].name %>" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></a>
-							</div>
-						</div>
-					</td>
-					<% } %>
-				</tr>
-				<% } %>
-			</tbody>
-		</table>
+		<div class="col-sm-2 pull-right">
+			<button style="margin-top: 20px; width: 8em;" type="button" class="btn btn-default" onclick="location.href = '/community/<%= communityName %>'">Voltar</button>
+		</div>
 	</div>
 
-	<div class="col-sm-2"></div>
+	<div class="tab-content">
+		<div class="tab-pane fade in active" id="users">
+			<table class="table table-bordered">
+				<thead>
+				<tr>
+					<th class="col-sm-4">Nome de Utilizador</th>
+                    <% if(useCoin) { %>
+					<th class="col-sm-2"><%= coinName %></th>
+                    <% } %>
+                    <th class="col-sm-2">Permissões</th>
+                    <% if(isModerator){ %>
+                    <th class="col-sm-3">Mudar Permissões</th>
+                    <th class="col-sm-1">Expulsar</th>
+                    <% } %>
+				</tr>
+				</thead>
+				<tbody>
+				<% for(var index = 0; index < members.length; index++){ %>
+				<tr>
+                    <td><a href="/profile/<%= members[index].name %>"><%= members[index].name %></a></td>
+                    <% if(useCoin) { %>
+                    <td><%= members[index].coins %></td>
+                    <% } %>
+                    <td><% if(founder == members[index].name) { %>Fundador<% } else if (admins.indexOf(members[index].name) != -1) { %>Moderador<% } else { %>Membro<% } %></td>
+                    <% if(isModerator){ %>
+                    <% if(founder == members[index].name || (admins.indexOf(members[index].name) != -1) && thisUser != founder) { %>
+                    <td>-</td>
+                    <td>-</td>
+                    <% } else { %>
+                    <td>
+                        <form role="form" action="/community_users/change_member/<%= communityName %>" method="post">
+                            <input type="radio" name="permissions" id="permissions<%= index %>" value="admin" <% if (admins.indexOf(members[index].name) != -1) { %>checked<% } %>> Moderador</input>
+                            <input type="radio" name="permissions" id="permissions<%= index %>" value="member" style="margin-left: 20px;" <% if (!(admins.indexOf(members[index].name) != -1)) { %>checked<% } %>> Membro</input>
+                            <input type="hidden" name="userName" value="<%= members[index].name %>">
+                            <button id="saveButton<%= index %>" style="margin-right: 5px; visibility: hidden;" type="submit" class="btn btn-success btn-xs pull-right" onclick="location.href = '#'"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                            <script>
+                                $('input[type=radio][id=permissions<%= index %>]').on('change', function() {
+                                    if(document.getElementById('saveButton<%= index %>').style.visibility != 'hidden') {
+                                        document.getElementById('saveButton<%= index %>').style.visibility = 'hidden';
+                                    } else {
+                                        document.getElementById('saveButton<%= index %>').style.visibility = 'visible';
+                                    }
+                                });
+                            </script>
+                        </form>
+                    </td>
+                    <td>
+                        <form role="form" action="/community_users/remove_member/<%= communityName %>" method="post">
+                            <input type="hidden" name="userName" value="<%= members[index].name %>">
+                            <button type="submit" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
+                        </form>
+                    </td>
+                    <% }} %>
+				</tr>
+				<% } %>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 
+<script>
+	$('input[type=radio][name=permissions]').on('change', function() {
+        if(document.getElementById('saveButton').style.visibility != 'hidden') {
+            document.getElementById('saveButton').style.visibility = 'hidden';
+        } else {
+            document.getElementById('saveButton').style.visibility = 'visible';
+        }
+	});
+</script>
 </body>
 </html>

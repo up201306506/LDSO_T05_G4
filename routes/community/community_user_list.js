@@ -1,30 +1,96 @@
-var express = require('express');
-var router = express.Router();
-var assert = require('assert');
-var userPrivileges = require('./../../config/userPrivileges');
-var communityController = require('./../../controllers/CommunityController');
-var mongo = require('mongodb').MongoClient;
-var configDB = require('./../../config/dbURL.js');
-var userController = require('./../../controllers/UserController');
-/* GET community user list page. */
-router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req, res, next)  {
+var express = require('express'),
+    router = express.Router(),
+    configDB = require('./../../config/dbURL.js'),
+    mongo = require('mongodb').MongoClient,
+    communityController = require('./../../controllers/CommunityController'),
+    userPrivileges = require('./../../config/userPrivileges');
 
-    //var isMod = userPrivileges.isModerator();
+router.get('/:communityName', userPrivileges.ensureAuthenticated, function (req, res, next)  {
+    // GET community name
     var communityName = String(req.params.communityName);
 
+    // Connects to database
     mongo.connect(configDB.url, function (err, db) {
-
-        communityController.getCommunityUsers(db,communityName,function (community) {
-
+        // Gets the info from the community
+        communityController.getCommunityData(db, communityName, function (community) {
+            // Closes DB
             db.close();
+
+            // Gets this user community permissions
+            var isModeratorBool = false;
+            if(community.admins.indexOf(req.user) != -1)
+                isModeratorBool = true;
+
             res.render('community/community_user_list',
                 {
-                    title: 'Community List Of Users',
-                    isModerator: "true",
+                    title: 'Local Exchange - Lista de Utilizadores',
+                    thisUser: req.user,
+                    isModerator: isModeratorBool,
                     communityName: communityName,
-                    users: community.members
+                    founder: community.founder,
+                    useCoin: community.useCoin,
+                    coinName: community.coinName,
+                    admins: community.admins,
+                    members: community.members
                 });
-        })
+        });
+    });
+});
+
+router.post('/change_member/:communityName', userPrivileges.ensureAuthenticated, function (req, res) {
+    // GET community name
+    var communityName = String(req.params.communityName);
+
+    // Gets username from post
+    var userName = req.body.userName;
+
+    // Boolean to further logic
+    var addToAdminBool = false;
+    if(req.body.permissions == 'admin')
+        addToAdminBool = true;
+
+    // Connects to database
+    mongo.connect(configDB.url, function (err, db) {
+        // Add admin
+        if(addToAdminBool){
+            // Add user to community's admins
+            communityController.insertAdminInCommunity(db, communityName, userName, function () {
+                // Closes DB
+                db.close();
+
+                // Redirects to user list page
+                res.redirect('/community_users/' + communityName);
+            });
+        } else {
+            // Remove user from community's admins
+            communityController.removeAdminFromCommunity(db, communityName, userName, function () {
+                // Closes DB
+                db.close();
+
+                // Redirects to user list page
+                res.redirect('/community_users/' + communityName);
+            });
+        }
+    });
+});
+
+router.post('/remove_member/:communityName', userPrivileges.ensureAuthenticated, function (req, res) {
+    // GET community name
+    var communityName = String(req.params.communityName);
+
+    // Gets username from post
+    var userName = req.body.userName;
+
+    // Connects to database
+    mongo.connect(configDB.url, function (err, db) {
+        // Remove member from community
+        communityController.removeUserFromCommunity(db, communityName, userName, function () {
+            // Closes DB
+            db.close();
+
+            // Redirects to user list page
+            res.redirect('/community_users/' + communityName);
+        });
     });
 });
 

@@ -10,7 +10,7 @@ router.get('/', userPrivileges.ensureAuthenticated, function (req, res) {
     // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
         // Gets communities administrated by this user
-        communityController.getUserAdminCommunities(db, req.user, true, function (communities) {
+        communityController.getUserAdminCommunities(db, req.user, function (communities) {
             // Closes db
             db.close();
 

@@ -21,8 +21,9 @@ router.get('/:username', function (req, res) {
         userController.getUser(db, username, function (userData) {
             // Gets user enrolled communities
             communityController.getUserEnrolledCommunities(db, username, isOwnProfile, function (communitiesArr) {
+                // Gets offers in enrolled communities
                 offerController.getOfferHistory(db, req.user, function(offers){
-                // Gets offers in inrolled communities
+                    // Closes db
                     db.close();
 
                     res.render('profile/view',
@@ -52,6 +53,7 @@ router.get('/edit/:username', userPrivileges.ensureAuthenticated, function (req,
     mongo.connect(configDB.url, function (err, db) {
         // Gets the user information
         userController.getUser(db, username, function (userData) {
+            // Closes db
             db.close();
 
             res.render('profile/edit',
@@ -75,12 +77,13 @@ router.post('/edit/:username', userPrivileges.ensureAuthenticated, function (req
     var username = String(req.params.username);
 
     // Verifies the form
-    req.checkBody('password', 'Password é necessária').notEmpty();
-    req.checkBody('password', 'Password deve ter entre 6 a 20 caracteres').len(6, 20);
+    req.checkBody('password', 'Password deve ter entre 6 a 20 caracteres').isLength({min: 6, max: 20});
     req.checkBody('passwordre', 'Passwords não coincidem').equals(req.body.password);
+    req.checkBody('name', 'Nome deve ter entre 3 a 40 caracteres').isLength({min: 3, max: 40});
     req.checkBody('email', 'Email é necessário').notEmpty();
     req.checkBody('email', 'Email inválido').isEmail();
     req.checkBody('emailre', 'Emails não coincidem').equals(req.body.email);
+
     var errors = req.validationErrors();
 
     if(req.body.gender != '' && dropdownList.genderList.indexOf(req.body.gender) == -1){
@@ -97,6 +100,7 @@ router.post('/edit/:username', userPrivileges.ensureAuthenticated, function (req
         mongo.connect(configDB.url, function (err, db) {
             // Edit the user information
             userController.editUser(db, username, req.body.password, req.body.name, req.body.email, req.body.phone, req.body.gender, function (wasEdited) {
+                // Closes db
                 db.close();
 
                 // If user was edited
