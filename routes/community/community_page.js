@@ -68,6 +68,7 @@ router.get('/:communityName', function (req, res, next) {
                 // Renders page
                 res.render('community/community_page',
                     {
+                        username: req.user,
                         communityName: community.name,
                         communityOffice: community.office,
                         communityDescription: community.description,
@@ -144,6 +145,53 @@ router.get('/:communityName/abandon_community/', userPrivileges.ensureAuthentica
     });
 });
 
+router.post('/invitation', userPrivileges.ensureAuthenticated, function(req, res) {
+
+    // Verifies if the form is completed
+    req.checkBody('recipient', 'Tem de indicar um utilizador a quem enviar convite ').notEmpty();
+    req.checkBody('content', 'Por favor escreva uma mensagem junto com o seu convite').notEmpty();
+    req.checkBody('community', '_community_id?').notEmpty();
+    var errors = req.validationErrors();
+
+
+    //User not logged in???
+    if(req.user == undefined){
+        if(errors.constructor != Array) errors = [];
+        errors.push({msg:'Houve um problema em encontrar o teu ID de utilizador'} );
+    }
+
+    if (errors) {
+        // If an error was found an error message should appear
+        req.flash('errors', errors);
+        //Redirect
+        var backURL=req.header('Referer') || '/';
+        res.redirect(backURL);
+        return;
+    }
+
+     mongo.connect(configDB.url, function (err, db) {
+         var subject = "Foi convidado a juntar-se à comunidade "+ req.body.community;
+
+         var message = "Foi convidado por <a href='../../profile/"+ req.user +"'>"+req.user+"</a> a juntar-se à comunidade <a href='../../community/"+req.body.community+"'>"+req.body.community+ "</a>. <br>Junto com este convite foi enviada a seguinte mensagem pessoal:<br>";
+         message += "<blockquote>" +req.body.content + "</blockquote>";
+         message += "Se quiser aceitar o convite, clique <a href='../../community/"+req.body.community+"'>neste endereço</a> para entrar.<br>";
+         message += "Se não quiser aceitar o convite, pode ignorar ou apagar esta mensagem";
+
+
+         messageController.insertMessage(db, req.user, req.body.recipient, subject, message, new Date(), 'invitation', function(success){
+             db.close();
+
+             if(success)
+             req.flash('success_msg', 'Convite enviado a '+ req.body.recipient +'!');
+             else
+             req.flash('error_msg', 'O utilizador "'+ req.body.recipient+'" não existe!');
+
+             var backURL=req.header('Referer') || '/';
+             res.redirect(backURL);
+         });
+     });
+ });
+	 
 router.post('/accept_offer', userPrivileges.ensureAuthenticated, function (req, res) {
     // Get community name from post
     var communityName = req.body.communityName;

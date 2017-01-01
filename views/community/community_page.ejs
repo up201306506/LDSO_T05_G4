@@ -116,7 +116,7 @@
             <% if (!isSecret) { %>
             <a class="btn btn-primary btn-block" href="/accept_requests/<%= communityName %>/">Pedidos de Adesão</a>
             <% } %>
-            <a class="btn btn-primary btn-block" href="#">Convidar Membros</a>
+            <a data-toggle="modal" data-target="#invite_modal" class="btn btn-primary btn-block" href="#">Convidar Membros</a>
             <% } %>
             <a class="btn btn-primary btn-block" href="/edit_community/<%= communityName %>">Editar Comunidade</a>
             <% }} %>
@@ -124,5 +124,86 @@
         </div>
     </div>
 </div>
+
+<% if (isMod) { %>
+<% if (isPrivate || isSecret) { %>
+    <div id="invite_modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="Invitation_Form" class="form-horizontal" role="form" action="/community/invitation" method="post">
+
+                    <div class="modal-header">
+                        <h4><span style="margin-right: 15px;" class="glyphicon glyphicon-envelope"></span>Convidar um Membro</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <div class="col-sm-12" style="margin-top: 10px; margin-bottom: 30px;">
+                                O utilizador vai ser informado do seu convite. <br>
+                                Por favor acrescente, adicionalmente, uma mensagem pessoal a introduzir o seu grupo
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="reply_recipient">Para</label>
+                            <div class="col-sm-10">
+                                <input name="recipient" type="text" class="form-control" id="reply_recipient">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="compose_subject">Mensagem</label>
+                            <div class="col-sm-10">
+                                <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+                                    <div class="btn-group" id="editor-buttons">
+                                        <a class="btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><strong>B</strong></a>
+                                        <a class="btn" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><em>I</em></a>
+                                        <a class="btn" data-edit="strikethrough" title="" data-original-title="Strikethrough"><s>S</s></a>
+                                        <a class="btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><u>U</u></a>
+                                    </div>
+                                    <div class="btn-group">
+                                        <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)">Desfazer</a>
+                                        <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)">Refazer</a>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div id="editor" contenteditable="true"></div>
+                                </div>
+                                <input id="content_input" name="content" value="" hidden>
+                                <input id="content_input" name="community" value="<%= communityName %>" hidden>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="modal-buttons" class="text-center" style="margin-bottom: 20px;">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" onclick="sendInvite()">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Text-area editor with buttons -->
+    <script type="text/javascript" src="https://rawgithub.com/mindmup/bootstrap-wysiwyg/master/bootstrap-wysiwyg.js"></script>
+    <script src="https://rawgithub.com/mindmup/bootstrap-wysiwyg/master/external/jquery.hotkeys.js"></script>
+    <script>
+
+
+        $(document).ready(function(){
+            //Textarea Initializer
+            $('#editor').wysiwyg();
+            $('#launch').click();
+        });
+        function sendInvite(){
+            $('#content_input').attr('value', $('#editor').html());
+            $('#Invitation_Form').submit();
+        }
+    </script>
+<% } %>
+<% } %>
+
+
 </body>
 </html>

@@ -4,15 +4,15 @@ var userController = require("./UserController.js");
 
 module.exports = {
     /*
-     sender: username
-     receiver: username
-     subject: text
-     content: inner_html?? text??
-     date: date
-     type: "offer", "conversation"
-     read: bool
-     starred: bool
-     deleted: bool
+        sender: username
+        receiver: username
+        subject: text
+        content: inner_html?? text??
+        date: date
+        type: "offer", "conversation", "invitation"
+        read: bool
+        starred: bool
+        deleted: bool
      */
 
     //Create a new Message
