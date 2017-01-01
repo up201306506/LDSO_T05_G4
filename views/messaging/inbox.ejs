@@ -41,7 +41,17 @@
 
             <div class="row" style="margin-top: 10px;">
                 <div class="list-group col-sm-12">
-                    <% for(var i = 0; i < userMessages.length; i++) { %>
+                    <% if(userMessages.length == 0) { %>
+                    <li class="list-group-item">
+                        <a class="disabled">
+                            <div class="message_sender_username">
+                            </div>
+                            <div class="message_preview">
+                                <span class="message_subject">Sem nenhuma mensagem para mostrar</span>
+                            </div>
+                        </a>
+                    </li>
+                    <% } else { for(var i = 0; i < userMessages.length; i++) { %>
                     <li class="list-group-item <%if(!userMessages[i].read){%>active<%}%>">
                         <a href="#"><span class="glyphicon glyphicon-star<%= userMessages[i].starred ? "" : "-empty" %>" star_id="<%= userMessages[i]._id %>" onclick="toggleStar(this)"></span></a>
 
@@ -60,7 +70,7 @@
                         </a>
 
                         <div class="pull-right">
-                            <span class="badge hidden-xs" title="<%= userMessages[i].date.toUTCString() %>"><%= userMessages[i].date.getDate() + "/" + userMessages[i].date.getMonth() + "/" + userMessages[i].date.getFullYear() %></span>
+                            <span class="badge hidden-xs"><%= ("0" + (new Date(userMessages[i].date)).getDate()).slice(-2) + "/" + ("0" + ((new Date(userMessages[i].date)).getMonth() + 1)).slice(-2) + "/" + (new Date(userMessages[i].date)).getFullYear() + " - " + ("0" + (new Date(userMessages[i].date)).getHours()).slice(-2) + ":" + ("0" + (new Date(userMessages[i].date)).getMinutes()).slice(-2) %></span>
                             <% if(inboxType == 'Deleted'){ %>
                             <a href="#"><span class="glyphicon glyphicon-share-alt" onclick="recycleButton(this)" delete_id="<%= userMessages[i]._id %>"
                                               data-toggle="tooltip" data-placement="left" title="Restaurar Mensagem"></span></a>
@@ -70,7 +80,7 @@
                             <% } %>
                         </div>
                     </li>
-                    <% } %>
+                    <% }} %>
                 </div>
             </div>
         </div>

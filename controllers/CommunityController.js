@@ -114,85 +114,191 @@ module.exports = {
     },
 
     // Insert a new user in the community
-    insertUserInCommunity: function (db, communityName, userName) {
+    insertUserInCommunity: function (db, communityName, userName, callback) {
         // Get Community collection
         var community = db.collection('community');
 
         // Inserts user
-        community.updateOne({name: communityName}, {$push: {members: {name: userName, coins: 0}}});
+        community.updateOne({name: communityName}, {$push: {members: {name: userName, coins: 20}}}, function () {
+            // Call callback
+            callback();
+        });
     },
 
     // User request to be inserted in the community
-    insertUserRequestsInCommunity: function (db, communityName, userName) {
+    insertUserRequestsInCommunity: function (db, communityName, userName, callback) {
         // Get Community collection
         var community = db.collection('community');
 
         // Inserts user's request
-        community.updateOne({name: communityName}, {$push: {requests: userName}});
+        community.updateOne({name: communityName}, {$push: {requests: userName}}, function () {
+            // Call callback
+            callback();
+        });
     },
 
     // Remove user from community
-    removeUserFromCommunity: function (db, communityName, userName) {
+    removeUserFromCommunity: function (db, communityName, userName, callback) {
         // Get Community collection
         var community = db.collection('community');
 
         // Removes user from members
-        community.updateOne({name: communityName, founder: {$ne: userName}}, {$pull: {members: {name: userName}}});
-
-        // Removes user from admins
-        community.updateOne({name: communityName, founder: {$ne: userName}}, {$pull: {admins: userName}});
+        community.updateOne({name: communityName, founder: {$ne: userName}}, {$pull: {members: {name: userName}}}, function () {
+            // Removes user from admins
+            community.updateOne({name: communityName, founder: {$ne: userName}}, {$pull: {admins: userName}}, function () {
+                // Call callback
+                callback();
+            });
+        });
     },
 
     // Insert new admin to community
-    insertAdminInCommunity: function (db, communityName, userName) {
+    insertAdminInCommunity: function (db, communityName, userName, callback) {
         // Get Community collection
         var community = db.collection('community');
 
         // Inserts user
-        community.updateOne({name: communityName}, {$push: {admins: userName}});
+        community.updateOne({name: communityName}, {$push: {admins: userName}}, function () {
+            // Call callback
+            callback();
+        });
     },
 
     // Remove admin from community
-    removeAdminFromCommunity: function (db, communityName, userName) {
+    removeAdminFromCommunity: function (db, communityName, userName, callback) {
         // Get Community collection
         var community = db.collection('community');
 
         // Inserts user
-        community.updateOne({name: communityName}, {$pull: {admins: userName}});
+        community.updateOne({name: communityName}, {$pull: {admins: userName}}, function () {
+            // Call callback
+            callback();
+        });
     },
 
     // Remove user request
-    removeFromRequests: function (db, communityName, username){
+    removeFromRequests: function (db, communityName, username, callback){
         // Get Community collection
         var community = db.collection('community');
 
         // Remove user from request list
-        community.updateOne({name: communityName}, {$pull: {requests: username}});
+        community.updateOne({name: communityName}, {$pull: {requests: username}}, function () {
+            // Call callback
+            callback();
+        });
     },
 
+    // Edit all information of a community
+    editCommunityData: function (db, communityName, headOffice, description, coinName, privacy, rules, callback) {
+        // Get Community collection
+        var community = db.collection('community');
 
+        // Update the community in the db
+        community.updateOne({name: communityName},
+            {
+                $set: {office: headOffice, description: description, coinName: coinName, privacy: privacy, ruleDescription: rules}
+            }, function (err) {
+                assert.equal(err, null);
 
+                // Process the edit
+                callback(true);
+            });
+    },
 
+    // Update member coins
+    updateMemberCoins: function (db, communityName, username, value, callback) {
+        // Get Community collection
+        var community = db.collection('community');
 
+        // Update the community member's coins
+        community.findOne({name: communityName}, function (err, communityData) {
+            assert.equal(err, null);
 
+            // Holds coin value to update
+            var coinValue = 0;
+            for(var index = 0; index < communityData.members.length; index++){
+                if(communityData.members[index].name == username){
+                    coinValue = communityData.members[index].coins;
+                    break;
+                }
+            }
 
+            coinValue += value;
 
+            if(coinValue < 0){
+                callback(false);
+            }else{
+                community.updateOne({name: communityName, "members.name": username},
+                    {
+                        $set : {"members.$.coins": coinValue}
+                    }, function (err) {
+                        assert.equal(err, null);
 
+                        // Process the edit
+                        callback(true);
+                    });
+            }
+        });
+    },
 
+    // Inserts a user into a Community invitation List
+    insertUserInvitation: function(db, communityName, username, callback) {
+        // Get collections
+        var community = db.collection('community');
+        var communityInvitations = db.collection('communityInvitations');
 
+        community.findOne({name: communityName}, function (err, communityData) {
+            assert.equal(err, null);
+            if (communityData == null) {
+                callback("Comunidade não existe");
+                return;
+            }
 
+            // Verifies if the user is already invited
+            communityInvitations.findOne({community: communityName, user: username}, function (err, inviteData) {
+                assert.equal(err, null);
+                if (inviteData != null) {
+                    callback("O utilizador já foi convidado recentemente");
+                } else {
+                    communityInvitations.createIndex({ "createdAt": 1 }, { expireAfterSeconds: 86400 });
 
+                    communityInvitations.insertOne({community: communityName, user: username, createdAt: new Date()}, function(err, result) {
+                        assert.equal(err, null);
+                        assert.equal(1, result.result.n);
+                        assert.equal(1, result.ops.length);
 
+                        callback("Utilizador Convidado!");
+                    });
+                }
+            });
+        });
+    },
 
+    checkInvitation: function (db, communityName, username, callback) {
+        // Get collections
+        var communityInvitations = db.collection('communityInvitations');
 
+        // Verifies if the user is already invited
+        communityInvitations.findOne({community: communityName, user: username}, function (err, inviteData) {
+            assert.equal(err, null);
+            if (inviteData != null) {
+                callback(inviteData);
+            } else {
+                callback(false);
+            }
+        });
+    },
 
+    // Remove a user from a Community invitation List
+    removeUserInvitation: function(db, communityName, username, callback) {
+        // Get collection
+        var communityInvitations = db.collection('communityInvitations');
 
-
-
-
-
-
-
+        communityInvitations.deleteOne({community: communityName, user: username}, function (err) {
+            assert.equal(err, null);
+            callback(true);
+        });
+    },
 
 
 
@@ -287,23 +393,6 @@ module.exports = {
                 callback(false);
             }
         });
-    },
-
-    // Edit all information of a community
-    editCommunityData: function (db, communityName, headOffice, description, privacy, rules, callback) {
-        // Get Community collection
-        var community = db.collection('community');
-
-        // Update the community in the db
-        community.updateOne({name: communityName},
-            {
-                $set: {office: headOffice, description: description, privacy: privacy, ruleDescription: rules}
-            }, function (err) {
-                assert.equal(err, null);
-
-                // Process the edit
-                callback(true);
-            });
     },
 
     removeCommunity : function ( db, name, callback) {

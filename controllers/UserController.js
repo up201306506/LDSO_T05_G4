@@ -71,6 +71,7 @@ module.exports = {
         });
     },
 
+    // Get all users with username like param
     getAllUsers: function (db,username,callback) {
         // Get User collection
         var user = db.collection('user');
@@ -83,108 +84,38 @@ module.exports = {
         });
     },
 
-    // Edit all informatio about an user
+    // Edit all information about an user
     editUser: function (db, username, password, name, email, phone, gender, callback) {
         // Get Community collection
         var user = db.collection('user');
 
         // Find the user in the db
         user.findOne({username: username}, function (err, result) {
-        assert.equal(err, null);
-            if(result != null)
-            {
+            assert.equal(err, null);
 
+            if (result != null) {
                 // Finds if the email is already taken
                 user.findOne({email: email}, function (err, userData) {
                     assert.equal(err, null);
 
                     // Verifies if email is not being used
-                    if(userData == null || userData.username == username ){
+                    if (userData == null || userData.username == username) {
                         // Updates information about the user
                         user.updateOne({username: username},
                             {
                                 $set: {password: password, name: name, email: email, phone: phone, gender: gender}
-                            },function (err) {
+                            }, function (err) {
                                 assert.equal(err, null);
 
                                 callback(true);
                             });
-                    }else{
+                    } else {
                         callback(false);
                     }
                 });
-
-
-            }
-            else
-            {
+            } else {
                 callback(false);
             }
-        });
-    },
-
-
-
-
-
-
-
-
-
-
-
-
-
-    updateEmail: function (db, oldEmail, newEmail, callback) {
-        var user = db.collection('user');
-        user.updateOne({email: oldEmail}, {$set: {email: newEmail}}
-            , function (err, result) {
-                assert.equal(err, null);
-                console.log("E-mail updated.");
-                callback(result);
-            });
-    },
-
-    updatePassword: function (db, email, newpass, callback) {
-        var user = db.collection('user');
-        user.updateOne({email: email}, {$set: {password: newpass}}
-            , function (err, result) {
-                assert.equal(err, null);
-                console.log("Password updated.");
-                callback(result);
-            });
-    },
-
-    updatePhone: function (db, email, newphone, callback) {
-        var user = db.collection('user');
-        user.updateOne({email: email}, {$set: {phone: newphone}}
-            , function (err, result) {
-                assert.equal(err, null);
-                console.log("Phone updated.");
-                callback(result);
-            });
-    },
-
-    deleteUserByEmail: function (db, mail, callback) {
-        var user = db.collection('user');
-        user.deleteOne({email: mail}, function (err, results) {
-            if (err) {
-                console.log("failed");
-                throw err;
-            }
-            assert.equal(1, results.result.n);
-            console.log("success");
-            callback(results);
-        });
-    },
-
-    listAllUsers: function (db, callback) {
-        var user = db.collection('user');
-        user.find().toArray(function (err, docs) {
-            assert.equal(err, null);
-            console.log('Found ' + docs.length + " documents");
-            console.log(docs);
-            callback(docs);
         });
     }
 };

@@ -1,4 +1,4 @@
-button {
+#buttonsPanel button {
     width: 9em;
 }
 
@@ -17,4 +17,14 @@ button {
     overflow: auto; max-height:700px; height: 300px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.message_display{
+    overflow: auto; min-height:300px;
+    border: 1px solid #ccc;
+    background-color: white;
+}
+
+blockquote{
+    font-size: inherit;
 }

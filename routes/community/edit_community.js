@@ -38,10 +38,18 @@ router.post('/:communityName', userPrivileges.ensureAuthenticated, function (req
     // GET community name from url
     var communityName = String(req.params.communityName);
 
+    var useCoin = false;
+    if(req.body.useCoin === 'on')
+        useCoin = true;
+
     // Verifies if the form is completed
-    req.checkBody('headQuarter', 'Sede da comunidade necessária').notEmpty();
-    req.checkBody('description', 'Descricao da comunidade necessária').notEmpty();
+    req.checkBody('headQuarter', 'Sede da comunidade deverá ter entre 4 e 50 carácteres').isLength({min: 4, max: 50});
+    req.checkBody('description', 'Descricao da comunidade deverá ter até 800 carácteres').isLength({min: 1, max: 800});
+    if(useCoin) {
+        req.checkBody('coinName', 'Nome da moeda da comunidade deverá ter entre 1 e 10 carácteres').isLength({min: 1, max: 10});
+    }
     req.checkBody('privacy', 'É necessário escolher o tipo de privacidade').notEmpty();
+    req.checkBody('rules', 'Regras da comunidade deverá ter até 800 carácteres').isLength({min: 1, max: 800});
 
     // If an error is found an error message will be displayed
     var errors = req.validationErrors();
@@ -52,32 +60,14 @@ router.post('/:communityName', userPrivileges.ensureAuthenticated, function (req
     }
 
     if (errors) {
-        // Connects to the db
-        mongo.connect(configDB.url, function (err, db) {
-            // Get commmunity info for the edit page placeholders
-            communityController.getCommunityData(db, communityName, function (communityData) {
-                // Close DB
-                db.close();
-
-                res.render('community/edit_community',
-                    {
-                        communityName: communityName,
-                        headQuartes: communityData.office,
-                        description: communityData.description,
-                        category: communityData.category,
-                        privacy: communityData.privacy,
-                        rules: communityData.ruleDescription,
-                        privacyList: dropdownList.privacyList,
-                        errors: errors
-                    });
-            });
-        });
+        req.flash('errors', errors);
+        res.redirect('/edit_community/' + communityName);
     } else {
         // If no error is found the community will be edited
-        mongo.connect(configDB.url, function (err, db, next) {
+        mongo.connect(configDB.url, function (err, db) {
             // Edit the community info in the db
             communityController.editCommunityData(db, communityName, req.body.headQuarter,
-                req.body.description, req.body.privacy, req.body.rules, function (wasEdited) {
+                req.body.description, req.body.coinName, req.body.privacy, req.body.rules, function (wasEdited) {
                     // Close DB
                     db.close();
 
@@ -87,7 +77,7 @@ router.post('/:communityName', userPrivileges.ensureAuthenticated, function (req
                         res.redirect('/community/' + communityName);
                     } else {
                         req.flash('error_msg', 'Ocorreu um erro ao atualizar a comunidade');
-                        res.redirect('/edit_community/' + username);
+                        res.redirect('/edit_community/' + communityName);
                     }
                 });
         });

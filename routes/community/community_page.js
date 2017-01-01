@@ -3,6 +3,7 @@ var express = require('express'),
     configDB = require('./../../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
     communityController = require('./../../controllers/CommunityController'),
+    messageController = require('./../../controllers/MessageController'),
     offerController = require('./../../controllers/OfferController'),
     userPrivileges = require('./../../config/userPrivileges'),
     dropdownList = require('./../../config/dropdownLists');
@@ -26,7 +27,7 @@ router.get('/:communityName', function (req, res, next) {
         // Gets the info from the community
         communityController.getCommunityData(db, communityName, function (community) {
             // Get this community offers
-            offerController.getCommunityOffers(db, communityName, range, function (offers, totalOffersCount) {
+            offerController.getActiveOffers(db, communityName, range, function (offers, totalOffersCount) {
                 // Closes db
                 db.close();
 
@@ -67,6 +68,7 @@ router.get('/:communityName', function (req, res, next) {
                 // Renders page
                 res.render('community/community_page',
                     {
+                        username: req.user,
                         communityName: community.name,
                         communityOffice: community.office,
                         communityDescription: community.description,
@@ -103,22 +105,64 @@ router.get('/:communityName/join_community/', userPrivileges.ensureAuthenticated
             // Verifies community privacy
             if(community.privacy == dropdownList.privacyList[0]){ // Public community
                 // Inserts the user
-                communityController.insertUserInCommunity(db, communityName, req.user);
+                communityController.insertUserInCommunity(db, communityName, req.user, function () {
+                    // Closes db
+                    db.close();
 
-                // Redirects page
-                req.flash('success_msg', 'Aderiu à comunidade ' + communityName);
-                res.redirect("/community/" + communityName);
+                    // Redirects page
+                    req.flash('success_msg', 'Aderiu à comunidade ' + communityName);
+                    res.redirect("/community/" + communityName);
+                });
             } else if(community.privacy == dropdownList.privacyList[1]) { // Private community
-                // Inserts the user's request
-                communityController.insertUserRequestsInCommunity(db, communityName, req.user);
+                communityController.checkInvitation(db,communityName, req.user, function(check) {
+                    if (check){
+                        communityController.removeUserInvitation(db,communityName,req.user, function() {
+                            communityController.insertUserInCommunity(db, communityName, req.user, function () {
+                                // Closes db
+                                db.close();
 
-                // Redirects page
-                req.flash('success_msg', 'Pedido de adesão à comunidade ' + communityName + ' enviado com sucesso');
-                res.redirect("/community/" + communityName);
+                                // Redirects page
+                                req.flash('success_msg', 'Aderiu à comunidade ' + communityName);
+                                res.redirect("/community/" + communityName);
+                            });
+                        });
+                    } else
+                    {
+                        // Inserts the user's request
+                        communityController.insertUserRequestsInCommunity(db, communityName, req.user, function () {
+                            // Closes db
+                            db.close();
+
+                            // Redirects page
+                            req.flash('success_msg', 'Pedido de adesão à comunidade ' + communityName + ' enviado com sucesso');
+                            res.redirect("/community/" + communityName);
+                        });
+                    }
+                });
+            } else if(community.privacy == dropdownList.privacyList[2]) {  // Secret community
+                communityController.checkInvitation(db,communityName, req.user, function(check) {
+                    if (check){
+                        communityController.removeUserInvitation(db,communityName,req.user, function() {
+                            communityController.insertUserInCommunity(db, communityName, req.user, function () {
+                                // Closes db
+                                db.close();
+
+                                // Redirects page
+                                req.flash('success_msg', 'Aderiu à comunidade ' + communityName);
+                                res.redirect("/community/" + communityName);
+                            });
+                        });
+                    } else
+                    {
+                        // Closes db
+                        db.close();
+
+                        // Redirects page
+                        req.flash('error_msg', 'Não tem permissão para se juntar a ' + communityName);
+                        res.redirect("../../");
+                    }
+                });
             }
-
-            // Closes db
-            db.close();
         });
     });
 });
@@ -130,14 +174,137 @@ router.get('/:communityName/abandon_community/', userPrivileges.ensureAuthentica
     // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
         // Removes user from community
-        communityController.removeUserFromCommunity(db, communityName, req.user);
+        communityController.removeUserFromCommunity(db, communityName, req.user, function () {
+            // Closes db
+            db.close();
 
-        // Closes db
-        db.close();
-
-        req.flash('success_msg', 'Abandou a comunidade ' + communityName);
-        res.redirect("/");
+            req.flash('success_msg', 'Abandou a comunidade ' + communityName);
+            res.redirect("/");
+        });
     });
+});
+	 
+router.post('/accept_offer', userPrivileges.ensureAuthenticated, function (req, res) {
+    // Get community name from post
+    var communityName = req.body.communityName;
+
+    // Get offer id from post
+    var offerId = req.body.offerId;
+
+    // Connects to database
+    mongo.connect(configDB.url, function (err, db) {
+        // Gets offer data
+        offerController.getOfferData(db, offerId, function (offer) {
+            // Update user coins
+            communityController.updateMemberCoins(db, communityName, req.user, offer.price * (-1), function(wasUpdated){
+                // If user has not enough coins to accept offer
+                if(!wasUpdated){
+                    // Closes DB
+                    db.close();
+
+                    req.flash('error_msg', 'Não lhe é possível aceitar esta oferta');
+                    res.redirect("/community/" + communityName);
+                }else{
+                    // Updates offer status
+                    offerController.acceptOffer(db, offerId, req.user, true, function(){
+                        // Update receiver coins
+                        communityController.updateMemberCoins(db, communityName, offer.username, offer.price * 1, function () {
+                            var messageTitle = "A Sua Oferta Foi Aceite (Mensagem Automática)";
+                            var messageContent = "A sua oferta, " + offer.title + ", da comunidade, " + offer.communityName
+                                + ", foi aceite pelo membro " + req.user + ". Responda a esta mensagem para contactar "
+                                + req.user + " e assim terminar a negociação da oferta.";
+
+                            // Sends offer message to receiver
+                            messageController.insertMessage(db, req.user, offer.username, messageTitle,
+                                messageContent, new Date(), "offer", function (wasSent) {
+                                    // Closes DB
+                                    db.close();
+
+                                    res.redirect("/community/" + communityName);
+                                });
+                        });
+                    });
+                }
+            });
+        });
+    });
+});
+
+router.post('/invitation', userPrivileges.ensureAuthenticated, function(req, res) {
+
+    // Verifies if the form is completed
+    req.checkBody('recipient', 'Tem de indicar um utilizador a quem enviar convite ').notEmpty();
+    req.checkBody('content', 'Por favor escreva uma mensagem junto com o seu convite').notEmpty();
+    req.checkBody('community', '_community_id?').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        req.flash('errors', errors);
+        //Redirect
+        var backURL=req.header('Referer') || '/';
+        res.redirect(backURL);
+    } else {
+        // Connects to the database
+        mongo.connect(configDB.url, function (err, db) {
+            // Get the user enrolled communities
+            communityController.getUserEnrolledCommunities(db, req.body.recipient, true, function(communities){
+                var found = false;
+                for(var i = 0; i < communities.length; i++){
+                    if(communities[i].name == req.body.community){
+                        found = true;
+                        break;
+                    }
+                }
+
+                // The user is alreay in this community
+                if(found){
+                    // Closes DB
+                    db.close();
+
+                    req.flash('error_msg', 'O utilizador "'+ req.body.recipient+'" já faz parte desta comunidade');
+                    var backURL=req.header('Referer') || '/';
+                    res.redirect(backURL);
+                }else{
+                    // Insert the user invitation in the community
+                    communityController.insertUserInvitation(db, req.body.community, req.body.recipient, function(success){
+                        if(success == null) {
+                            req.flash('error_msg', 'Ocorreu um erro a convidar o utilizador');
+                            var backURL=req.header('Referer') || '/';
+                            res.redirect(backURL);
+                        }else if(success != "Utilizador Convidado!"){
+                            req.flash('error_msg', success);
+                            var backURL=req.header('Referer') || '/';
+                            res.redirect(backURL);
+                        }else{
+                            var subject = "Foi convidado a juntar-se à comunidade "+ req.body.community;
+
+                            var tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate() + 1);
+
+                            var message = "Foi convidado por <a href='../../profile/"+ req.user +"'>"+req.user+"</a> a juntar-se à comunidade <a href='../../community/"+req.body.community+"'>"+req.body.community+ "</a>. <br>Junto com este convite foi enviada a seguinte mensagem pessoal:<br>";
+                            message += "<blockquote>" +req.body.content + "</blockquote>";
+                            message += "Se quiser aceitar o convite, clique <a href='../../community/"+req.body.community+"/join_community'>neste endereço</a> para entrar.<br>";
+                            message += "Este convite expira a " + tomorrow.toLocaleTimeString() + " " + tomorrow.toLocaleDateString();
+
+                            // Inserts new message
+                            messageController.insertMessage(db, req.user, req.body.recipient, subject, message, new Date(), 'invitation', function(success){
+                                db.close();
+
+                                if(success)
+                                    req.flash('success_msg', 'Convite enviado a '+ req.body.recipient);
+                                else
+                                    req.flash('error_msg', 'O utilizador "'+ req.body.recipient+'" não existe');
+
+                                var backURL=req.header('Referer') || '/';
+                                res.redirect(backURL);
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    }
 });
 
 module.exports = router;

@@ -14,8 +14,12 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-offset-2 col-sm-8">
-            <h1>Editar Perfil - <%= username %></h1>
+        <div class="col-sm-offset-2 col-sm-8 well">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2>Editar Perfil de <i><%= username %></i></h2>
+                </div>
+            </div>
 
             <form role="form" action="/profile/edit/<%= username %>" method="post">
                 <div class="form-group">
@@ -28,7 +32,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="control-label" for="password">Password</label>
-                            <input type="password" name="password" class="form-control" id="password"
+                            <input type="password" name="password" class="form-control" maxlength="20" id="password"
                                    value="<%= password %>">
                         </div>
                     </div>
@@ -36,7 +40,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="control-label" for="passwordre">Confirmar Password</label>
-                            <input type="password" name="passwordre" class="form-control" id="passwordre"
+                            <input type="password" name="passwordre" class="form-control" maxlength="20" id="passwordre"
                                    value="<%= password %>">
                         </div>
                     </div>
@@ -44,7 +48,7 @@
 
                 <div class="form-group">
                     <label class="control-label" for="name">Nome</label>
-                    <input type="text" name="name" class="form-control" id="name" value="<%= name %>">
+                    <input type="text" name="name" class="form-control" maxlength="40" id="name" value="<%= name %>">
                 </div>
 
                 <div class="row">
@@ -88,10 +92,10 @@
 
                 <div class="col-sm-offset-1 col-sm-9">
                     <div class="form-group text-center" id="buttons-panel">
-                        <button type="submit" class="btn btn-default">Editar</button>
                         <button type="button" class="btn btn-default"
                                 onclick="location.href = '/profile/<%= username %>'">Voltar
                         </button>
+                        <button type="submit" class="btn btn-success">Editar</button>
                     </div>
                 </div>
             </form>

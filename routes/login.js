@@ -18,46 +18,38 @@ router.get('/', function (req, res) {
 router.post('/register', function (req, res) {
 
     // Verifies if the form is completed correctly
-    req.checkBody('username', 'Username é necessário').notEmpty();
-    req.checkBody('username', 'Username deve ter entre 4 a 20 caracteres').len(4, 20);
-    req.checkBody('password', 'Password é necessária').notEmpty();
-    req.checkBody('password', 'Password deve ter entre 6 a 20 caracteres').len(6, 20);
-    req.checkBody('password2', 'Passwords não coincidem').equals(req.body.password);
+    req.checkBody('username', 'Username deve ter entre 4 a 20 caracteres').isLength({min: 4, max: 20});
+    req.checkBody('password', 'Password deve ter entre 6 a 20 caracteres').isLength({min: 6, max: 20});
+    req.checkBody('passwordre', 'Passwords não coincidem').equals(req.body.password);
     req.checkBody('email', 'Email é necessário').notEmpty();
     req.checkBody('email', 'Email inválido').isEmail();
-    req.checkBody('email2', 'Emails não coincidem').equals(req.body.email);
+    req.checkBody('emailre', 'Emails não coincidem').equals(req.body.email);
 
     // Verifies if there is any error
     var errors = req.validationErrors();
     if (errors) {
-        // If an error was found an error message will appear
-        res.render('login', {
-            title: 'Local Exchange - Login',
-            errors: errors
-        });
+        req.flash('errors', errors);
+        res.redirect('/login');
     } else {
-        // If no error was found the new user will be inserted in the db
+        // Connects to the db
         mongo.connect(configDB.url, function (err, db) {
-            if(err){
-                console.log(err);
-                res.redirect('/maintenance');
-                return;
-            }
+            // Insert new user in the db
             userController.insertUser(db, req.body.username, req.body.password, "", req.body.email, "", "", function (error) {
+                // Close DB
                 db.close();
 
                 // The login page will be rendered
                 if(!error){
                     req.flash('success_msg', 'Registado com sucesso');
+                    res.redirect('/login');
                 }else{
                     req.flash('error_msg', error);
+                    res.redirect('/login');
                 }
-                res.redirect('/login');
             });
         });
     }
 });
-
 
 passport.serializeUser(function (user, done) {
     done(null, user);
@@ -95,18 +87,18 @@ router.post('/', function (req, res, next) {
     req.checkBody('username', 'Username é necessário').notEmpty();
     req.checkBody('password', 'Password é necessária').notEmpty();
 
+    // Connects to the db
     mongo.connect(configDB.url, function (err, db) {
-        if(err){
-            console.log(err);
-            return done(null, false, {message: 'Base de dados inacessivel'});
-        }
-
+        // Gets the user data
         userController.getUser(db, req.body.username, function (userinfo) {
+            // Closes DB
             db.close();
+
+            // If username was not found in the db or the password is incorrect
             if(!userinfo) {
                 req.flash('error_msg', 'Username não existente');
             } else if(userinfo.password != req.body.password) {
-                req.flash('error_msg', 'Password errada');
+                req.flash('error_msg', 'Password incorrecta');
             }
         });
     });
