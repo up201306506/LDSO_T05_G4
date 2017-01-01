@@ -323,15 +323,16 @@ router.get('/inbox', userPrivileges.ensureAuthenticated, function (req, res) {
             else
                 userMessages = userMessages.slice((page-1)*messages_per_page,(page-1)*messages_per_page + messages_per_page);
 
+            console.log(userMessages);
+
             res.render('messaging/inbox',
                 {
-                    title: 'Message Inbox',
+                    title: 'Local Exchange - Caixa de Entrada',
                     userMessages: userMessages,
                     inboxType: 'Inbox',
                     newMessages : newMessages,
                     page: page,
                     maxPage: maxPage
-
                 }
             );
         });

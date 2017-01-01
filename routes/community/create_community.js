@@ -46,7 +46,7 @@ router.post('/create', userPrivileges.ensureAuthenticated, function (req, res) {
         mongo.connect(configDB.url, function (err, db, next) {
             // Insert a new community in the db
             communityController.insertCommunity(db, req.body.communityName, req.body.headQuarter, req.body.description,
-                useCoin, req.body.coinName, req.body.privacy, req.body.rules, req.user, [req.user], [{name: req.user, coins: 0}] ,function (wasCreated) {
+                useCoin, req.body.coinName, req.body.privacy, req.body.rules, req.user, [req.user], [{name: req.user, coins: 20}] ,function (wasCreated) {
                     db.close();
 
                     // The main page will be rendered

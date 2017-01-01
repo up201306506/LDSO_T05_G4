@@ -105,39 +105,19 @@ module.exports = {
         });
     },
 
+    // Gets all active offers from a community
+    getActiveOffers: function(db, communityName, range, callback){
+        //Get offer collection
+        var offer = db.collection('offer');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        offer.count(function (e, totalOffersCount) {
+            // Get a list of offers of community communityName
+            offer.find({communityName: communityName, isExpired: false}).skip(range.from).limit(range.size).toArray(function (err, offers) {
+                assert.equal(err, null);
+                callback(offers, totalOffersCount);
+            });
+        });
+    },
 
     // Gets all offers from a community
     getCommunityOffers: function (db, communityName, range, callback) {
@@ -153,19 +133,59 @@ module.exports = {
         });
     },
 
-    // Gets all active offers from a community
-    getActiveOffers: function(db, communityName, range, callback){
-        //Get offer collection
+    acceptOffer: function (db, id, receiver, is_expired, callback) {
+        // Get offer collection
         var offer = db.collection('offer');
 
-        offer.count(function (e, totalOffersCount) {
-            // Get a list of offers of community communityName
-            offer.find({communityName: communityName, isExpired: false}).skip(range.from).limit(range.size).toArray(function (err, offers) {
+        // Updates offer status
+        offer.updateOne({_id: ObjectId(id)}, {$set: {isExpired: is_expired, receiver: receiver}},
+            function (err) {
                 assert.equal(err, null);
-                callback(offers, totalOffersCount);
+
+                callback();
             });
-        });
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Gets history of user offers
     getOfferHistory: function(db, username, callback) {
@@ -201,25 +221,5 @@ module.exports = {
             console.log(docs);
             callback(docs);
         });
-    },
-
-    updateOfferDescription: function (db, oldDescription, newDescription, callback) {
-        var offer = db.collection('offer');
-        offer.updateOne({description: oldDescription}, {$set: {description: newDescription}},
-            function (err, result) {
-                assert.equal(err, null);
-                console.log("Description updated.");
-                callback(result);
-            });
-    },
-
-    updateOfferStatus: function (db, id, receiver, is_expired, callback) {
-        var offer = db.collection('offer');
-        offer.updateOne({_id: ObjectId(id)}, {$set: {isExpired: is_expired, receiver: receiver}},
-            function (err, result) {
-                assert.equal(err, null);
-                console.log("Status updated.");
-                callback(result);
-            });
     }
 };

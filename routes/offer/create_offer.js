@@ -69,10 +69,15 @@ router.post('/create/:communityName', userPrivileges.ensureAuthenticated, upload
             });
         });
     } else {
+        var priceValue = req.body.offerPrice;
+        if(req.body.offerPrice == null){
+            priceValue = 0;
+        }
+
         // If no error is found a new offer will be created
         mongo.connect(configDB.url, function (err, db, next) {
             // Insert a new offer in the db
-            offerController.insertOffer(db, req.user, communityName, req.body.offerTitle, req.body.offerDescription, req.body.offerPrice,
+            offerController.insertOffer(db, req.user, communityName, req.body.offerTitle, req.body.offerDescription, priceValue,
                 fileName, false, Date.now(), function (wasCreated) {
                     // Closes DB
                     db.close();

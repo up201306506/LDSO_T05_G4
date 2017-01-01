@@ -3,6 +3,7 @@ var express = require('express'),
     configDB = require('./../../config/dbURL.js'),
     mongo = require('mongodb').MongoClient,
     communityController = require('./../../controllers/CommunityController'),
+    messageController = require('./../../controllers/MessageController'),
     offerController = require('./../../controllers/OfferController'),
     userPrivileges = require('./../../config/userPrivileges'),
     dropdownList = require('./../../config/dropdownLists');
@@ -26,7 +27,7 @@ router.get('/:communityName', function (req, res, next) {
         // Gets the info from the community
         communityController.getCommunityData(db, communityName, function (community) {
             // Get this community offers
-            offerController.getCommunityOffers(db, communityName, range, function (offers, totalOffersCount) {
+            offerController.getActiveOffers(db, communityName, range, function (offers, totalOffersCount) {
                 // Closes db
                 db.close();
 
@@ -139,6 +140,52 @@ router.get('/:communityName/abandon_community/', userPrivileges.ensureAuthentica
 
             req.flash('success_msg', 'Abandou a comunidade ' + communityName);
             res.redirect("/");
+        });
+    });
+});
+
+router.post('/accept_offer', userPrivileges.ensureAuthenticated, function (req, res) {
+    // Get community name from post
+    var communityName = req.body.communityName;
+
+    // Get offer id from post
+    var offerId = req.body.offerId;
+
+    // Connects to database
+    mongo.connect(configDB.url, function (err, db) {
+        // Gets offer data
+        offerController.getOfferData(db, offerId, function (offer) {
+            // Update user coins
+            communityController.updateMemberCoins(db, communityName, req.user, offer.price * (-1), function(wasUpdated){
+                // If user has not enough coins to accept offer
+                if(!wasUpdated){
+                    // Closes DB
+                    db.close();
+
+                    req.flash('error_msg', 'Não lhe é possível aceitar esta oferta');
+                    res.redirect("/community/" + communityName);
+                }else{
+                    // Updates offer status
+                    offerController.acceptOffer(db, offerId, req.user, true, function(){
+                        // Update receiver coins
+                        communityController.updateMemberCoins(db, communityName, offer.username, offer.price * 1, function () {
+                            var messageTitle = "A Sua Oferta Foi Aceite (Mensagem Automática)";
+                            var messageContent = "A sua oferta, " + offer.title + ", da comunidade, " + offer.communityName
+                                + ", foi aceite pelo membro " + req.user + ". Responda a esta mensagem para contactar "
+                                + req.user + " e assim terminar a negociação da oferta.";
+
+                            // Sends offer message to receiver
+                            messageController.insertMessage(db, req.user, offer.username, messageTitle,
+                                messageContent, new Date(), "offer", function (wasSent) {
+                                    // Closes DB
+                                    db.close();
+
+                                    res.redirect("/community/" + communityName);
+                                });
+                        });
+                    });
+                }
+            });
         });
     });
 });

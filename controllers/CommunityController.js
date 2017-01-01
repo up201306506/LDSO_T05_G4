@@ -119,7 +119,7 @@ module.exports = {
         var community = db.collection('community');
 
         // Inserts user
-        community.updateOne({name: communityName}, {$push: {members: {name: userName, coins: 0}}}, function () {
+        community.updateOne({name: communityName}, {$push: {members: {name: userName, coins: 20}}}, function () {
             // Call callback
             callback();
         });
@@ -187,6 +187,73 @@ module.exports = {
             callback();
         });
     },
+
+    // Edit all information of a community
+    editCommunityData: function (db, communityName, headOffice, description, privacy, rules, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Update the community in the db
+        community.updateOne({name: communityName},
+            {
+                $set: {office: headOffice, description: description, privacy: privacy, ruleDescription: rules}
+            }, function (err) {
+                assert.equal(err, null);
+
+                // Process the edit
+                callback(true);
+            });
+    },
+
+    // Update member coins
+    updateMemberCoins: function (db, communityName, username, value, callback) {
+        // Get Community collection
+        var community = db.collection('community');
+
+        // Update the community member's coins
+        community.findOne({name: communityName}, function (err, communityData) {
+            assert.equal(err, null);
+
+            // Holds coin value to update
+            var coinValue = 0;
+            for(var index = 0; index < communityData.members.length; index++){
+                if(communityData.members[index].name == username){
+                    coinValue = communityData.members[index].coins;
+                    break;
+                }
+            }
+
+            coinValue += value;
+
+            if(coinValue < 0){
+                callback(false);
+            }else{
+                community.updateOne({name: communityName, "members.name": username},
+                    {
+                        $set : {"members.$.coins": coinValue}
+                    }, function (err) {
+                        assert.equal(err, null);
+
+                        // Process the edit
+                        callback(true);
+                    });
+            }
+        });
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -305,23 +372,6 @@ module.exports = {
                 callback(false);
             }
         });
-    },
-
-    // Edit all information of a community
-    editCommunityData: function (db, communityName, headOffice, description, privacy, rules, callback) {
-        // Get Community collection
-        var community = db.collection('community');
-
-        // Update the community in the db
-        community.updateOne({name: communityName},
-            {
-                $set: {office: headOffice, description: description, privacy: privacy, ruleDescription: rules}
-            }, function (err) {
-                assert.equal(err, null);
-
-                // Process the edit
-                callback(true);
-            });
     },
 
     removeCommunity : function ( db, name, callback) {
