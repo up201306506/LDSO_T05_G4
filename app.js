@@ -85,13 +85,11 @@ var webpage_communityUserList = require('./routes/community/community_user_list'
 var webpage_communityOfferList = require('./routes/community/community_offer_list');
 var webpage_accept_requests = require('./routes/community/accept_requests');
 var webpage_deleteCommunity = require('./routes/community/remove_community');
-var webpage_removeCommunityUser = require('./routes/community/remove_community_user');
 // offer
 var webpage_createOffer = require('./routes/offer/create_offer');
-var webpage_viewoffer = require('./routes/offer/viewoffer');
-var webpage_editoffer = require('./routes/offer/editoffer');
-var webpage_deleteoffer = require('./routes/offer/deleteoffer');
-var webpage_acceptoffer = require('./routes/offer/acceptoffer');
+var webpage_editoffer = require('./routes/offer/edit_offer');
+var webpage_deleteoffer = require('./routes/offer/delete_offer');
+var webpage_acceptoffer = require('./routes/offer/accept_offer');
 // messaging
 var controller_message = require('./routes/messaging/message');
 
@@ -112,10 +110,8 @@ app.use('/community_users', webpage_communityUserList);
 app.use('/community_offers', webpage_communityOfferList);
 app.use('/accept_requests', webpage_accept_requests);
 app.use('/delete_community', webpage_deleteCommunity);
-app.use('/remove_user', webpage_removeCommunityUser);
 // offer
 app.use('/create_offer', webpage_createOffer);
-app.use('/view_offer', webpage_viewoffer);
 app.use('/edit_offer', webpage_editoffer);
 app.use('/delete_offer', webpage_deleteoffer);
 app.use('/accept_offer', webpage_acceptoffer);
@@ -125,7 +121,7 @@ app.use('/message/', controller_message);
 //---------------------------------------------------------------------
 
 // catch 404
-app.use(function (req, res, next) {
+app.use(function (req, res) {
     res.render('error', {
         error: '404 Page Not Found'
     });

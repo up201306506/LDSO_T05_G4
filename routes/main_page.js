@@ -9,7 +9,7 @@ var express = require('express'),
 
 router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
     // Connects to the db
-    mongo.connect(configDB.url, function (err, db, next) {
+    mongo.connect(configDB.url, function (err, db) {
         // Verifies in which page the user is
         var page = req.query.page;
         if(!page){

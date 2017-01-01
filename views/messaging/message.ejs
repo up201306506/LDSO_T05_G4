@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <div class="row" style="margin-top: 20px;">
+    <div class="row" style="margin-top: 20px;" id="buttonsPanel">
         <div class="col-sm-12 text-center">
             <%if(!deleted){%>
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_modal">Remover</button>
@@ -64,7 +64,7 @@
                 <h4><span style="margin-right: 15px;" class="glyphicon glyphicon-trash"></span>Remover Mensagem?</h4>
             </div>
 
-            <div class="text-center" style="margin-top: 20px; margin-bottom: 20px;">
+            <div class="text-center" style="margin-top: 20px; margin-bottom: 20px;" id="buttonsPanel">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-danger" onclick="trashCanButton(this)" delete_id="<%= message_id %>" >Remover</button>
             </div>
@@ -141,7 +141,7 @@
                     </div>
 
                 </div>
-                <div class="text-center" style="margin-bottom: 20px;">
+                <div class="text-center" style="margin-bottom: 20px;" id="buttonsPanel">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-success" onclick="sendReply()">Responder</button>
                 </div>
@@ -209,7 +209,7 @@
                             </div>
                         </div>
                 </div>
-                <div class="text-center" style="margin-bottom: 20px;">
+                <div class="text-center" style="margin-bottom: 20px;" id="buttonsPanel">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-success" onclick="sendRedirect()">Reencaminhar</button>
                 </div>

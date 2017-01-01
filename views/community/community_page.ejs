@@ -81,7 +81,13 @@
                     <div class="col-sm-4 text-center" style="border-right: 1px solid #d6d6d6;">
                         <img class="img-responsive img-thumbnail" src="<% if(offerArr[index].imageDir != null && offerArr[index].imageDir != ''){ %>/images/offers/<%= offerArr[index].imageDir %><% }else{ %>http://placehold.it/420x320<% } %>"/>
                         <% if(useCoin) { %><h6>Custo <%= offerArr[index].price %> <b><%= coinName %></b></h6><% } %>
-                        <a class="btn btn-success <% if(user == offerArr[index].username) { %>disabled<% } %>" href="#" style="width: 8em;">Aceitar</a>
+                        <% if(isMember) { %>
+                        <form role="form" action="/community/accept_offer" method="post">
+                            <input type="hidden" name="communityName" value="<%= communityName %>">
+                            <input type="hidden" name="offerId" value="<%= offerArr[index]._id %>">
+                            <button type="submit" class="btn btn-success <% if(user == offerArr[index].username) { %>disabled<% } %>" style="width: 8em; margin-top: 15px;" <% if(user == offerArr[index].username) { %>disabled<% } %>>Aceitar</button>
+                        </form>
+                        <% } %>
                     </div>
                     <div class="col-sm-8">
                         <p><%= offerArr[index].description %></p>
