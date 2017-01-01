@@ -28,34 +28,28 @@ router.post('/register', function (req, res) {
     // Verifies if there is any error
     var errors = req.validationErrors();
     if (errors) {
-        // If an error was found an error message will appear
-        res.render('login', {
-            title: 'Local Exchange - Login',
-            errors: errors
-        });
+        req.flash('errors', errors);
+        res.redirect('/login');
     } else {
-        // If no error was found the new user will be inserted in the db
+        // Connects to the db
         mongo.connect(configDB.url, function (err, db) {
-            if(err){
-                console.log(err);
-                res.redirect('/maintenance');
-                return;
-            }
+            // Insert new user in the db
             userController.insertUser(db, req.body.username, req.body.password, "", req.body.email, "", "", function (error) {
+                // Close DB
                 db.close();
 
                 // The login page will be rendered
                 if(!error){
                     req.flash('success_msg', 'Registado com sucesso');
+                    res.redirect('/login');
                 }else{
                     req.flash('error_msg', error);
+                    res.redirect('/login');
                 }
-                res.redirect('/login');
             });
         });
     }
 });
-
 
 passport.serializeUser(function (user, done) {
     done(null, user);

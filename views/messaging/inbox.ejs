@@ -60,7 +60,7 @@
                         </a>
 
                         <div class="pull-right">
-                            <span class="badge hidden-xs" title="<%= userMessages[i].date.toUTCString() %>"><%= userMessages[i].date.getDate() + "/" + userMessages[i].date.getMonth() + "/" + userMessages[i].date.getFullYear() %></span>
+                            <span class="badge hidden-xs"><%= ("0" + (new Date(userMessages[i].date)).getDate()).slice(-2) + "/" + ("0" + ((new Date(userMessages[i].date)).getMonth() + 1)).slice(-2) + "/" + (new Date(userMessages[i].date)).getFullYear() + " - " + ("0" + (new Date(userMessages[i].date)).getHours()).slice(-2) + ":" + ("0" + (new Date(userMessages[i].date)).getMinutes()).slice(-2) %></span>
                             <% if(inboxType == 'Deleted'){ %>
                             <a href="#"><span class="glyphicon glyphicon-share-alt" onclick="recycleButton(this)" delete_id="<%= userMessages[i]._id %>"
                                               data-toggle="tooltip" data-placement="left" title="Restaurar Mensagem"></span></a>

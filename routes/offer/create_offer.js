@@ -51,23 +51,8 @@ router.post('/create/:communityName', userPrivileges.ensureAuthenticated, upload
 
     var errors = req.validationErrors();
     if (errors) {
-        // Connects to the db
-        mongo.connect(configDB.url, function (err, db) {
-            // Gets the info from the community
-            communityController.getCommunityData(db, communityName, function (community) {
-                // Closes DB
-                db.close();
-
-                res.render('offer/create_offer',
-                    {
-                        title: 'Local Exchange - Criar Oferta',
-                        communityName: communityName,
-                        useCoin: community.useCoin,
-                        coinName: community.coinName,
-                        errors: errors
-                    });
-            });
-        });
+        req.flash('errors', errors);
+        res.redirect('/create_offer/' + communityName);
     } else {
         var priceValue = req.body.offerPrice;
         if(req.body.offerPrice == null){
@@ -75,7 +60,7 @@ router.post('/create/:communityName', userPrivileges.ensureAuthenticated, upload
         }
 
         // If no error is found a new offer will be created
-        mongo.connect(configDB.url, function (err, db, next) {
+        mongo.connect(configDB.url, function (err, db) {
             // Insert a new offer in the db
             offerController.insertOffer(db, req.user, communityName, req.body.offerTitle, req.body.offerDescription, priceValue,
                 fileName, false, Date.now(), function (wasCreated) {

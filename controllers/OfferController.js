@@ -11,7 +11,7 @@ module.exports = {
         offer.findOne({
             username: username,
             communityName: communityName,
-            title: title
+            date: date
         }, function (err, offerData) {
             assert.equal(err, null);
 
@@ -69,50 +69,41 @@ module.exports = {
     },
 
     // Edit all information about an offer
-    editOffer: function (db, offerId, lastTitle, username, communityName, title, description, price, imageDir, callback) {
+    editOffer: function (db, offerId, date, username, communityName, title, description, price, imageDir, callback) {
         // Get Offer collection
         var offer = db.collection('offer');
 
-        // Search for offers dups in the db
-        offer.findOne({
-            title: title
-        }, function (err, offerData) {
-            assert.equal(err, null);
+        // Updates information about an offer
+        offer.updateOne({
+                username: username,
+                communityName: communityName,
+                date: date
+            },
+            {
+                $set: {
+                    title: title,
+                    description: description,
+                    price: price,
+                    imageDir: imageDir
+                }
+            }, function (err) {
+                assert.equal(err, null);
 
-            // Verifies if there is another offer's dup
-            if (offerData != null && offerData._id != offerId) {
-                callback(false);
-            } else {
-                // Updates information about an offer
-                offer.updateOne({
-                        username: username,
-                        communityName: communityName,
-                        title: lastTitle
-                    },
-                    {
-                        $set: {
-                            title: title,
-                            description: description,
-                            price: price,
-                            imageDir: imageDir
-                        }
-                    },function (err) {
-                        assert.equal(err, null);
-
-                        callback(true);
-                    });
-            }
-        });
+                callback(true);
+            });
     },
 
     // Gets all active offers from a community
-    getActiveOffers: function(db, communityName, range, callback){
+    getActiveOffers: function (db, communityName, range, callback) {
         //Get offer collection
         var offer = db.collection('offer');
 
         offer.count(function (e, totalOffersCount) {
             // Get a list of offers of community communityName
-            offer.find({communityName: communityName, isExpired: false}).skip(range.from).limit(range.size).toArray(function (err, offers) {
+            offer.find({
+                communityName: communityName,
+                isExpired: false
+            }).skip(range.from).limit(range.size).toArray(function (err, offers) {
                 assert.equal(err, null);
                 callback(offers, totalOffersCount);
             });
@@ -146,49 +137,8 @@ module.exports = {
             });
     },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Gets history of user offers
-    getOfferHistory: function(db, username, callback) {
+    getOfferHistory: function (db, username, callback) {
         var offer = db.collection('offer');
         offer.find({$or: [{username: username}, {receiver: username}]}).toArray(function (err, offers) {
             assert.equal(err, null);
@@ -206,7 +156,10 @@ module.exports = {
 
         var offer = db.collection('offer');
         offer.count(function (e, totalOffersCount) {
-            offer.find({communityName: {$in: communityListName}, isExpired: false }).skip(range.from).limit(range.size).toArray(function (err, offers) {
+            offer.find({
+                communityName: {$in: communityListName},
+                isExpired: false
+            }).skip(range.from).limit(range.size).toArray(function (err, offers) {
                 assert.equal(err, null);
                 callback(offers, totalOffersCount);
             });

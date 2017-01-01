@@ -111,30 +111,33 @@
             <h1>Histórico de Contribuições</h1>
             <% if(offerArr.length == 0) { %>
             <h5> <b style="margin-right: 15px;"> O teu histórico de contribuições encontra-se vazio. </b></h5>
+            <% } else if(!isOwnProfile) { %>
+            <h5> <b style="margin-right: 15px;"> Não tens permissões para visualizar este conteúdo. </b></h5>
             <% } else {
              for(var index = 0; index < offerArr.length; index++) { %>
             <div class="well">
-                <div class="offer-head">
-                    <span>Criado por: <a href="/profile/<%= offerArr[index].username %>"><%= offerArr[index].username %></a></span><br>
-                    <span>Criado em: <a href="/community/<%= offerArr[index].communityName %>"><%= offerArr[index].communityName %></a></span>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="btn-group pull-right">
+                            <a style="pointer-events: none; cursor: default;" href="" class="btn btn-primary btn-xs">Opções</a>
+                            <a href="#" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/delete_offer/<%= offerArr[index]._id %>">Eliminar</a></li>
+                            </ul>
+                        </div>
+                        <a style="pointer-events: none; cursor: default;" href="" class="lead"><%= offerArr[index].title %></a>
+                        <p>Criado por <a href="/profile/<%= offerArr[index].username %>"><%= offerArr[index].username %></a></p>
+                    </div>
                 </div>
 
-                <div class="row offer-content">
-                    <div class="col-sm-4">
-                        <img class="img-responsive visible-md visible-lg" src="<% if(offerArr[index].imageDir != null && offerArr[index].imageDir != ''){ %>/images/offers/<%= offerArr[index].imageDir %><% }else{ %>http://placehold.it/420x320<% } %>"/>
+                <div class="row" style="border-top: 1px solid #d6d6d6; padding-top: 15px;">
+                    <div class="col-sm-4 text-center" style="border-right: 1px solid #d6d6d6;">
+                        <img class="img-responsive img-thumbnail" src="<% if(offerArr[index].imageDir != null && offerArr[index].imageDir != ''){ %>/images/offers/<%= offerArr[index].imageDir %><% }else{ %>http://placehold.it/420x320<% } %>"/>
+                        <p style="margin-top: 5px;"><%= ("0" + (new Date(offerArr[index].date)).getDate()).slice(-2) + "/" + ("0" + ((new Date(offerArr[index].date)).getMonth() + 1)).slice(-2) + "/" + (new Date(offerArr[index].date)).getFullYear() + " - " + ("0" + (new Date(offerArr[index].date)).getHours()).slice(-2) + ":" + ("0" + (new Date(offerArr[index].date)).getMinutes()).slice(-2) %></p>
                     </div>
-
                     <div class="col-sm-8">
-                        <p class="lead">
-                            <a href="/view_offer/<%= offerArr[index]._id %>"><%= offerArr[index].title %></a>
-                        </p>
-                        <%= offerArr[index].description %>
+                        <p><%= offerArr[index].description %></p>
                     </div>
-                </div>
-
-                <div class="row offer-footer">
-                    <a class="btn btn-default pull-right" href="/view_offer/<%= offerArr[index]._id %>">Ver detalhes</a>
-                    <h6 class="pull-right" style="margin-right: 20px;">Preço: <%= offerArr[index].price %><span class="glyphicon glyphicon-gift" style="margin-left: 5px;"></span></h6>
                 </div>
             </div>
             <% }} %>

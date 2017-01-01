@@ -12,31 +12,35 @@ router.get('/', userPrivileges.ensureAuthenticated, function (req, res, next) {
     mongo.connect(configDB.url, function (err, db) {
         // Verifies in which page the user is
         var page = req.query.page;
-        if(!page){
+        if (!page) {
             page = 1;
         }
 
         //Range
         var pageSize = 10;
-        var range = {from:(pageSize*(page-1)), size:pageSize};
+        var range = {from: (pageSize * (page - 1)), size: pageSize};
 
         // Get this user enrolled communities from the db
         communityController.getUserEnrolledCommunities(db, req.user, true, function (communities) {
-            // ESTE OFFER VAI SER INUTIL COM A DASHBOARD
+            // Get enrolled communities offers
             offerController.getCommunityListOffers(db, communities, range, function (offers, totalOffersCount) {
-                messageController.getMessagesByUser(db,req.user,function (received) {
-                    messageController.getSentByUser(db,req.user,function (sent) {
-                            db.close();
-                            res.render('main_page',
-                                {
-                                    title: 'Local Exchange - Main page',
-                                    communityArr: communities,
-                                    offerArr: offers,
-                                    nPages: Math.ceil(totalOffersCount/pageSize),
-                                    thisPage: page,
-                                    sentArray: sent,
-                                    receivedArray: received
-                                });
+                // Get user message statistics
+                messageController.getMessagesByUser(db, req.user, function (received) {
+                    // Get user message statistics
+                    messageController.getSentByUser(db, req.user, function (sent) {
+                        // Close DB
+                        db.close();
+
+                        res.render('main_page',
+                            {
+                                title: 'Local Exchange - Main page',
+                                communityArr: communities,
+                                offerArr: offers,
+                                nPages: Math.ceil(totalOffersCount / pageSize),
+                                thisPage: page,
+                                sentArray: sent,
+                                receivedArray: received
+                            });
                     });
                 });
 

@@ -34,7 +34,7 @@
         </div>
 
         <div class="pull-right col-sm-2">
-            <span style="margin-left: 10px; font-size: 17px;">Data: <%= date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() %></span>
+            <span style="margin-left: 10px; font-size: 17px;">Data: <%= ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear() %></span>
         </div>
     </div>
 
