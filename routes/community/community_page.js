@@ -212,7 +212,7 @@ router.post('/invitation', userPrivileges.ensureAuthenticated, function(req, res
         communityController.getUserEnrolledCommunities(db,req.body.recipient,true, function(result){
 
             var found = false;
-            console.log(result);
+            //console.log(result);
             for(var i = 0; i < result.length; i++){
                 if(result[i].name == req.body.community)
                     found = true;
