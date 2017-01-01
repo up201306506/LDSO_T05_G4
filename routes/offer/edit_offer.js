@@ -53,14 +53,31 @@ router.post('/edit/:edit_offer', userPrivileges.ensureAuthenticated, upload.sing
     req.checkBody('offerTitle', 'Título da oferta deverá ter entre 4 e 50 carácteres').isLength({min: 4, max: 50});
     req.checkBody('offerDescription', 'Descrição da oferta deverá ter entre 4 e 350 carácteres').isLength({min: 4, max: 350});
     if(useCoin){
-        req.checkBody('offerPrice', 'Preço da oferta deverá ser um número entre 1 e 6 carácteres').isInt({min: 0, max: 999999});
+        req.checkBody('offerPrice', 'Preço da oferta deverá ser um número entre 1 e 6 carácteres').isNumeric({min: 0, max: 999999});
     }
 
     var fileName = "";
     if(req.file) fileName = req.file.filename;
 
     var errors = req.validationErrors();
-    if (errors) {
+    var i,k=0;
+    var cond=false;
+
+    for(i=0;i<req.body.offerTitle.length;i++){
+        k=req.body.offerTitle[i];
+        k=k.keyCode;
+        if(k == 8 || k == 33 || (k >= 35 && k <= 36) || (k >= 38 && k <= 59) || k == 61 || (k > 62 && k < 92) || k == 93 || (k > 94 && k < 123) || k == 126) {
+            continue;
+        } else {
+            cond=true;
+            break;
+        }
+    }
+
+    if(cond==true) {
+        req.flash('error_msg', 'Nome da oferta contém caracteres inválidos');
+        res.redirect('/edit_offer/' + offerId);
+    } else if (errors) {
         req.flash('errors', errors);
         res.redirect('/edit_offer/' + offerId);
     } else {

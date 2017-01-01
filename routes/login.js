@@ -27,7 +27,24 @@ router.post('/register', function (req, res) {
 
     // Verifies if there is any error
     var errors = req.validationErrors();
-    if (errors) {
+    var i,k=0;
+    var cond=false;
+
+    for(i=0;i<req.body.username.length;i++){
+        k=req.body.username[i];
+        k=k.keyCode;
+        if(k == 8 || k == 33 || (k >= 35 && k <= 36) || (k >= 38 && k <= 59) || k == 61 || (k > 62 && k < 92) || k == 93 || (k > 94 && k < 123) || k == 126) {
+            continue;
+        } else {
+            cond=true;
+            break;
+        }
+    }
+
+    if(cond==true) {
+        req.flash('error_msg', 'Username contém caracteres inválidos');
+        res.redirect('/login');
+    } else if (errors) {
         req.flash('errors', errors);
         res.redirect('/login');
     } else {

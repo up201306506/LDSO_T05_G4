@@ -41,7 +41,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label" for="offerPrice">Preço - <%= coinName %></label>
-                            <input type="text" name="offerPrice" class="form-control" onkeypress="return allowNumbersOnly(event)" maxlength="6" id="offerPrice" required>
+                            <input type="text" name="offerPrice" class="form-control" maxlength="6" id="offerPrice" required>
                         </div>
                     </div>
                     <% } %>
@@ -58,12 +58,5 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    function allowNumbersOnly(e) {
-        var k = e.keyCode;
-        //código ASCII dos caracteres permitidos
-        return (k >= 48 && k <= 57);
-    }
-</script>
 </body>
 </html>
