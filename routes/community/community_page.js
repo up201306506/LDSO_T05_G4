@@ -209,44 +209,59 @@ router.post('/invitation', userPrivileges.ensureAuthenticated, function(req, res
     }
 
      mongo.connect(configDB.url, function (err, db) {
+        communityController.getUserEnrolledCommunities(db,req.body.recipient,true, function(result){
 
-         communityController.insertUserInvitation(db,req.body.community,req.body.recipient,function(success){
-            if(success == null) {
-                req.flash('error_msg', 'Ocorreu um erro a convidar o utilizador');
+            var found = false;
+            console.log(result);
+            for(var i = 0; i < result.length; i++){
+                if(result[i].name == req.body.community)
+                    found = true;
+            }
+            if(found){
+                req.flash('error_msg', 'O utilizador "'+ req.body.recipient+'" já faz parte desta comunidade!');
                 var backURL=req.header('Referer') || '/';
                 res.redirect(backURL);
                 return;
             }
 
-            if(success != "Utilizador Convidado!"){
-                req.flash('error_msg', success);
-                var backURL=req.header('Referer') || '/';
-                res.redirect(backURL);
-            return;
-            }
+            communityController.insertUserInvitation(db,req.body.community,req.body.recipient,function(success){
+                if(success == null) {
+                    req.flash('error_msg', 'Ocorreu um erro a convidar o utilizador');
+                    var backURL=req.header('Referer') || '/';
+                    res.redirect(backURL);
+                    return;
+                }
 
-             var subject = "Foi convidado a juntar-se à comunidade "+ req.body.community;
+                if(success != "Utilizador Convidado!"){
+                    req.flash('error_msg', success);
+                    var backURL=req.header('Referer') || '/';
+                    res.redirect(backURL);
+                return;
+                }
 
-             var tomorrow = new Date();
-             tomorrow.setDate(tomorrow.getDate() + 1);
+                 var subject = "Foi convidado a juntar-se à comunidade "+ req.body.community;
 
-             var message = "Foi convidado por <a href='../../profile/"+ req.user +"'>"+req.user+"</a> a juntar-se à comunidade <a href='../../community/"+req.body.community+"'>"+req.body.community+ "</a>. <br>Junto com este convite foi enviada a seguinte mensagem pessoal:<br>";
-             message += "<blockquote>" +req.body.content + "</blockquote>";
-             message += "Se quiser aceitar o convite, clique <a href='../../community/"+req.body.community+"/join_community'>neste endereço</a> para entrar.<br>";
-             message += "Este convite expira a " + tomorrow.toLocaleTimeString() + " " + tomorrow.toLocaleDateString();
+                 var tomorrow = new Date();
+                 tomorrow.setDate(tomorrow.getDate() + 1);
 
-             messageController.insertMessage(db, req.user, req.body.recipient, subject, message, new Date(), 'invitation', function(success){
-                 db.close();
+                 var message = "Foi convidado por <a href='../../profile/"+ req.user +"'>"+req.user+"</a> a juntar-se à comunidade <a href='../../community/"+req.body.community+"'>"+req.body.community+ "</a>. <br>Junto com este convite foi enviada a seguinte mensagem pessoal:<br>";
+                 message += "<blockquote>" +req.body.content + "</blockquote>";
+                 message += "Se quiser aceitar o convite, clique <a href='../../community/"+req.body.community+"/join_community'>neste endereço</a> para entrar.<br>";
+                 message += "Este convite expira a " + tomorrow.toLocaleTimeString() + " " + tomorrow.toLocaleDateString();
 
-                 if(success)
-                     req.flash('success_msg', 'Convite enviado a '+ req.body.recipient +'!');
-                 else
-                     req.flash('error_msg', 'O utilizador "'+ req.body.recipient+'" não existe!');
+                 messageController.insertMessage(db, req.user, req.body.recipient, subject, message, new Date(), 'invitation', function(success){
+                     db.close();
 
-                 var backURL=req.header('Referer') || '/';
-                 res.redirect(backURL);
-             });
+                     if(success)
+                         req.flash('success_msg', 'Convite enviado a '+ req.body.recipient +'!');
+                     else
+                         req.flash('error_msg', 'O utilizador "'+ req.body.recipient+'" não existe!');
 
+                     var backURL=req.header('Referer') || '/';
+                     res.redirect(backURL);
+                 });
+
+            });
          });
      });
  });
