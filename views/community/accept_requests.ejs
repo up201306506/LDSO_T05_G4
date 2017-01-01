@@ -34,7 +34,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                <% for(var index = 0; index < requests.length; index++){ %>
+                <% if(requests.length == 0) { %>
+                <tr>
+                    <td><a class="disable">Nenhum pedido de adesão novo</a>
+                    <td></td>
+                </tr>
+                <% } else { for(var index = 0; index < requests.length; index++){ %>
                 <tr>
                     <td><a href="/profile/<%= requests[index] %>"><%= requests[index] %></a>
                     <td>
@@ -55,7 +60,7 @@
                         </div>
                     </td>
                 </tr>
-                <% } %>
+                <% }} %>
                 </tbody>
             </table>
         </div>

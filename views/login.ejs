@@ -31,7 +31,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label>Username</label>
-                            <input type="text" name="username" class="form-control" maxlength="20" value="" required>
+                            <input type="text" name="username" class="form-control" maxlength="20" value="" required onkeypress="return allowValidDigits(event)">
                         </div>
                     </div>
 
@@ -77,5 +77,14 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function allowValidDigits(e) {
+        var k = e.keyCode;
+        //código ASCII dos caracteres permitidos
+        return ((k >= 48 && k <= 57) || (k >= 65 && k <= 90) || (k >= 97 && k <= 122));
+    }
+</script>
+
 </body>
 </html>
