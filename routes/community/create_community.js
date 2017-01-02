@@ -41,7 +41,7 @@ router.post('/create', userPrivileges.ensureAuthenticated, function (req, res) {
     for(i=0;i<req.body.communityName.length;i++){
         k=req.body.communityName[i];
         k=k.charCodeAt(0);
-        if(k == 8 || k == 33 || (k >= 35 && k <= 36) || (k >= 38 && k <= 59) || k == 61 || (k > 62 && k < 92) || k == 93 || (k > 94 && k < 123) || k == 126) {
+        if(k == 32 || (k >= 48 && k <= 57) || (k >= 65 && k <= 90) || (k >= 97 && k <= 122)) {
             continue;
         } else {
             cond=true;

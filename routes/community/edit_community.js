@@ -58,25 +58,7 @@ router.post('/:communityName', userPrivileges.ensureAuthenticated, function (req
         if(errors.constructor != Array) errors = [];
         errors.push({msg:'Tipo de visualização não válida'} );
     }
-
-    var i,k=0;
-    var cond=false;
-
-    for(i=0;i<req.body.communityName.length;i++){
-        k=req.body.communityName[i];
-        k=k.charCodeAt(0);
-        if(k == 8 || k == 33 || (k >= 35 && k <= 36) || (k >= 38 && k <= 59) || k == 61 || (k > 62 && k < 92) || k == 93 || (k > 94 && k < 123) || k == 126) {
-            continue;
-        } else {
-            cond=true;
-            break;
-        }
-    }
-
-    if(cond==true) {
-        req.flash('error_msg', 'Nome da comunidade contém caracteres inválidos');
-        res.redirect('/edit_community/' + communityName);
-    } else if (errors) {
+    if (errors) {
         req.flash('errors', errors);
         res.redirect('/edit_community/' + communityName);
     } else {
