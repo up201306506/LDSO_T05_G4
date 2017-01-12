@@ -3,6 +3,3 @@ node_js:
   - 4.6.0
   
 services: mongodb
-
-notifications:
-  slack: ldsot05grupo4:xhOmhs4AsqvYEunlO4mOBcNv
